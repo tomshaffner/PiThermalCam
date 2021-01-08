@@ -4,8 +4,9 @@
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 # Project specific
-/run_data/
+/run_data/*
 !/run_data/note.txt
+*.png
 
 # Node artifact files
 node_modules/

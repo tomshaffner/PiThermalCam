@@ -1,0 +1,1 @@
+This folder should be excluded from the git, apart from this file to keep it in existance.

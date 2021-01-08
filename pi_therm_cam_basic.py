@@ -78,12 +78,12 @@ def simple_camera_read():
             therm1.set_clim(vmin=np.min(data_array),vmax=np.max(data_array)) # set bounds
             cbar.on_mappable_changed(therm1) # update colorbar range
             plt.pause(0.001) # required
-            fig.savefig('mlx90640_test_fliplr.png',dpi=300,facecolor='#FCFCFC',
-                        bbox_inches='tight') # comment out to speed up
+            fig.savefig(output_folder + 'mlx90640_test_fliplr.png',dpi=300,facecolor='#FCFCFC', bbox_inches='tight') # comment out to speed up
             t_array.append(time.monotonic()-t1)
             print('Sample Rate: {0:2.1f}fps'.format(len(t_array)/np.sum(t_array)))
         except ValueError:
             continue # if error, just read again
 
 if __name__ == "__main__":
-    print_mean_temp()
+    # print_mean_temp()
+    simple_camera_read()
