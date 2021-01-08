@@ -1,6 +1,8 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Documentation of the thermal pi cam project, which connects an MLX90640 thermal camera up to a Raspberry Pi 4.
+
+Setup based primarily off the article at https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640#thermal-cam.
 
 ### What is this repository for? ###
 
@@ -10,20 +12,9 @@ This README would normally document whatever steps are necessary to get your app
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+1. Install, using apt-get, the following items:
+libatlas-base-dev
+python-smbus
+i2c-tools
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+2. pip3 install the requirements.txt
