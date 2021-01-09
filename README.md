@@ -18,3 +18,7 @@ python-smbus
 i2c-tools
 
 2. pip3 install the requirements.txt
+
+3. If you're going to use the opencv implementations in this you'll need to install and build opencv. You can do this via pip, but the manual build approach is the more nuanced approach.
+
+You'll also want to install cmapy, but it's not in the requirements file because a pip install will automatically install opencv via pip. If you're okay with this that's fine; if not you'll want to install using the --no-deps pip install.
