@@ -11,6 +11,7 @@ import cv2
 import logging, configparser
 import cmapy
 import traceback
+from scipy import ndimage
 
 from numpy.lib.type_check import imag
 from util_functions import c_to_f
@@ -96,8 +97,8 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
     interpolation_index = 3
     # See https://gitlab.com/cvejarano-oss/cmapy/-/blob/master/docs/colorize_all_examples.md to develop list
     colormap_list=['jet','bwr','seismic','coolwarm','PiYG_r','tab10','tab20','gnuplot2','brg']
-    interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4]
-    interpolation_list_name = ['Nearest','Inter Linear','Inter Area','Inter Cubic','Inter Lanczos4']
+    interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4,5]
+    interpolation_list_name = ['Nearest','Inter Linear','Inter Area','Inter Cubic','Inter Lanczos4','Scipy']
 
     try:
         while True:          
@@ -113,11 +114,18 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
             img=temps_to_rescaled_uints(image,temp_min,temp_max)    
 
             # Image processing
-            img = cv2.applyColorMap(img, cmapy.cmap(colormap_list[colormap_index]))
-            img = cv2.resize(img, (800,600), interpolation = interpolation_list[interpolation_index])
+            if interpolation_index==5: # Can't apply colormap before ndimage, so reversed, even though it seems slower
+                img = ndimage.zoom(img,25) # interpolate with scipy
+                img = cv2.applyColorMap(img, cmapy.cmap(colormap_list[colormap_index]))
+            else:
+                img = cv2.applyColorMap(img, cmapy.cmap(colormap_list[colormap_index]))
+                img = cv2.resize(img, (800,600), interpolation = interpolation_list[interpolation_index])      
+
             if filter_image:
-                img = cv2.erode(img, None, iterations=2)
-                img = cv2.dilate(img, None, iterations=2)
+                img=cv2.bilateralFilter(img,15,80,80)
+                # img=cv2.fastNlMeansDenoisingColored(img,None,10,10,7,21)
+                # img = cv2.erode(img, None, iterations=2)
+                # img = cv2.dilate(img, None, iterations=2)
             if use_f:
                 temp_min=c_to_f(temp_min)
                 temp_max=c_to_f(temp_max)
