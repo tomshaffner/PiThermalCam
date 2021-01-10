@@ -41,8 +41,8 @@ filename_date_format = config.get(section='FILEPATHS',option='filename_date_form
 class ThermalCam:
     # See https://gitlab.com/cvejarano-oss/cmapy/-/blob/master/docs/colorize_all_examples.md to develop list
     _colormap_list=['jet','bwr','seismic','coolwarm','PiYG_r','tab10','tab20','gnuplot2','brg']
-    _interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4,5]
-    _interpolation_list_name = ['Nearest','Inter Linear','Inter Area','Inter Cubic','Inter Lanczos4','Scipy']
+    _interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4,5,6]
+    _interpolation_list_name = ['Nearest','Inter Linear','Inter Area','Inter Cubic','Inter Lanczos4','Pure Scipy', 'Scipy/CV2 Mixed']
     _current_frame_processed=False # Tracks if the current processed image matches the current raw image
     i2c=None
     mlx=None
@@ -88,9 +88,14 @@ class ThermalCam:
     def _process_raw_image(self):
         """Process the raw temp data to a colored image. Filter if necessary"""
         # Image processing
-        if self._interpolation_index==5: # Can't apply colormap before ndimage, so reversed, even though it seems slower
+        # Can't apply colormap before ndimage, so reversed in first two options, even though it seems slower
+        if self._interpolation_index==5: # Scale via scipy only - slowest but seems higher quality
             self._image = ndimage.zoom(self._raw_image,25) # interpolate with scipy
             self._image = cv2.applyColorMap(self._image, cmapy.cmap(self._colormap_list[self._colormap_index]))
+        elif self._interpolation_index==6: # Scale partially via scipy and partially via cv2 - mix of speed and quality
+            self._image = ndimage.zoom(self._raw_image,10) # interpolate with scipy
+            self._image = cv2.applyColorMap(self._image, cmapy.cmap(self._colormap_list[self._colormap_index]))
+            self._image = cv2.resize(self._image, (800,600), interpolation = cv2.INTER_CUBIC)
         else:
             self._image = cv2.applyColorMap(self._raw_image, cmapy.cmap(self._colormap_list[self._colormap_index]))
             self._image = cv2.resize(self._image, (800,600), interpolation = self._interpolation_list[self._interpolation_index])

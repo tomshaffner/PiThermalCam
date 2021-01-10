@@ -41,7 +41,7 @@ filename_date_format = config.get(section='FILEPATHS',option='filename_date_form
 # Setup camera
 i2c = busio.I2C(board.SCL, board.SDA, frequency=800000) # setup I2C
 mlx = adafruit_mlx90640.MLX90640(i2c) # begin MLX90640 with I2C comm
-mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_8_HZ  # set refresh rate
+mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_16_HZ  # set refresh rate
 time.sleep(0.1)
 
 # function to convert temperatures to pixels on image
@@ -97,8 +97,8 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
     interpolation_index = 3
     # See https://gitlab.com/cvejarano-oss/cmapy/-/blob/master/docs/colorize_all_examples.md to develop list
     colormap_list=['jet','bwr','seismic','coolwarm','PiYG_r','tab10','tab20','gnuplot2','brg']
-    interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4,5]
-    interpolation_list_name = ['Nearest','Inter Linear','Inter Area','Inter Cubic','Inter Lanczos4','Scipy']
+    interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4,5,6]
+    interpolation_list_name = ['Nearest','Inter Linear','Inter Area','Inter Cubic','Inter Lanczos4','Scipy', 'Scipy/CV2 Mixed']
 
     try:
         while True:          
@@ -114,9 +114,14 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
             img=temps_to_rescaled_uints(image,temp_min,temp_max)    
 
             # Image processing
-            if interpolation_index==5: # Can't apply colormap before ndimage, so reversed, even though it seems slower
+            # Can't apply colormap before ndimage, so reversed in first two options, even though it seems slower
+            if interpolation_index==5: # Scale via scipy only - slowest but seems higher quality
                 img = ndimage.zoom(img,25) # interpolate with scipy
                 img = cv2.applyColorMap(img, cmapy.cmap(colormap_list[colormap_index]))
+            elif interpolation_index==6: # Scale partially via scipy and partially via cv2 - mix of speed and quality
+                img = ndimage.zoom(img,10) # interpolate with scipy
+                img = cv2.applyColorMap(img, cmapy.cmap(colormap_list[colormap_index]))
+                img = cv2.resize(img, (800,600), interpolation = cv2.INTER_CUBIC)
             else:
                 img = cv2.applyColorMap(img, cmapy.cmap(colormap_list[colormap_index]))
                 img = cv2.resize(img, (800,600), interpolation = interpolation_list[interpolation_index])      
