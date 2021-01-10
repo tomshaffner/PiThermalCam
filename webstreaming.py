@@ -3,9 +3,7 @@ from flask import Response
 from flask import Flask, request
 from flask import render_template
 import threading
-import argparse
 import datetime
-import imutils
 import time, socket
 import cv2
 
@@ -17,7 +15,7 @@ lock = threading.Lock()
 app = Flask(__name__)
 
 # initialize the video stream and allow the camera sensor to warmup
-thermcam = ThermalCam(resize_image=True)
+thermcam = ThermalCam()
 time.sleep(2.0)
 
 @app.route("/")
@@ -50,6 +48,16 @@ def decrement_colormap():
 def toggle_filter():
     thermcam.filter_image=not thermcam.filter_image
     return ("Filtering Toggled")
+
+@app.route('/interpolation')
+def increment_interpolation():
+    thermcam.change_interpolation()
+    return ("Interpolation Changed")
+
+@app.route('/interpolationback')
+def decrement_interpolation():
+    thermcam.change_interpolation(forward=False)
+    return ("Interpolation Changed Back")
 
 def detect_motion(frameCount):
 	# TODO See if this even works with thermal or is needed. E.g. if an area heats up, will it be detected as motion?

@@ -13,7 +13,7 @@ import cmapy
 import traceback
 
 from numpy.lib.type_check import imag
-from util_functions import *
+from util_functions import c_to_f
 
 # Manual Params
 DEBUG_MODE=False
@@ -93,8 +93,12 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
     image = np.zeros((24*32,))
     t0 = time.time()
     colormap_index = 0
+    interpolation_index = 3
     # See https://gitlab.com/cvejarano-oss/cmapy/-/blob/master/docs/colorize_all_examples.md to develop list
     colormap_list=['jet','bwr','seismic','coolwarm','PiYG_r','tab10','tab20','gnuplot2','brg']
+    interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4]
+    interpolation_list_name = ['Nearest','Inter Linear','Inter Area','Inter Cubic','Inter Lanczos4']
+
     try:
         while True:          
             # Get image
@@ -110,18 +114,17 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
 
             # Image processing
             img = cv2.applyColorMap(img, cmapy.cmap(colormap_list[colormap_index]))
-            img = cv2.resize(img, (800,600), interpolation = cv2.INTER_CUBIC) #INTER_LANCZOS4) #INTER_LINEAR)
-            img = cv2.flip(img, 1)
+            img = cv2.resize(img, (800,600), interpolation = interpolation_list[interpolation_index])
             if filter_image:
                 img = cv2.erode(img, None, iterations=2)
                 img = cv2.dilate(img, None, iterations=2)
             if use_f:
                 temp_min=c_to_f(temp_min)
                 temp_max=c_to_f(temp_max)
-                text = f'Tmin={temp_min:+.1f}F Tmax={temp_max:+.1f}F FPS={1/(time.time() - t0):.2f} Filtered:{filter_image} Colormap:{colormap_list[colormap_index]}'
+                text = f'Tmin={temp_min:+.1f}F - Tmax={temp_max:+.1f}F - FPS={1/(time.time() - t0):.1f} - Interpolation: {interpolation_list_name[interpolation_index]} - Colormap: {colormap_list[colormap_index]} - Filtered: {filter_image}'
             else:
-                text = f'Tmin={temp_min:+.1f}C Tmax={temp_max:+.1f}C FPS={1/(time.time() - t0):.2f} Filtered:{filter_image} Colormap:{colormap_list[colormap_index]}'
-            cv2.putText(img, text, (10, 18), cv2.FONT_HERSHEY_SIMPLEX, .6, (255, 255, 255), 2)
+                text = f'Tmin={temp_min:+.1f}C - Tmax={temp_max:+.1f}C - FPS={1/(time.time() - t0):.1f} - Interpolation: {interpolation_list_name[interpolation_index]} - Colormap: {colormap_list[colormap_index]} - Filtered: {filter_image}'
+            cv2.putText(img, text, (30, 18), cv2.FONT_HERSHEY_SIMPLEX, .4, (255, 255, 255), 1)
             cv2.namedWindow('Thermal Image', cv2.WINDOW_NORMAL)
             cv2.resizeWindow('Thermal Image', 1200,900)
             cv2.imshow('Thermal Image', img)
@@ -139,16 +142,24 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
                 colormap_index+=1
                 if colormap_index==len(colormap_list):
                     colormap_index=0
-            elif key == ord("x"): # If c is chosen cycle the colormap used
+            elif key == ord("x"): # If c is chosen cycle the colormap used back
                 colormap_index-=1
                 if colormap_index<0:
                     colormap_index=len(colormap_list)-1
             elif key == ord("f"): # If f is chosen cycle the image filtering
                 filter_image = not filter_image
                 print(f"Filter On: {filter_image}")
-            elif key == ord("u"): # If t is chosen cycle the units used for temperature
+            elif key == ord("t"): # If t is chosen cycle the units used for Temperature
                 use_f = not use_f
                 print(f"Using Fahrenheit: {use_f}")
+            elif key == ord("u"): # If u is chosen cycle interpolation algorith back
+                interpolation_index-=1
+                if interpolation_index<0:
+                    interpolation_index=len(interpolation_list)-1
+            elif key == ord("i"):  # If i is chosen cycle interpolation algorith
+                interpolation_index+=1
+                if interpolation_index==len(interpolation_list):
+                    interpolation_index=0
             elif key==27: # Break if escape key is used
                 raise KeyboardInterrupt
                     

@@ -40,6 +40,8 @@ filename_date_format = config.get(section='FILEPATHS',option='filename_date_form
 class ThermalCam:
     # See https://gitlab.com/cvejarano-oss/cmapy/-/blob/master/docs/colorize_all_examples.md to develop list
     _colormap_list=['jet','bwr','seismic','coolwarm','PiYG_r','tab10','tab20','gnuplot2','brg']
+    _interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4]
+    _interpolation_list_name = ['Nearest','Inter Linear','Inter Area','Inter Cubic','Inter Lanczos4']
     _current_frame_processed=False # Tracks if the current processed image matches the current raw image
     i2c=None
     mlx=None
@@ -48,15 +50,15 @@ class ThermalCam:
     _raw_image=None
     _image=None
 
-    def __init__(self,use_f:bool = True, filter_image:bool = False, resize_image:bool = True, image_width:int=1200, image_height:int=900, output_folder:str = '/home/pi/pithermalcam/run_data/'):
+    def __init__(self,use_f:bool = True, filter_image:bool = False, image_width:int=1200, image_height:int=900, output_folder:str = '/home/pi/pithermalcam/run_data/'):
         self.use_f=use_f
         self.filter_image=filter_image
-        self.resize_image=resize_image
         self.image_width=image_width
         self.image_height=image_height
         self.output_folder=output_folder
 
         self._colormap_index = 0
+        self._interpolation_index = 3
         self._setup_therm_cam()
         self._t0 = time.time()
         self.update_image_frame()
@@ -77,8 +79,8 @@ class ThermalCam:
         # Get image
         self._raw_image = np.zeros((24*32,))
         self.mlx.getFrame(self._raw_image) # read mlx90640
-        self._temp_min = np.min(self._raw_image) if self.use_f else c_to_f(np.min(self._raw_image))
-        self._temp_max = np.max(self._raw_image) if self.use_f else c_to_f(np.max(self._raw_image))
+        self._temp_min = np.min(self._raw_image) 
+        self._temp_max = np.max(self._raw_image) 
         self._raw_image=self._temps_to_rescaled_uints(self._raw_image,self._temp_min,self._temp_max)
         self._current_frame_processed=False # Note that the newly updated raw frame has not been processed
 
@@ -86,7 +88,7 @@ class ThermalCam:
         """Process the raw temp data to a colored image. Filter if necessary"""
         # Image processing
         self._image = cv2.applyColorMap(self._raw_image, cmapy.cmap(self._colormap_list[self._colormap_index]))
-        self._image = cv2.resize(self._image, (800,600), interpolation = cv2.INTER_CUBIC) #INTER_LANCZOS4) #INTER_LINEAR)
+        self._image = cv2.resize(self._image, (800,600), interpolation = self._interpolation_list[self._interpolation_index])
         self._image = cv2.flip(self._image, 1)
         if self.filter_image:
             self._image = cv2.erode(self._image, None, iterations=2)
@@ -95,16 +97,18 @@ class ThermalCam:
     def _add_image_text(self):
         """Set image text content"""
         if self.use_f:
-            text = f'Tmin={self._temp_min:+.1f}F Tmax={self._temp_max:+.1f}F FPS={1/(time.time() - self._t0):.2f} Filtered:{self.filter_image} Colormap:{self._colormap_list[self._colormap_index]}'
+            temp_min=c_to_f(self._temp_min)
+            temp_max=c_to_f(self._temp_max)
+            text = f'Tmin={temp_min:+.1f}F - Tmax={temp_max:+.1f}F - FPS={1/(time.time() - self._t0):.1f} - Interpolation: {self._interpolation_list_name[self._interpolation_index]} - Colormap: {self._colormap_list[self._colormap_index]} - Filtered: {self.filter_image}'
         else:
-            text = f'Tmin={self._temp_min:+.1f}C Tmax={self._temp_max:+.1f}C FPS={1/(time.time() - self._t0):.2f} Filtered:{self.filter_image} Colormap:{self._colormap_list[self._colormap_index]}'
-        cv2.putText(self._image, text, (10, 18), cv2.FONT_HERSHEY_SIMPLEX, .6, (255, 255, 255), 2)
+            text = f'Tmin={self._temp_min:+.1f}C - Tmax={self._temp_max:+.1f}C - FPS={1/(time.time() - self._t0):.1f} - Interpolation: {self._interpolation_list_name[self._interpolation_index]} - Colormap: {self._colormap_list[self._colormap_index]} - Filtered: {self.filter_image}'
+        cv2.putText(self._image, text, (30, 18), cv2.FONT_HERSHEY_SIMPLEX, .4, (255, 255, 255), 1)
+        self._t0 = time.time() # Update time to this pull
         
     def show_processed_image(self):
         """Resize image window and display it"""  
         cv2.namedWindow('Thermal Image', cv2.WINDOW_NORMAL)
-        if self.resize_image:
-            cv2.resizeWindow('Thermal Image', self.image_width,self.image_height)
+        cv2.resizeWindow('Thermal Image', self.image_width,self.image_height)
         cv2.imshow('Thermal Image', self._image)        
 
     def set_click_keyboard_events(self):
@@ -128,7 +132,6 @@ class ThermalCam:
         elif key==27: # Break if escape key is used
             raise KeyboardInterrupt
 
-
     def _mouse_click(self,event,x,y,flags,param):
         """Used to save an image on double-click"""
         global mouseX,mouseY
@@ -145,6 +148,17 @@ class ThermalCam:
             self._colormap_index-=1
             if self._colormap_index<0:
                 self._colormap_index=len(self._colormap_list)-1
+
+    def change_interpolation(self, forward:bool = True):
+        """Cycle interpolation. Forward by default, backwards if param set to false."""
+        if forward:
+            self._interpolation_index+=1
+            if self._interpolation_index==len(self._interpolation_list):
+                self._interpolation_index=0
+        else:
+            self._interpolation_index-=1
+            if self._interpolation_index<0:
+                self._interpolation_index=len(self._interpolation_list)-1
 
     def update_image_frame(self):
         """Pull raw data, process it to an image, and update image attributes"""
@@ -169,7 +183,6 @@ class ThermalCam:
             self._process_raw_image()
             self._add_image_text()
             self._current_frame_processed=True
-        self._t0 = time.time() # Update time to this pull
         return self._image
 
     def save_image(self):

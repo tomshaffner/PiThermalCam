@@ -15,7 +15,18 @@
           });
         });
 </script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type=text/javascript>
+  $(function() {
+    $('a#units').on('click', function(e) {
+      e.preventDefault()
+      $.getJSON('/units',
+          function(data) {
+        //do nothing
+      });
+      return false;
+    });
+  });
+</script>
   <script type=text/javascript>
         $(function() {
           $('a#colormap').on('click', function(e) {
@@ -28,7 +39,6 @@
           });
         });
 </script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script type=text/javascript>
         $(function() {
           $('a#colormapback').on('click', function(e) {
@@ -41,7 +51,6 @@
           });
         });
 </script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script type=text/javascript>
         $(function() {
           $('a#filter').on('click', function(e) {
@@ -53,6 +62,30 @@
             return false;
           });
         });
+</script>
+  <script type=text/javascript>
+      $(function() {
+        $('a#interpolation').on('click', function(e) {
+          e.preventDefault()
+          $.getJSON('/interpolation',
+              function(data) {
+            //do nothing
+          });
+          return false;
+        });
+      });
+      </script>
+  <script type=text/javascript>
+      $(function() {
+        $('a#interpolationback').on('click', function(e) {
+          e.preventDefault()
+          $.getJSON('/interpolationback',
+              function(data) {
+            //do nothing
+          });
+          return false;
+        });
+      });
 </script>
 </head>
 
@@ -74,11 +107,12 @@
 
   .form-inline {
     margin: 5px;
-    margin-left: 120px;
+    margin-left: -10px;
+    margin-right: -10px;
   }
 
   .btn {
-    margin-left: 5px;
+    margin-left: 3px;
   }
 </style>
 
@@ -93,6 +127,8 @@
       <a href=# id=units><button class='btn btn-default'>Change Temp Units</button></a>
       <a href=# id=colormapback><button class='btn btn-default'>Previous Colormap</button></a>
       <a href=# id=colormap><button class='btn btn-default'>Next Colormap</button></a>
+      <a href=# id=interpolationback><button class='btn btn-default'>Previous Interpolation</button></a>
+      <a href=# id=interpolation><button class='btn btn-default'>Next Interpolation</button></a>
       <a href=# id=filter><button class='btn btn-default'>Toggle Filter</button></a>
     </form>
   </div>

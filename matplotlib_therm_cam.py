@@ -10,7 +10,7 @@ import adafruit_mlx90640
 import matplotlib.pyplot as plt
 import logging, configparser
 from scipy import ndimage
-from util_functions import *
+from util_functions import c_to_f
 
 profiling = False # Flag to turn profiling on
 if profiling:
@@ -45,7 +45,7 @@ mlx = adafruit_mlx90640.MLX90640(i2c) # begin MLX90640 with I2C comm
 
 
 # print out the average temperature from the MLX90640
-def print_mean_temp():
+def print_mean_temp(use_f:bool = False):
     """
     Get mean temp of entire field of view. Return both temp C and temp F.
     """
@@ -228,7 +228,7 @@ def interpolated_camera_read():
 
 if __name__ == "__main__":
     # Pick the mode to run in. Mode corresponds to functions in elif below.
-    mode=1
+    mode=5
 
     if mode==1:
         print_mean_temp()
