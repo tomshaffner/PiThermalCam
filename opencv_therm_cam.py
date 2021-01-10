@@ -3,12 +3,10 @@
 ##################################
 # MLX90640 Thermal Camera w Raspberry Pi
 ##################################
-
 import time,board,busio
 import numpy as np
 import adafruit_mlx90640
 import datetime as dt
-import matplotlib.pyplot as plt
 import cv2
 import logging, configparser
 import cmapy
@@ -16,10 +14,6 @@ import traceback
 
 from numpy.lib.type_check import imag
 from utils import *
-
-profiling = False # Flag to turn profiling on
-if profiling:
-    import cProfile, pstats
 
 # Manual Params
 DEBUG_MODE=False
@@ -51,11 +45,11 @@ time.sleep(0.1)
 
 # function to convert temperatures to pixels on image
 def temps_to_rescaled_uints(f,Tmin,Tmax):
-	norm = np.uint8((f - Tmin)*255/(Tmax-Tmin))
-	norm.shape = (24,32)
-	return norm
+    norm = np.uint8((f - Tmin)*255/(Tmax-Tmin))
+    norm.shape = (24,32)
+    return norm
 
-def take_pic(pic_name='simple_pic.png',use_f = False):
+def take_pic(use_f = True):
     """Take single pic"""  
     image = np.zeros((24*32,))
 
@@ -66,9 +60,17 @@ def take_pic(pic_name='simple_pic.png',use_f = False):
     image=temps_to_rescaled_uints(image,temp_min,temp_max)    
 
     # Image processing
-    img = cv2.applyColorMap(image, cv2.COLORMAP_JET)
+    img = cv2.applyColorMap(image, cmapy.cmap('bwr'))
     img = cv2.resize(img, (320,240), interpolation = cv2.INTER_CUBIC)
     img = cv2.flip(img, 1)
+
+    if use_f:
+        temp_min=c_to_f(temp_min)
+        temp_max=c_to_f(temp_max)
+        text = f'Tmin={temp_min:+.1f}F Tmax={temp_max:+.1f}F'
+    else:
+        text = f'Tmin={temp_min:+.1f}C Tmax={temp_max:+.1f}C'
+            
 
     text = 'Tmin = {:+.1f} Tmax = {:+.1f} '.format(temp_min/100, temp_max/100)
     cv2.putText(img, text, (5, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 0), 1)
@@ -78,7 +80,7 @@ def take_pic(pic_name='simple_pic.png',use_f = False):
     cv2.imwrite(fname, img)
     print('Saving image ', fname)
 
-def camera_read(use_f:bool = False, filter_image:bool = False):
+def camera_read(use_f:bool = True, filter_image:bool = False):
     image = np.zeros((24*32,))
     t0 = time.time()
     colormap_index = 0
@@ -90,7 +92,7 @@ def camera_read(use_f:bool = False, filter_image:bool = False):
             mlx.getFrame(image) # read mlx90640
             temp_min = np.min(image)
             temp_max = np.max(image)
-            img=temps_to_rescaled_uints(image,20,40)    
+            img=temps_to_rescaled_uints(image,temp_min,temp_max)    
 
             # Image processing
             img = cv2.applyColorMap(img, cmapy.cmap(colormap_list[colormap_index]))
@@ -120,6 +122,10 @@ def camera_read(use_f:bool = False, filter_image:bool = False):
                 colormap_index+=1
                 if colormap_index==len(colormap_list):
                     colormap_index=0
+            if key == ord("x"): # If c is chosen cycle the colormap used
+                colormap_index-=1
+                if colormap_index<0:
+                    colormap_index=len(colormap_list)-1
             if key == ord("f"): # If f is chosen cycle the image filtering
                 filter_image = not filter_image
                 print(f"Filter On: {filter_image}")
@@ -131,37 +137,11 @@ def camera_read(use_f:bool = False, filter_image:bool = False):
     except KeyboardInterrupt:
         cv2.destroyAllWindows()
         print("Code Stopped by User")
-    except Exception as e:
+    except Exception:
         print(traceback.format_exc())
         pass
 
     cv2.destroyAllWindows()
-
-class Motion_Detection_Camera:
-    # Class based on post from https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/
-    def __init__(self, accumWeight=0.5):
-        # store the accumulated weight factor
-        self.accumWeight = accumWeight
-        # initialize the background model
-        self.bg = None
-
-    def update(self, image):
-        # if the background model is None, initialize it
-        if self.bg is None:
-            self.bg = image.copy().astype("float")
-            return
-        # update the background model by accumulating the weighted
-        # average
-        cv2.accumulateWeighted(image, self.bg, self.accumWeight)
-
-    def detect(self, image, tVal=25):
-        # compute the absolute difference between the background model and the image passed in, then threshold the delta image
-        delta = cv2.absdiff(self.bg.astype("uint8"), image)
-        thresh = cv2.threshold(delta, tVal, 255, cv2.THRESH_BINARY)[1]
-        # perform a series of erosions and dilations to remove small blobs
-        thresh = cv2.erode(thresh, None, iterations=2)
-        thresh = cv2.dilate(thresh, None, iterations=2)
-
 
 if __name__ == "__main__":
     # take_pic()

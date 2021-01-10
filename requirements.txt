@@ -5,3 +5,4 @@ RPI.GPIO
 adafruit-blinka
 adafruit-circuitpython-mlx90640
 imutils
+flask
