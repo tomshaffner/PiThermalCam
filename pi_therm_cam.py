@@ -8,7 +8,6 @@ import numpy as np
 import adafruit_mlx90640
 import datetime as dt
 import cv2
-import imutils
 import logging, configparser
 import cmapy
 from numpy.lib.type_check import imag
@@ -204,47 +203,3 @@ class ThermalCam:
         norm = np.uint8((f - Tmin)*255/(Tmax-Tmin))
         norm.shape = (24,32)
         return norm
-        
-
-class Motion_Detector:
-    # Class based on post at https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/
-    def __init__(self, accumWeight=0.5):
-        # store the accumulated weight factor
-        self.accumWeight = accumWeight
-        # initialize the background model
-        self.bg = None
-
-    def update(self, image):
-        # if the background model is None, initialize it
-        if self.bg is None:
-            self.bg = image.copy().astype("float")
-            return
-        # update the background model by accumulating the weighted
-        # average
-        cv2.accumulateWeighted(image, self.bg, self.accumWeight)
-
-    def detect(self, image, threshholdVal=25):
-        # compute the absolute difference between the background model and the image passed in, then threshold the delta image
-        delta = cv2.absdiff(self.bg.astype("uint8"), image)
-        thresh = cv2.threshold(delta, threshholdVal, 255, cv2.THRESH_BINARY)[1]
-        # perform a series of erosions and dilations to remove small blobs
-        thresh = cv2.erode(thresh, None, iterations=2)
-        thresh = cv2.dilate(thresh, None, iterations=2)
-
-        # find contours in the thresholded image and initialize the minimum and maximum bounding box regions for motion
-        cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-        cnts = imutils.grab_contours(cnts)
-        (minX, minY) = (np.inf, np.inf)
-        (maxX, maxY) = (-np.inf, -np.inf)
-
-        # if no contours were found, return None
-        if len(cnts) == 0:
-            return None
-        # otherwise, loop over the contours
-        for c in cnts:
-            # compute the bounding box of the contour and use it to update the minimum and maximum bounding box regions
-            (x, y, w, h) = cv2.boundingRect(c)
-            (minX, minY) = (min(minX, x), min(minY, y))
-            (maxX, maxY) = (max(maxX, x + w), max(maxY, y + h))
-        # otherwise, return a tuple of the thresholded image along with bounding box
-        return (thresh, (minX, minY, maxX, maxY))
