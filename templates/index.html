@@ -1,0 +1,101 @@
+<html>
+
+<head>
+  <title>Pi Thermal Video</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type=text/javascript>
+        $(function() {
+          $('a#save').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/save',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+</script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type=text/javascript>
+        $(function() {
+          $('a#colormap').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/colormap',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+</script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type=text/javascript>
+        $(function() {
+          $('a#colormapback').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/colormapback',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+</script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type=text/javascript>
+        $(function() {
+          $('a#filter').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/filter',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+</script>
+</head>
+
+<!-- Center align things and add margins -->
+<style>
+  h1 {
+    text-align: center;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: auto;
+  }
+
+  .form {
+    max-width: 800px;
+    margin: auto;
+  }
+
+  .form-inline {
+    margin: 5px;
+    margin-left: 120px;
+  }
+
+  .btn {
+    margin-left: 5px;
+  }
+</style>
+
+<body>
+  <div class='container'>
+    <h1>Pi Thermal Video</h1>
+    <img src="{{ url_for('video_feed') }}" class='video'>
+  </div>
+  <div class='container'>
+    <form class="form-inline">
+      <a href=# id=save><button class='btn btn-default'>Save</button></a>
+      <a href=# id=units><button class='btn btn-default'>Change Temp Units</button></a>
+      <a href=# id=colormapback><button class='btn btn-default'>Previous Colormap</button></a>
+      <a href=# id=colormap><button class='btn btn-default'>Next Colormap</button></a>
+      <a href=# id=filter><button class='btn btn-default'>Toggle Filter</button></a>
+    </form>
+  </div>
+</body>
+
+</html>

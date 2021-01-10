@@ -10,7 +10,7 @@ import adafruit_mlx90640
 import matplotlib.pyplot as plt
 import logging, configparser
 from scipy import ndimage
-from utils import *
+from util_functions import *
 
 profiling = False # Flag to turn profiling on
 if profiling:
@@ -41,31 +41,47 @@ filename_date_format = config.get(section='FILEPATHS',option='filename_date_form
 # Setup camera
 i2c = busio.I2C(board.SCL, board.SDA, frequency=800000) # setup I2C
 mlx = adafruit_mlx90640.MLX90640(i2c) # begin MLX90640 with I2C comm
-mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_2_HZ  # set refresh rate
 
-def take_pic(pic_name='simple_pic.png',use_f = False):
-    """Take pic using matplotlib"""  
+
+
+# print out the average temperature from the MLX90640
+def print_mean_temp():
+    """
+    Get mean temp of entire field of view. Return both temp C and temp F.
+    """
+    frame = np.zeros((24*32,)) # setup array for storing all 768 temperatures
+    while True:
+        try:
+            mlx.getFrame(frame) # read MLX temperatures into frame var
+            break
+        except ValueError:
+            continue # if error, just read again
+    
+    temp_c = np.mean(frame)
+    temp_f=c_to_f(temp_c)
+    print('Average MLX90640 Temperature: {0:2.1f}C ({1:2.1f}F)'.format(temp_c,temp_f))
+    return temp_c, temp_f
+
+def simple_pic():
+    """# -- 2Hz Sampling with Simple Routine"""
+    mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_2_HZ  # set refresh rate
     mlx_shape = (24,32)
 
     # setup the figure for plotting
-    fig,ax = plt.subplots(figsize=(12,9))
+    # plt.ion() # enables interactive plotting
+    fig,ax = plt.subplots(figsize=(12,7))
     therm1 = ax.imshow(np.zeros(mlx_shape),vmin=0,vmax=60) #start plot with zeros
     cbar = fig.colorbar(therm1) # setup colorbar for temps
-    if use_f:
-        cbar.set_label('Temperature [$^{\circ}$F]',fontsize=14) # colorbar label
-    else:
-        cbar.set_label('Temperature [$^{\circ}$C]',fontsize=14) # colorbar label
+    cbar.set_label('Temperature [$^{\circ}$C]',fontsize=14) # colorbar label
 
     frame = np.zeros((24*32,)) # setup array for storing all 768 temperatures
     mlx.getFrame(frame) # read MLX temperatures into frame var
     data_array = (np.reshape(frame,mlx_shape)) # reshape to 24x32
-    if use_f:
-        data_array=np.array(map(c_to_f,data_array))
     therm1.set_data(np.fliplr(data_array)) # flip left to right
     therm1.set_clim(vmin=np.min(data_array),vmax=np.max(data_array)) # set bounds
     cbar.on_mappable_changed(therm1) # update colorbar range
     plt.pause(0.001) # required
-    fig.savefig(output_folder + pic_name,dpi=300,facecolor='#FCFCFC', bbox_inches='tight')
+    fig.savefig(output_folder + 'simple_pic.png',dpi=300,facecolor='#FCFCFC', bbox_inches='tight')
 
 def simple_camera_read():
     """# -- Sampling with Simple Routine"""
@@ -95,7 +111,6 @@ def simple_camera_read():
             print('Sample Rate: {0:2.1f}fps'.format(len(t_array)/np.sum(t_array)))
         except ValueError:
             continue # if error, just read again
-
 
 def interpolated_pic():
     """# -- 2fps with Interpolation and Blitting"""
@@ -212,8 +227,16 @@ def interpolated_camera_read():
                 break
 
 if __name__ == "__main__":
-    # print_mean_temp()
-    # simple_pic()
-    # simple_camera_read()
-    # interpolated_pic()
-    interpolated_camera_read()
+    # Pick the mode to run in. Mode corresponds to functions in elif below.
+    mode=1
+
+    if mode==1:
+        print_mean_temp()
+    elif mode==2:
+        simple_pic()
+    elif mode==3:
+        simple_camera_read()
+    elif mode==4:
+        interpolated_pic()
+    elif mode==5:
+        interpolated_camera_read()

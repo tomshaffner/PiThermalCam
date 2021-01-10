@@ -13,7 +13,7 @@ import cmapy
 import traceback
 
 from numpy.lib.type_check import imag
-from utils import *
+from util_functions import *
 
 # Manual Params
 DEBUG_MODE=False
@@ -80,6 +80,15 @@ def take_pic(use_f = True):
     cv2.imwrite(fname, img)
     print('Saving image ', fname)
 
+def save_snapshot(event,x,y,flags,param):
+    """Used to save an image on double-click"""
+    img=param[0]
+    global mouseX,mouseY
+    if event == cv2.EVENT_LBUTTONDBLCLK:
+        fname = output_folder + 'pic_' + dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.jpg'
+        cv2.imwrite(fname, img)
+        print('Thermal Image ', fname)
+
 def camera_read(use_f:bool = True, filter_image:bool = False):
     image = np.zeros((24*32,))
     t0 = time.time()
@@ -89,7 +98,12 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
     try:
         while True:          
             # Get image
-            mlx.getFrame(image) # read mlx90640
+            try:
+                mlx.getFrame(image) # read mlx90640
+            except Exception:
+                print("Too many retries error caught; continuing...")
+                logger.info(traceback.format_exc())
+                continue
             temp_min = np.min(image)
             temp_max = np.max(image)
             img=temps_to_rescaled_uints(image,temp_min,temp_max)    
@@ -111,6 +125,9 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
             cv2.namedWindow('Thermal Image', cv2.WINDOW_NORMAL)
             cv2.resizeWindow('Thermal Image', 1200,900)
             cv2.imshow('Thermal Image', img)
+    
+            # Set mouse click events
+            cv2.setMouseCallback('Thermal Image',save_snapshot,param=[img])
 
             # if 's' is pressed - saving of picture
             key = cv2.waitKey(1) & 0xFF
@@ -118,27 +135,29 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
                 fname = output_folder + 'pic_' + dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.jpg'
                 cv2.imwrite(fname, img)
                 print('Thermal Image ', fname)
-            if key == ord("c"): # If c is chosen cycle the colormap used
+            elif key == ord("c"): # If c is chosen cycle the colormap used
                 colormap_index+=1
                 if colormap_index==len(colormap_list):
                     colormap_index=0
-            if key == ord("x"): # If c is chosen cycle the colormap used
+            elif key == ord("x"): # If c is chosen cycle the colormap used
                 colormap_index-=1
                 if colormap_index<0:
                     colormap_index=len(colormap_list)-1
-            if key == ord("f"): # If f is chosen cycle the image filtering
+            elif key == ord("f"): # If f is chosen cycle the image filtering
                 filter_image = not filter_image
                 print(f"Filter On: {filter_image}")
-            if key == ord("u"): # If t is chosen cycle the units used for temperature
+            elif key == ord("u"): # If t is chosen cycle the units used for temperature
                 use_f = not use_f
                 print(f"Using Fahrenheit: {use_f}")
+            elif key==27: # Break if escape key is used
+                raise KeyboardInterrupt
                     
             t0 = time.time()
     except KeyboardInterrupt:
         cv2.destroyAllWindows()
         print("Code Stopped by User")
     except Exception:
-        print(traceback.format_exc())
+        logger.info(traceback.format_exc())
         pass
 
     cv2.destroyAllWindows()

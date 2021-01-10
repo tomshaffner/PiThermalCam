@@ -12,7 +12,7 @@ import imutils
 import logging, configparser
 import cmapy
 from numpy.lib.type_check import imag
-from utils import *
+from util_functions import *
 
 # Manual Params
 DEBUG_MODE=False
@@ -30,23 +30,36 @@ config = configparser.ConfigParser(inline_comment_prefixes='#')
 config.read('/home/pi/pithermalcam/config.ini')
 logger.debug(f'Config file sections found: {config.sections()}')
 
+## Read Global variables from config file
+# Note: Raw parsing used to avoid having to escape % characters in time strings
+logger.debug("Reading config file and initializing variables...")
+output_folder = config.get(section='FILEPATHS',option='output_folder',raw=True)
+filename_date_format = config.get(section='FILEPATHS',option='filename_date_format',raw=True) # NOTE: This will be used in Windows so no disallowed character like ":"
+
 
 class ThermalCam:
     # See https://gitlab.com/cvejarano-oss/cmapy/-/blob/master/docs/colorize_all_examples.md to develop list
     _colormap_list=['jet','bwr','seismic','coolwarm','PiYG_r','tab10','tab20','gnuplot2','brg']
+    _current_frame_processed=False # Tracks if the current processed image matches the current raw image
+    i2c=None
+    mlx=None
+    _temp_min=None
+    _temp_max=None
+    _raw_image=None
+    _image=None
 
-    def __init__(self,use_f:bool = True, filter_image:bool = False, resize_image:bool = True, image_width:int=1200, image_height:int=900, output_folder:str = output_folder):
+    def __init__(self,use_f:bool = True, filter_image:bool = False, resize_image:bool = True, image_width:int=1200, image_height:int=900, output_folder:str = '/home/pi/pithermalcam/run_data/'):
         self.use_f=use_f
         self.filter_image=filter_image
         self.resize_image=resize_image
         self.image_width=image_width
         self.image_height=image_height
+        self.output_folder=output_folder
 
-        self._raw_image = np.zeros((24*32,))
         self._colormap_index = 0
         self._setup_therm_cam()
         self._t0 = time.time()
-        return self.update_image_frame()
+        self.update_image_frame()
 
     def __del__(self):
         logger.debug("ThermalCam Object deleted.")
@@ -59,39 +72,68 @@ class ThermalCam:
         self.mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_8_HZ  # set refresh rate
         time.sleep(0.1)
 
-    def _get_image(self):
+    def _pull_raw_image(self):
         """Get one pull of the raw image data, converting temp units if necessary"""
         # Get image
+        self._raw_image = np.zeros((24*32,))
         self.mlx.getFrame(self._raw_image) # read mlx90640
-        self._temp_min = np.min(self._raw_image)
-        self._temp_max = np.max(self._raw_image)
-        if self.use_f:
-            self._temp_min=c_to_f(self._temp_min)
-            self._temp_max=c_to_f(self._temp_max)
-        self._image=self._temps_to_rescaled_uints(self._raw_image,self._temp_min,self._temp_max)
+        self._temp_min = np.min(self._raw_image) if self.use_f else c_to_f(np.min(self._raw_image))
+        self._temp_max = np.max(self._raw_image) if self.use_f else c_to_f(np.max(self._raw_image))
+        self._raw_image=self._temps_to_rescaled_uints(self._raw_image,self._temp_min,self._temp_max)
+        self._current_frame_processed=False # Note that the newly updated raw frame has not been processed
 
-    def _process_image(self):
+    def _process_raw_image(self):
         """Process the raw temp data to a colored image. Filter if necessary"""
         # Image processing
-        self._image = cv2.applyColorMap(self._image, cmapy.cmap(self._colormap_list[self._colormap_index]))
+        self._image = cv2.applyColorMap(self._raw_image, cmapy.cmap(self._colormap_list[self._colormap_index]))
         self._image = cv2.resize(self._image, (800,600), interpolation = cv2.INTER_CUBIC) #INTER_LANCZOS4) #INTER_LINEAR)
         self._image = cv2.flip(self._image, 1)
         if self.filter_image:
             self._image = cv2.erode(self._image, None, iterations=2)
             self._image = cv2.dilate(self._image, None, iterations=2)
 
-    def _set_image_attributes(self):
-        """Set image size and text content"""
+    def _add_image_text(self):
+        """Set image text content"""
         if self.use_f:
             text = f'Tmin={self._temp_min:+.1f}F Tmax={self._temp_max:+.1f}F FPS={1/(time.time() - self._t0):.2f} Filtered:{self.filter_image} Colormap:{self._colormap_list[self._colormap_index]}'
         else:
             text = f'Tmin={self._temp_min:+.1f}C Tmax={self._temp_max:+.1f}C FPS={1/(time.time() - self._t0):.2f} Filtered:{self.filter_image} Colormap:{self._colormap_list[self._colormap_index]}'
-        cv2.putText(self.image, text, (10, 18), cv2.FONT_HERSHEY_SIMPLEX, .6, (255, 255, 255), 2)
+        cv2.putText(self._image, text, (10, 18), cv2.FONT_HERSHEY_SIMPLEX, .6, (255, 255, 255), 2)
+        
+    def show_processed_image(self):
+        """Resize image window and display it"""  
         cv2.namedWindow('Thermal Image', cv2.WINDOW_NORMAL)
         if self.resize_image:
             cv2.resizeWindow('Thermal Image', self.image_width,self.image_height)
-        cv2.imshow('Thermal Image', self.image)
+        cv2.imshow('Thermal Image', self._image)        
 
+    def set_click_keyboard_events(self):
+        """Add click and keyboard actions to image"""
+        # Set mouse click events
+        cv2.setMouseCallback('Thermal Image',self._mouse_click)
+
+        # Set keyboard events
+        # if 's' is pressed - saving of picture
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord("s"): # If s is chosen, save an image to filec
+            self.save_image()
+        elif key == ord("c"): # If c is chosen cycle the colormap used
+            self.change_colormap()
+        elif key == ord("x"): # If c is chosen cycle the colormap used
+            self.change_colormap(forward=False)
+        elif key == ord("f"): # If f is chosen cycle the image filtering
+            self.filter_image = not self.filter_image
+        elif key == ord("u"): # If t is chosen cycle the units used for temperature
+            self.use_f = not self.use_f
+        elif key==27: # Break if escape key is used
+            raise KeyboardInterrupt
+
+
+    def _mouse_click(self,event,x,y,flags,param):
+        """Used to save an image on double-click"""
+        global mouseX,mouseY
+        if event == cv2.EVENT_LBUTTONDBLCLK:
+            self.save_image()
 
     def change_colormap(self, forward:bool = True):
         """Cycle colormap. Forward by default, backwards if param set to false."""
@@ -106,21 +148,37 @@ class ThermalCam:
 
     def update_image_frame(self):
         """Pull raw data, process it to an image, and update image attributes"""
-        self._get_image()
-        self._process_image()
-        self._set_image_attributes()
+        self._pull_raw_image()
+        self._process_raw_image()
+        self._add_image_text()
+        self._current_frame_processed=True
         return self._image
 
-    def read_image_frame(self):
+    def update_raw_image_only(self):
+        """Pull only raw data"""
+        self._pull_raw_image
+
+    def get_current_raw_image_frame(self):
+        """Get the raw image"""
+        return self._raw_image
+
+    def get_current_image_frame(self):
+        """Get the processed image"""
+        # If the current raw image hasn't been procssed, process and return it
+        if not self._current_frame_processed:
+            self._process_raw_image()
+            self._add_image_text()
+            self._current_frame_processed=True
+        self._t0 = time.time() # Update time to this pull
         return self._image
 
     def save_image(self):
-        fname = self._output_folder + 'pic_' + dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.jpg'
+        fname = self.output_folder + 'pic_' + dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.jpg'
         cv2.imwrite(fname, self._image)
         print('Thermal Image ', fname)
 
     # function to convert temperatures to pixels on image
-    def _temps_to_rescaled_uints(f,Tmin,Tmax):
+    def _temps_to_rescaled_uints(self,f,Tmin,Tmax):
         norm = np.uint8((f - Tmin)*255/(Tmax-Tmin))
         norm.shape = (24,32)
         return norm
