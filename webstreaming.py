@@ -134,7 +134,6 @@ def get_ip_address():
 
 # check to see if this is the main thread of execution
 if __name__ == '__main__':
-
 	# start a thread that will perform motion detection
 	t = threading.Thread(target=pull_images)
 	t.daemon = True
@@ -143,7 +142,7 @@ if __name__ == '__main__':
 	ip=get_ip_address()
 	port=8000
 
-	print(f'{ip}:{port}')
+	print(f'Server can be found at {ip}:{port}')
 
 	# start the flask app
-	app.run(host=ip, port=port, debug=True,threaded=True, use_reloader=False)
+	app.run(host=ip, port=port, debug=False,threaded=True, use_reloader=False)

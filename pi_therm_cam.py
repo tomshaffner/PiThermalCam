@@ -3,7 +3,7 @@
 ##################################
 # MLX90640 Thermal Camera w Raspberry Pi
 ##################################
-import time,board,busio
+import time,board,busio, traceback
 import numpy as np
 import adafruit_mlx90640
 import datetime as dt
@@ -76,11 +76,15 @@ class ThermalCam:
         """Get one pull of the raw image data, converting temp units if necessary"""
         # Get image
         self._raw_image = np.zeros((24*32,))
-        self.mlx.getFrame(self._raw_image) # read mlx90640
-        self._temp_min = np.min(self._raw_image) 
-        self._temp_max = np.max(self._raw_image) 
-        self._raw_image=self._temps_to_rescaled_uints(self._raw_image,self._temp_min,self._temp_max)
-        self._current_frame_processed=False # Note that the newly updated raw frame has not been processed
+        try:
+            self.mlx.getFrame(self._raw_image) # read mlx90640
+            self._temp_min = np.min(self._raw_image) 
+            self._temp_max = np.max(self._raw_image) 
+            self._raw_image=self._temps_to_rescaled_uints(self._raw_image,self._temp_min,self._temp_max)
+            self._current_frame_processed=False # Note that the newly updated raw frame has not been processed
+        except ValueError:
+            print("Math error; continuing...")
+            logger.info(traceback.format_exc())
 
     def _process_raw_image(self):
         """Process the raw temp data to a colored image. Filter if necessary"""
