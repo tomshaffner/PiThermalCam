@@ -1,5 +1,5 @@
 from pi_therm_cam import ThermalCam
-from flask import Response, make_response
+from flask import Response, request, make_response
 from flask import Flask, send_file
 from flask import render_template
 import threading
@@ -65,8 +65,11 @@ def decrement_interpolation():
     return ("Interpolation Changed Back")
 
 @app.route('/exit')
-def exit():
-    break
+def appexit():
+	func = request.environ.get('werkzeug.server.shutdown')
+	if func is None:
+		raise RuntimeError('Not running with the Werkzeug Server')
+	func()
 
 @app.route('/localsave')
 def localsave():
