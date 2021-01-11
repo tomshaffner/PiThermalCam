@@ -40,7 +40,7 @@ output_folder = config.get(section='FILEPATHS',option='output_folder',raw=True)
 # Setup camera
 i2c = busio.I2C(board.SCL, board.SDA, frequency=800000) # setup I2C
 mlx = adafruit_mlx90640.MLX90640(i2c) # begin MLX90640 with I2C comm
-mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_16_HZ  # set refresh rate
+mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_8_HZ  # set refresh rate
 time.sleep(0.1)
 
 # function to convert temperatures to pixels on image
