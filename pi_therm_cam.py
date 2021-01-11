@@ -34,8 +34,6 @@ logger.debug(f'Config file sections found: {config.sections()}')
 # Note: Raw parsing used to avoid having to escape % characters in time strings
 logger.debug("Reading config file and initializing variables...")
 output_folder = config.get(section='FILEPATHS',option='output_folder',raw=True)
-filename_date_format = config.get(section='FILEPATHS',option='filename_date_format',raw=True) # NOTE: This will be used in Windows so no disallowed character like ":"
-
 
 class ThermalCam:
     # See https://gitlab.com/cvejarano-oss/cmapy/-/blob/master/docs/colorize_all_examples.md to develop list

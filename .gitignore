@@ -8,6 +8,9 @@
 !/run_data/note.txt
 *.png
 
+# Pycache
+*__pycache__
+
 # Node artifact files
 node_modules/
 dist/
@@ -53,3 +56,4 @@ Thumbs.db
 *.mov
 *.wmv
 
+.vscode

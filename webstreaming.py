@@ -64,12 +64,16 @@ def decrement_interpolation():
     thermcam.change_interpolation(forward=False)
     return ("Interpolation Changed Back")
 
+@app.route('/exit')
+def exit():
+    break
+
 @app.route('/localsave')
 def localsave():
 	# Send the current frame as a jpeg to the browder for saving
-	global current_frame
+	global outputFrame
 	print("Saving?")	
-	flag , encodedImage = cv2.imencode(".jpg", current_frame)
+	flag , encodedImage = cv2.imencode(".jpg", outputFrame)
 	# response=make_response(bytearray(encodedImage))
 	# response.headers.set('Content-Type', 'image/jpeg')
 	# response.headers.set('Content-Disposition', 'attachment', filename='pic_' + dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')+ '.jpg')

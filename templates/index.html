@@ -87,6 +87,30 @@
         });
       });
 </script>
+  <script type=text/javascript>
+  $(function() {
+    $('a#localsave').on('click', function(e) {
+      e.preventDefault()
+      $.getJSON('/localsave',
+          function(data) {
+        //do nothing
+      });
+      return false;
+    });
+  });
+</script>
+  <script type=text/javascript>
+  $(function() {
+    $('a#exit').on('click', function(e) {
+      e.preventDefault()
+      $.getJSON('/exit',
+          function(data) {
+        //do nothing
+      });
+      return false;
+    });
+  });
+</script>
 </head>
 
 <!-- Center align things and add margins -->
@@ -97,6 +121,16 @@
 
   .container {
     max-width: 800px;
+    margin: auto;
+  }
+
+  .container2 {
+    max-width: 100px;
+    margin: auto;
+  }
+
+  .container3 {
+    max-width: 50px;
     margin: auto;
   }
 
@@ -132,6 +166,11 @@
       <a href=# id=filter><button class='btn btn-default'>Toggle Filter</button></a>
     </form>
   </div>
+  &nbsp;
+  <div class='container2'><a href=# id=localsave><button class='btn btn-default'>Save Locally</button></a></div>
+  &nbsp;
+  <div class='container3'><a href=# id=exit><button class='btn btn-default'>Exit</button></a></div>
+
 </body>
 
 </html>
