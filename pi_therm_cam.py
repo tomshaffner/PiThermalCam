@@ -47,6 +47,7 @@ class ThermalCam:
     _temp_max=None
     _raw_image=None
     _image=None
+    _file_saved_notification_start=None
 
     def __init__(self,use_f:bool = True, filter_image:bool = False, image_width:int=1200, image_height:int=900, output_folder:str = '/home/pi/pithermalcam/run_data/'):
         self.use_f=use_f
@@ -114,6 +115,10 @@ class ThermalCam:
             text = f'Tmin={self._temp_min:+.1f}C - Tmax={self._temp_max:+.1f}C - FPS={1/(time.time() - self._t0):.1f} - Interpolation: {self._interpolation_list_name[self._interpolation_index]} - Colormap: {self._colormap_list[self._colormap_index]} - Filtered: {self.filter_image}'
         cv2.putText(self._image, text, (30, 18), cv2.FONT_HERSHEY_SIMPLEX, .4, (255, 255, 255), 1)
         self._t0 = time.time() # Update time to this pull
+
+        # For a brief period after saving, display saved notification
+        if self._file_saved_notification_start is not None and (time.monotonic()-self._file_saved_notification_start)<1:
+            cv2.putText(self._image, 'Snapshot Saved!', (300,300),cv2.FONT_HERSHEY_SIMPLEX, .8, (255, 255, 255), 2)
         
     def show_processed_image(self):
         """Resize image window and display it"""  
@@ -198,6 +203,7 @@ class ThermalCam:
     def save_image(self):
         fname = self.output_folder + 'pic_' + dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.jpg'
         cv2.imwrite(fname, self._image)
+        self._file_saved_notification_start = time.monotonic()
         print('Thermal Image ', fname)
 
     # function to convert temperatures to pixels on image

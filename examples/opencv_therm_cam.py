@@ -94,6 +94,7 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
     t0 = time.time()
     colormap_index = 0
     interpolation_index = 3
+    file_saved_notification_start = None
     # See https://gitlab.com/cvejarano-oss/cmapy/-/blob/master/docs/colorize_all_examples.md to develop list
     colormap_list=['jet','bwr','seismic','coolwarm','PiYG_r','tab10','tab20','gnuplot2','brg']
     interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4,5,6]
@@ -137,6 +138,11 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
             else:
                 text = f'Tmin={temp_min:+.1f}C - Tmax={temp_max:+.1f}C - FPS={1/(time.time() - t0):.1f} - Interpolation: {interpolation_list_name[interpolation_index]} - Colormap: {colormap_list[colormap_index]} - Filtered: {filter_image}'
             cv2.putText(img, text, (30, 18), cv2.FONT_HERSHEY_SIMPLEX, .4, (255, 255, 255), 1)
+
+            # For a brief period after saving, display saved notification
+            if file_saved_notification_start is not None and (time.monotonic()-file_saved_notification_start)<1:
+                cv2.putText(img, 'Snapshot Saved!', (300,300),cv2.FONT_HERSHEY_SIMPLEX, .8, (255, 255, 255), 2)
+
             cv2.namedWindow('Thermal Image', cv2.WINDOW_NORMAL)
             cv2.resizeWindow('Thermal Image', 1200,900)
             cv2.imshow('Thermal Image', img)
@@ -149,6 +155,7 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
             if key == ord("s"): # If s is chosen, save an image to filec
                 fname = output_folder + 'pic_' + dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.jpg'
                 cv2.imwrite(fname, img)
+                file_saved_notification_start = time.monotonic()
                 print('Thermal Image ', fname)
             elif key == ord("c"): # If c is chosen cycle the colormap used
                 colormap_index+=1

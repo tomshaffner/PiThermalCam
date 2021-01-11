@@ -1,6 +1,6 @@
 from pi_therm_cam import ThermalCam
-from flask import Response, request, make_response
-from flask import Flask, send_file
+from flask import Response, request
+from flask import Flask
 from flask import render_template
 import threading
 import datetime as dt
@@ -31,8 +31,8 @@ def index():
 #background processes happen without any refreshing (for button clicks)
 @app.route('/save')
 def save_image():
-    thermcam.save_image()
-    return ("Snapshot Saved")
+	thermcam.save_image()
+	return ("Snapshot Saved")
 
 @app.route('/units')
 def change_units():
