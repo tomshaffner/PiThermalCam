@@ -70,21 +70,7 @@ def appexit():
 	if func is None:
 		raise RuntimeError('Not running with the Werkzeug Server')
 	func()
-
-@app.route('/localsave')
-def localsave():
-	# Send the current frame as a jpeg to the browder for saving
-	global outputFrame
-	print("Saving?")	
-	flag , encodedImage = cv2.imencode(".jpg", outputFrame)
-	# response=make_response(bytearray(encodedImage))
-	# response.headers.set('Content-Type', 'image/jpeg')
-	# response.headers.set('Content-Disposition', 'attachment', filename='pic_' + dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')+ '.jpg')
-	# return response
-
-	filename='pic_' + dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')+ '.jpg'
-	return send_file(io.BytesIO(bytearray(encodedImage)),mimetype='image/jpeg',as_attachment=True,attachment_filename=filename)
-
+	
 def generate():
 	# grab global references to the output frame and lock variables
 	global outputFrame, lock
