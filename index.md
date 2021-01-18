@@ -1,4 +1,4 @@
-## MLX90640 Thermal Camera with Raspberry Pi 4
+# MLX90640 Thermal Camera with Raspberry Pi 4
 {:.no_toc}
 
 # Note: This page is still under construction. Check back later for the final version.
@@ -10,19 +10,19 @@ Thanks are owed to those two projects: namely, Joshua Hrisko's [article at Maker
 * This line is replaced at runtime by a Table of Contents of headers, excluding the top header
 {:toc}
 
-### Physical Setup
+## Physical Setup
 
-### Software Installation
+## Software Installation
 
-### Setting Up Run
+## Setting Up Run
 
-#### Matplotlib Version
+### Matplotlib Version
 
-#### OpenCV Version - Local
+### OpenCV Version - Local
 
-#### OpenCV Version - Web Server
+### OpenCV Version - Web Server
 
-### Usage
+## Usage
 
 
 
