@@ -66,9 +66,17 @@ If you're going to be walking around your house, or outside it, you'll want some
 
 I went with the Wifi option so I can't speak to screens, but I'd imagine any of the many Pi-specific screens would be fine for this.
 
-On the battery, the Pi 4 draws around 3 Amps so you'd want any backup battery you have which can feed a USB-C connection with 3 Amps. You could try one with less power than this if it's not too low everything would probably work, it would just be slower.
+On the battery, the Pi 4 draws around 3 Amps so you'd want any backup battery you have which can feed a USB-C connection with 3 Amps. I had a battery I use for my phone while traveling that worked great. You could try one with less power than this; just be aware that even if it runs it might be a bit slower.
 
-## Physical Setup
+## Hardware Setup
+
+{:.center}
+![Wiring Setup](/images/mlx90640_rpi_wiring_diagram_w_table.png#center)
+*[By Joshua Hrisko / Maker Portal, copied permission and thanks](https://www.raspberrypi.org/products/raspberry-pi-universal-power-supply/)*
+
+Most of the physical setup is straightforward. The one piece specific to this project is wiring the camera to the Pi itself, and luckly for us, Josh at Maker Portal has made the perfect picture (above) for this and kindly agreed to let me put it here too.
+
+The image shows where the camera connects to the Pi using the appropriate power and I2C pins. In my particular case I had a fan on the ground pin shown in this so I needed to move the ground wire to another ground on the Pi, but you can find another ground as needed in the [GPIO pinout diagrams](https://www.raspberrypi.org/documentation/usage/gpio/) available in many places online.
 
 ## Software Installation
 
