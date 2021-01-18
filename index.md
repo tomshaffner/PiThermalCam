@@ -1,4 +1,4 @@
-# MLX90640 Thermal Camera with Raspberry Pi 4
+-> # MLX90640 Thermal Camera with Raspberry Pi 4 <-
 {:.no_toc}
 January, 2021
 
@@ -13,7 +13,6 @@ It's winter, and my heating bill has gone up. I've also noticed a draft in certa
 Cameras such as these can produce images like this one, showing where heat is leaving a building:
 
 ![Image of House from Thermal Camera](/images/Passivhaus_thermogram_gedaemmt_ungedaemmt.png#center)
-
 *[Passivhaus Institut, CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/), via Wikimedia Commons*
 
 Initially I researched buying or renting such a camera, but the buying options tend to start at [$200 for the basic smartphone version](https://www.flir.com/products/flir-one-gen-3/), and go up to nearly $1,000. My local Lowe's has such cameras for rent as well but they cost $50 for 24 hours!
@@ -39,7 +38,7 @@ Thanks are owed to those three other projects: namely, Joshua Hrisko's article a
 ## Parts Required
 
 ![Raspberry Pi 4](/images/Raspberry_Pi_4_Model_B_-_Side.jpg#center)
-*[By Miiicihiaieil  Hieinizilieir / Wikimedia Commons, CC BY-SA 4.0]*(https://commons.wikimedia.org/w/index.php?curid=80140656)
+*[By Miiicihiaieil  Hieinizilieir / Wikimedia Commons, CC BY-SA 4.0](https://commons.wikimedia.org/w/index.php?curid=80140656)*
 
 Most of the parts lists I see are incomplete or link to pages with excessive costs (e.g. the Pi was invented to be accessible, so the basic version should never be > $35 before shipping). Below is a complete list of parts needed if you're starting from scratch. The Pi-specific items can be reused for other projects; the camera is really the only item specific to this project.
 
