@@ -1,0 +1,16 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+.inner {
+  max-width: 75%;
+}
+
+.page-header {
+    color: #fff;
+    text-align: center;
+    background-color: #159957;
+    background-image: linear-gradient(90deg, rgba(4,0,251,1) 35%, rgba(24,230,8,1) 45%, rgba(255,223,0,1) 55%, rgba(255,0,0,1) 73%);
+    padding: 1.5rem 2rem;
+  }
