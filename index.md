@@ -1,8 +1,8 @@
-<div align="center">
+{:.center}
 # MLX90640 Thermal Camera with Raspberry Pi 4
 {:.no_toc}
+{:.center}
 January, 2021
-</div>
 
 # Note: This page is still under construction. Check back later for the final version.
 {:.no_toc}
@@ -15,7 +15,7 @@ It's winter, and my heating bill has gone up. I've also noticed a draft in certa
 Cameras such as these can produce images like this one, showing where heat is leaving a building:
 
 ![Image of House from Thermal Camera](/images/Passivhaus_thermogram_gedaemmt_ungedaemmt.png#center)
-*[Passivhaus Institut, CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/), via Wikimedia Commons*{: style="text-align:center"}
+{:.center}*[Passivhaus Institut, CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/), via Wikimedia Commons*
 
 Initially I researched buying or renting such a camera, but the buying options tend to start at [$200 for the basic smartphone version](https://www.flir.com/products/flir-one-gen-3/), and go up to nearly $1,000. My local Lowe's has such cameras for rent as well but they cost $50 for 24 hours!
 

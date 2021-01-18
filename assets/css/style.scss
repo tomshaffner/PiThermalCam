@@ -29,6 +29,11 @@ img[src*='#center'] {
   margin: auto;
 }
 
+// Center text that has the callout after it
+.center {
+  text-align: center;
+}
+
 // Change the color of headers
 .main-content h1,
 .main-content h2,
