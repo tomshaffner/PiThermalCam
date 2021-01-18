@@ -1,12 +1,19 @@
 ---
 ---
 
-@import "{{ site.theme }}";
+@import "";
   
 .page-header {
-    color: rgb(0, 0, 0);
+    color: #fff;
     text-align: center;
     background: rgb(4,0,251);
     background: linear-gradient(90deg, rgba(4,0,251,1) 70%, rgba(14,255,0,1) 83%, rgba(255,244,0,1) 87%, rgba(255,0,0,1) 92%);
     padding: 1.5rem 2rem;
 }
+
+.main-content, .toc {
+    max-width: 80rem;
+    padding: 2rem 4rem;
+    margin: 0 auto;
+    font-size: 1.1rem;
+  }
