@@ -1,37 +1,29 @@
-## Welcome to GitHub Pages
+# MLX90640 Thermal Camera with Raspberry Pi 4
+{:.no_toc}
 
-You can use the [editor on GitHub](https://github.com/tomshaffner/PiThermalCam/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+# Note: This page is still under construction. Check back later for the final version.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+I recently purchased an MLX90640 Thermal Camera in order to evaluate the insulation/thermal leakage of my house. I connected this to a [Raspberry Pi 4](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/). There were several such projects already online, and I ended up taking pieces of two as my baseline, mixing and matching and adding some features. The results of that work are placed here for others to use directly or as a baseline for further work.
 
-### Markdown
+Thanks are owed to those two projects: namely, Joshua Hrisko's [article at Maker Portal](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640) and Валерий Курышев's [article under the name Walker2000 at Habr](https://habr.com/en/post/441050/). Their work was a BIG step forward as a starting point.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+* This line is replaced at runtime by a Table of Contents of headers, excluding the top header
+{:toc}
 
-```markdown
-Syntax highlighted code block
+## Physical Setup
 
-# Header 1
-## Header 2
-### Header 3
+## Software Installation
 
-- Bulleted
-- List
+## Setting Up Run
 
-1. Numbered
-2. List
+### Matplotlib Version
 
-**Bold** and _Italic_ and `Code` text
+### OpenCV Version - Local
 
-[Link](url) and ![Image](src)
-```
+### OpenCV Version - Web Server
+
+## Usage
+
+
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/tomshaffner/PiThermalCam/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
