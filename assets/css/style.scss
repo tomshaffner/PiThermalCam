@@ -3,15 +3,20 @@
 
 @import "{{ site.theme }}";
   
+// The below lines overwrite pieces of https://github.com/yixuan/prettydoc/blob/master/inst/resources/css/cayman.css to adjust the theme
+
+// Change header color and add height/padding to keep banner height and text location the same
 .page-header {
     color: #fff;
     height: 21rem;
     text-align: center;
     background: rgb(4,0,251);
-    background: linear-gradient(90deg, rgba(4,0,251,1) 70%, rgba(14,255,0,1) 83%, rgba(255,244,0,1) 87%, rgba(255,0,0,1) 92%);
+    background: linear-gradient(90deg, rgba(4,0,251,1) 70%, rgba(14,255,0,1) 83%, rgba(255,244,0,1) 87%, rgba(255,0,0,1) 92%); // Created with https://cssgradient.io/
     padding: 5rem 2rem;
 }
 
+
+// Overwrite page width
 .main-content, .toc {
     max-width: 80rem;
     padding: 2rem 4rem;
@@ -19,7 +24,7 @@
     font-size: 1.1rem;
   }
 
-
+// Change the color of headers
 .main-content h1,
 .main-content h2,
 .main-content h3,
@@ -29,5 +34,5 @@
 margin-top: 2rem;
 margin-bottom: 1rem;
 font-weight: normal;
-color: #010db3;
+color: #0a0035;
 }
