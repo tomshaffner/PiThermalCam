@@ -15,7 +15,6 @@
     padding: 5rem 2rem;
 }
 
-
 // Overwrite page width
 .main-content, .toc {
     max-width: 80rem;
@@ -23,6 +22,12 @@
     margin: 0 auto;
     font-size: 1.1rem;
   }
+
+// Center Images when they end with #center
+img[src*='#center'] { 
+  display: block;
+  margin: auto;
+}
 
 // Change the color of headers
 .main-content h1,

@@ -12,27 +12,34 @@ It's winter, and my heating bill has gone up. I've also noticed a draft in certa
 
 Cameras such as these can produce images like this one, showing where heat is leaving a building:
 
-![Image of House from Thermal Camera](/images/Passivhaus_thermogram_gedaemmt_ungedaemmt.png)
+![Image of House from Thermal Camera](/images/Passivhaus_thermogram_gedaemmt_ungedaemmt.png#center)
+
 *[Passivhaus Institut, CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/), via Wikimedia Commons*
 
 Initially I researched buying or renting such a camera, but the buying options tend to start at [$200 for the basic smartphone version](https://www.flir.com/products/flir-one-gen-3/), and go up to nearly $1,000. My local Lowe's has such cameras for rent as well but they cost $50 for 24 hours!
 
-I've long been a Raspberry Pi fan so when I saw that rental price I decided to see what options were available for the Pi. I quickly found the MLX90640 camera which costs only $60; at this price I figured I'd get a cool gadget to play with, be able to evaluate my house for leaks, and when I'm done I might use it as a security camera. I would of course also need a pi and accompany equipment but I had some of that and would be able to reuse it all for other projects as well. This was also a great excuse to finally upgrade from the Pi 3B+ I had to a [Pi 4](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/).
+I've long been a Raspberry Pi fan so when I saw that rental price I decided to see what options were available for the Pi. I quickly found the MLX90640 camera which costs only $60; at this price I figured I'd get a cool gadget to play with, be able to evaluate my house for leaks, and when I'm done I might use it as a security camera.
+
+I would of course also need a pi and accompany equipment but I had some of that and would be able to reuse it all for other projects as well. This was also a great excuse to finally upgrade from the Pi 3B+ I had to a [Pi 4](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/).
 
 Of note: The resolution on this camera is much lower so we'll never get pictures quite like the above, but a mere few years ago even the [best cheaper camera](https://www.adafruit.com/product/3538) had only an 8x8 resolution, which is nearly unusable for projects like this. Jumping up to 24x32 resolution of the MLX90640 is a 12-fold increase for about the same price! It seems we've finally reached the point where cheap homemade versions of the camera are worth buying.
 
 The below guide is meant to be a start-to-finish overview of the parts, setup, install, and use of this project for any who want to do likewise or build on it further.
 
-* This line is replaced at runtime by a Table of Contents of headers, excluding the top header
+**Contents**
+* This line is replaced at runtime by a Table of Contents of headers, excluding those headers followed by {:.no_toc} 
 {:toc}
 
-## Background/Acknowledgements
+## Background
 
 There were several such projects already online, and I ended up taking pieces of two as my baseline, mixing and matching, and adding features like web streaming from a third page. The results of that work are placed here for others to use directly or as a baseline for further develoment. The code is also available in the Github Repo corresponding to this page (link at top). The license is also included there and is an AGPL-3.0 License.
 
 Thanks are owed to those three other projects: namely, Joshua Hrisko's article at Maker Portal, [High Resolution Thermal Camera with Raspberry Pi and MLX90640](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640),  Валерий Курышев's article under the name Walker2000 at Habr, [Making a DIY thermal camera based on a Raspberry Pi](https://habr.com/en/post/441050/), and Adrian Rosebrock's article [OpenCV – Stream video to web browser/HTML page](https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/). Their work was a BIG step forward as a starting point.
 
 ## Parts Required
+
+![Raspberry Pi 4](/images/Raspberry_Pi_4_Model_B_-_Side.jpg#center)
+*[By Miiicihiaieil  Hieinizilieir / Wikimedia Commons, CC BY-SA 4.0]*(https://commons.wikimedia.org/w/index.php?curid=80140656)
 
 Most of the parts lists I see are incomplete or link to pages with excessive costs (e.g. the Pi was invented to be accessible, so the basic version should never be > $35 before shipping). Below is a complete list of parts needed if you're starting from scratch. The Pi-specific items can be reused for other projects; the camera is really the only item specific to this project.
 
