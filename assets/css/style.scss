@@ -5,7 +5,7 @@
   
 .page-header {
     color: #fff;
-    height: 22rem;
+    height: 21rem;
     text-align: center;
     background: rgb(4,0,251);
     background: linear-gradient(90deg, rgba(4,0,251,1) 70%, rgba(14,255,0,1) 83%, rgba(255,244,0,1) 87%, rgba(255,0,0,1) 92%);
@@ -20,5 +20,8 @@
   }
 
   .main-content h6 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: normal;
     color: #010db3;
   }
