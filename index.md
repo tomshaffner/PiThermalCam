@@ -1,4 +1,4 @@
-# MLX90640 Thermal Camera with Raspberry Pi 4
+## MLX90640 Thermal Camera with Raspberry Pi 4
 
 # Note: This page is still under construction. Check back later for the final version.
 
@@ -6,19 +6,19 @@ I recently purchased an MLX90640 Thermal Camera in order to evaluate the insulat
 
 Thanks are owed to those two projects: namely, Joshua Hrisko's [article at Maker Portal](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640) and Валерий Курышев's [article under the name Walker2000 at Habr](https://habr.com/en/post/441050/). Their work was a BIG step forward as a starting point.
 
-## Physical Setup
+### Physical Setup
 
-## Software Installation
+### Software Installation
 
-## Setting Up Run
+### Setting Up Run
 
-### Matplotlib Version
+#### Matplotlib Version
 
-### OpenCV Version - Local
+#### OpenCV Version - Local
 
-### OpenCV Version - Web Server
+#### OpenCV Version - Web Server
 
-## Usage
+### Usage
 
 
 
