@@ -141,11 +141,17 @@ Once the above steps are done and your device is connected you can check to ensu
 
 Of note: The basic datasheet is available at Digikey for the [110 Degree Camera Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4469_Web.pdf) and the [55 Degree Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4407_Web.pdf). In both cases though the underlying camera device itself has the [same datasheet](https://www.melexis.com/-/media/files/documents/datasheets/mlx90640-datasheet-melexis.pdf), which shows that register 33 is the correct address.
 
+**IDE Setup for Development**
+
+If you're not going to run simply from the icons or script, you'll likely will want an IDE in order to look at and work with the python code. The Raspberry Pi comes with several now; if you installed the Raspbian version with recommended software you can find them in the Programming section of the menu. In my case though, I love Visual Studio Code and it's now supported on the Pi!! Straightforward install instructions are available at [PiMyLifeUp](https://pimylifeup.com/raspberry-pi-visual-studio-code/). Also, if you want a faster development experience you can install VS Code on your local machine, enable and set up SSH on the Pi (tutorials on this easy to find), and then use the remote development extension from your local VSCode. This was actually the best dev experience I found; the only down side is that running in this way will, in some approaches, throw errors because you don't have a display. As such I did 90% of my development via remote SSH and the remaining 10%, where I needed to have live video on the Pi itself, either directly in the terminal on the Pi or in VSCode on the Pi.
+
+None of this is required, but if you find yourself looking to develop this project further, I found this setup to be the best.
+
 ## Library Installation
 
-After the prereq setup, clone the Git repo to your Pi. Clone it into your default (pi) folder for best functioning. This can be done by opening a terminal, making sure you're in the pi folder, and typing `git clone https://github.com/tomshaffner/PiThermalCam.git`.
+After the prereq setup, clone the Git repo to your Pi. Clone it into your default (pi) folder to mirror my setup and avoid needing extra adjustments. This can be done by opening a terminal, making sure you're in the pi folder, and typing `git clone https://github.com/tomshaffner/PiThermalCam.git`.
 
-There are three approaches for running. All three are python 3 scripts so if you're comfortable with running python code manually or via an IDE you can just execute them. Details outlined below.
+There are three approaches for running the camear. All three are python 3 scripts so if you're comfortable with running python code manually or via an IDE you can just execute them. Details outlined below.
 
 For convenience I also created a desktop icon for each approach; those icons are in the templates folder and can be copied to your Raspbian desktop. Depending on how they downloaded You may need to make them executable, and they only work if you've installed this library in pi/pithermalcam/; otherwise you'll have to update the links.
 
