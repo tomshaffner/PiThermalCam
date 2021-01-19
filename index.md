@@ -199,7 +199,7 @@ The colormap used can sometimes make a big differences in what is easily visible
 ![Cycling Colormaps](/images/cycling colormaps.gif#center)
 *Different colormaps make it easier to see important areas*
 
-Note: It's hard to see in the compressed gif here, but the colormap used is displayed in the white text at the top.
+Note: It's hard to see in the compressed gif here, but the colormap in use is shown in the white text at the top.
 
 The contrast in the image also makes a big difference. E.g. as I move out of the picture in this clip, the smaller temperature differences in the image become much more visible, making the impact of the windows much clearer. Again, different colormaps can help highlight areas of interest here too.
 
@@ -207,6 +207,7 @@ The contrast in the image also makes a big difference. E.g. as I move out of the
 ![Impact of Temperature Range on image](/images/turning_to_windows_only.gif#center)
 *As I leave the image, my bodyheat being removed makes the temperature difference between the windows and wall more visible*
 
+#### Interpolation Algorithms
 Also, the process of blowing the image up larger requires zoom/interpolation algorithms of various sorts. As an example, here is a picture of me with the Matplotlib approach before interpolation (i.e. just the raw data as an image):
 
 {:.center}
@@ -221,7 +222,6 @@ Now change the color scheme and interpolate for a much cleaner picture:
 
 Apart from having evidence that my hands aren't just feeling cold but actually ARE cold, this image highlights particularly how good the Matplotlib approach (which uses the SciPy library for interpolation) sets the coloring to detect edges. The white line surrounding the red of my body makes the boundary much clearer.
 
-#### Interpolation Algorithms
 OpenCV, in contrast, has a number of interpolations algorithms, but most of them don't function as well with boundaries like this, and the default colormaps weren't as useful. As a result I used the cmapy library to import a handful of Matplotlib colormaps (the once I chose you saw cycled above), and now we can also cycle interpolation algorithms. Here is a cycling of all of them, using the same colormap as the above Matplotlib image:
 
 {:.center}
