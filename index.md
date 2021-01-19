@@ -59,7 +59,7 @@ Prices are approximate as of Jan. 2021:
 - Optional - Cooling Case with Fan - There are a variety of these to buy. You might well be fine without it, but the Pi 4 runs hot enough that I decided I wanted one simply to not need to worry about the CPU temp. Of note, if you have a Pi 4, looking for a case/fan in which the fan has 3 wires, not 2, so that you can connect it up to the Raspbian fan control which turns it on/off automatically as needed. The 2-wire versions will need adjustment or will be always on.
 
 #### Other Things you might need:
-- Portable battery with amp output ~ 3 Amps
+- Portable battery with output ~ 3 Amps
 - Screen for the Raspberry Pi
 
 If you're going to be walking around your house, or outside it, you'll want some way to see the camera output live. As such, you'll probably need a portable battery for the device and, if you're not going to stream the video over your WIFI (or your pi will go outside of internet range), you'll want a screen to attach to the Pi.
@@ -79,6 +79,34 @@ Most of the physical setup is straightforward. The one piece specific to this pr
 The image shows where the camera connects to the Pi using the appropriate power and I2C pins. In my particular case I had a fan on the ground pin shown in this so I needed to move the ground wire to another ground on the Pi, but you can find another ground as needed in the [GPIO pinout diagrams](https://www.raspberrypi.org/documentation/usage/gpio/) available in many places online.
 
 ## Software Installation
+
+There are two approaches to the video in this package. The first uses Matplotlib and is based on [Joshua Hrisko's article](https://www.raspberrypi.org/products/raspberry-pi-universal-power-supply/) mentioned above. It works fine but in my case ran incredibly slow (though it had superior processing algorithms; more on this later). It was almost unusable without substantial speed improvements, so I switched to:
+
+The second approach uses an OpenCV approach based on the [article by Валерий Курышев](https://habr.com/en/post/441050/), which ran MUCH faster for me, and thus I focused subsequent work on importing the algorithms from Josh's article into the OpenCV method.
+
+You can install simply the listed requirements in steps 1 and 2 below and that will be sufficient to use the Matplotlib approach as is. If you wish to use the faster (higher FPS in the final video) and more robust approach though, you'll need to go through the longer and more complex process of installing OpenCV as well.
+
+####Installation Steps
+**1. apt-get Installs**
+First, a number of these can be installed using apt-get, in particular these three:
+libatlas-base-dev
+python-smbus
+i2c-tools
+
+**2. Pip Installs**
+Most of the remaining packages are listed in the requirements.txt file and can be installed via pip using the command `pip3 install -r requirements.txt`.
+
+**3. OpenCV Install**
+OpenCV is a very large and comprehensive video processing library. It works faster partly because it runs mostly in C++. There are thus two ways to install it.
+  - 1. Attempt a pip install
+    - There are premade versions of the library that can be installed using pip. This changes often so it's worth searching for yourself, but at the time of this writing [this article](https://www.jeremymorgan.com/tutorials/raspberry-pi/how-to-install-opencv-raspberry-pi/) or [this article](https://www.pyimagesearch.com/2018/09/19/pip-install-opencv/) discuss the pip method to do this. This is much faster/simpler but from what I've read it also is less optimized and in develpment I wanted every ounce of speed so I did the more complex install below. If you just want a simple setup give it a go; from what I've read it likely isn't a huge speed difference. If you do this, the whole system install is slightly simpler and fine if you don't expect to use multiple OpenCV versions; the virtual environment install is a bit cleaner if you might have multiple versions.
+  - 2. Compile/Install OpenCV Locally
+    - This results in a more robust and optimized install and is what I used, but it also requires a MUCH longer and more cumbersome install process: one with many steps and which, at one point, takes an hour for the build to finish. Fortunately there are many sites that walk through the steps to do this. As this changes often it's again worth searching the web for more updated install instructions for OpenCV on a Raspberry Pi, but at the time of this writing [this article](https://qengineering.eu/install-opencv-4.4-on-raspberry-pi-4.html) or [this article](https://learnopencv.com/install-opencv-4-on-raspberry-pi/) work (check for newer OpenCV version even in those though). Again, I installed directly, skipping the virtual environment, but either approach should be fine for this project.
+
+**4. Cmapy Install**
+A final small step: you'll need to install the cmapy python library. It has opencv as a dependency though, and so requires one shift.
+ - If you're using the pip install approach for OpenCV you can just install cmapy via pip3 no problem.
+ - If you're compiling OpenCV however you'll need to install cmapy using the --no-deps flag to prevent it trying to also install the pip version of OpenCV. To do this, simply run `pip3 install cmapy --no-deps`
 
 ## Setting Up Run
 
