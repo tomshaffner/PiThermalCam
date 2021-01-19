@@ -11,7 +11,7 @@ _January, 2021_
 ## Introduction
 {:.no_toc}
 
-It's winter, and my heating bill has gone up. I've also noticed a draft in certain areas of my house, so I decided it was time to fulfill my long-awaited dream of getting a thermal camera. These have generated some buzz of late as potential Covid temperature detectors, but I was more interested in seeing where there's an insulation problem in my house that I might fix. Also, fun to play with!
+It's winter, and my heating bill has gone up. I've also noticed a draft in certain areas of my house, so I decided it was time to fulfill my long-awaited dream of getting a thermal camera. These have generated some buzz of late as potential Covid temperature detectors, but I was more interested in seeing where there's an insulation problem in my house that I might fix, or to be able to detect leaks in pipes. Also, fun to play with!
 
 Cameras such as these can produce images like this one, showing where heat is leaving a building:
 
@@ -21,13 +21,13 @@ Cameras such as these can produce images like this one, showing where heat is le
 
 Initially I researched buying or renting such a camera, but the buying options tend to start at [$200 for the basic smartphone version](https://www.flir.com/products/flir-one-gen-3/), and go up to nearly $1,000. My local Lowe's has such cameras for rent as well but they cost $50 for 24 hours!
 
-I've long been a Raspberry Pi fan so when I saw that rental price I decided to see what options were available for the Pi. I quickly found the MLX90640 camera which costs only $60; at this price I figured I'd get a cool gadget to play with, be able to evaluate my house for leaks, and when I'm done I might use it as a security camera.
+I've long been a Raspberry Pi fan so when I saw that rental price I decided to see what options were available for the Pi. I quickly found the MLX90640 camera which costs only $60; at this price I figured I'd get a cool gadget to play with, be able to evaluate my house for leaks, and when I'm done I can use it as a security camera.
 
-I would of course also need a pi and accompany equipment but I had some of that and would be able to reuse it all for other projects as well. This was also a great excuse to finally upgrade from the Pi 3B+ I had to a [Pi 4](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/).
+I would of course also need a raspberry pi and accompany equipment but I had some of that and would be able to reuse it all for other projects as well. This was also a great excuse to finally upgrade from the Pi 3B+ I had to a [Pi 4](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/).
 
-Of note: The resolution on this camera is much lower so we'll never get pictures quite like the above, but a mere few years ago even the [best cheaper camera](https://www.adafruit.com/product/3538) had only an 8x8 resolution, which is nearly unusable for projects like this. Jumping up to 24x32 resolution of the MLX90640 is a 12-fold increase for about the same price! It seems we've finally reached the point where cheap homemade versions of the camera are worth buying.
+Of note: The resolution on this camera is much lower so we'll never get pictures quite like the above, but a mere few years ago even the [best cheaper camera](https://www.adafruit.com/product/3538) had only an 8x8 resolution, which is nearly unusable for projects like this. Jumping up to 24x32 resolution of the MLX90640 is a 12-fold increase for about the same price! It seems we've finally reached the point where cheap homemade thermal cameras are worth buying.
 
-The below guide is meant to be a start-to-finish overview of the parts, setup, install, and use of this project for any who want to do likewise or build on it further.
+The below guide is meant to be a start-to-finish overview of the parts, setup, install, and use of this project for any who want to do likewise or build on it further. I don't cover everything needed to work with a Raspberry Pi itself as there are plenty of other guides for that out there, but I try to touch on any and all pieces related to this project directly.
 
 **Contents**
 * This line is replaced at runtime by a Table of Contents of headers, excluding those headers followed by {:.no_toc} 
@@ -35,7 +35,7 @@ The below guide is meant to be a start-to-finish overview of the parts, setup, i
 
 ## Background
 
-There were several such projects already online, and I ended up taking pieces of two as my baseline, mixing and matching, and adding features like web streaming from a third page. The results of that work are placed here for others to use directly or as a baseline for further develoment. The code is also available in the Github Repo corresponding to this page (link at top). The license is also included there and is an AGPL-3.0 License.
+There were several similar projects already online, and I ended up taking pieces of two as my baseline, mixing and matching, and adding features like web streaming from a third source. The results of that work are placed here for others to use directly or as a baseline for further develoment. The code is also available in the Github Repo corresponding to this page (link at top). The license is also included there and is an AGPL-3.0 License, so if you make changes and publish, you'll need to publish the code with it.
 
 Thanks are owed to those three other projects: namely, Joshua Hrisko's article at Maker Portal, [High Resolution Thermal Camera with Raspberry Pi and MLX90640](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640),  Валерий Курышев's article under the name Walker2000 at Habr, [Making a DIY thermal camera based on a Raspberry Pi](https://habr.com/en/post/441050/), and Adrian Rosebrock's article [OpenCV – Stream video to web browser/HTML page](https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/). Their work was a BIG step forward as a starting point.
 
@@ -45,12 +45,12 @@ Thanks are owed to those three other projects: namely, Joshua Hrisko's article a
 ![Raspberry Pi 4](/images/Raspberry_Pi_4_Model_B_-_Side.jpg#center)
 *[By Miiicihiaieil  Hieinizilieir / Wikimedia Commons, CC BY-SA 4.0](https://commons.wikimedia.org/w/index.php?curid=80140656)*
 
-Most of the parts lists I see are incomplete or link to pages with excessive costs (e.g. the Pi was invented to be accessible, so the basic version should never be > $35 before shipping). Below is a complete list of parts needed if you're starting from scratch. The Pi-specific items can be reused for other projects; the camera is really the only item specific to this project.
+Most of the parts lists I see are incomplete or link to pages with excessive costs (e.g. the Pi was invented specifically to be cheaper, so the basic version should never be > $35 before shipping). Below is a complete list of parts needed if you're starting from scratch. The Pi-specific items can be reused for other projects; the camera is really the only item specific to this project.
 
 Prices are approximate as of Jan. 2021:
 - $60 + Shipping - [MLX90640 Thermal Camera](https://www.adafruit.com/product/4469)
-  - Note: The Thermal Camera comes in two flavors; one that's 110 Degrees wide, one that's 55. For purposes of this project the 55 would have been MUCH better but unfortunately it was sold out, so I had to make do with the with 110. This makes my thermal evaluation harder but the camera will likely be better for security camera use longer term. I haven't had the chance to try it but I believe this code should work with the 55 Degree version without alteration too.
-- $1 + Shipping - [STEMMA QT / Qwii with Female Sockets](https://www.adafruit.com/product/4397) - This, or some other wiring solution, is needed to connect the camera easily to the Pi.
+  - Note: The Thermal Camera comes in two flavors; one that's 110 Degrees wide, one that's 55. For purposes of this project the 55 would have been MUCH better but unfortunately it was sold out, so I had to make do with the with 110. This makes my thermal evaluation harder but the camera will likely be better for security camera use longer term. I haven't had the chance to try it but I believe this code should work with the 55 Degree camear too.
+- $1 + Shipping - [STEMMA QT / Qwii with Female Sockets](https://www.adafruit.com/product/4397) - This, or some other wiring solution, is needed to connect the camera to the Pi.
 - $35 + Shipping - [Raspberry Pi 4](https://www.adafruit.com/product/4292)
   - Note: This same project could likely be performed with other Raspberry Pi versions as well, e.g. a Pi 3 or the like. Some adjustments might be necessary though, and for purposes here the Pi 4 with 2 GB RAM is the one being used.
 - $10-$30 - Raspberry Pi SD Card with Raspbian Installed - You can buy cards with Raspbian pre-loaded or get larger or faster cards from a variety of sources, so long as they follow the [right guidelines](https://www.raspberrypi.org/documentation/installation/sd-cards.md).
@@ -78,7 +78,15 @@ Most of the physical setup is straightforward. The one piece specific to this pr
 
 The image shows where the camera connects to the Pi using the appropriate power and I2C pins. In my particular case I had a fan on the ground pin shown in this so I needed to move the ground wire to another ground on the Pi, but you can find another ground as needed in the [GPIO pinout diagrams](https://www.raspberrypi.org/documentation/usage/gpio/) available in many places online.
 
-## Software Installation
+Below is a picture of my device in final form. You can see the case I used (but would not recommend; better to get one a tad more open and with a variable speed fan) and the fact that I initially bought a Stemma connector with male ends meant I had to solder those to other wires to connect to the Pi. If you buy the right pieces the first time yours will look cleaner than this.
+
+I found taping the camera to the case an easy way to make using the device simpler to work with.
+
+{:.center}
+![Wiring Setup](/images/assembled device.jpg#center)
+*Final Device Assembled*
+
+## Prerequisite Software Installation
 
 There are two approaches to the video in this package. The first uses Matplotlib and is based on [Joshua Hrisko's article](https://www.raspberrypi.org/products/raspberry-pi-universal-power-supply/) mentioned above. It works fine but in my case ran incredibly slow (though it had superior processing algorithms; more on this later). It was almost unusable without substantial speed improvements, so I switched to:
 
@@ -86,7 +94,7 @@ The second approach uses an OpenCV approach based on the [article by Валер�
 
 You can install simply the listed requirements in steps 1 and 2 below and that will be sufficient to use the Matplotlib approach as is. If you wish to use the faster (higher FPS in the final video) and more robust approach though, you'll need to go through the longer and more complex process of installing OpenCV as well.
 
-#### Installation Steps
+### Installation Steps
 **1. apt-get Installs**
 
 First, a number of these can be installed using apt-get, in particular these three:
@@ -112,9 +120,9 @@ A final small step: you'll need to install the cmapy python library. It has open
  - If you're using the pip install approach for OpenCV you can just install cmapy via pip3 no problem.
  - If you're compiling OpenCV however you'll need to install cmapy using the --no-deps flag to prevent it trying to also install the pip version of OpenCV. To do this, simply run `pip3 install cmapy --no-deps`
 
-## Setting Up Run
+## Library Installation
 
-First, clone the Git repo locally. Clone it into your default (pi) folder for best functioning. This can be done by opening a terminal, making sure you're in the pi folder, and typing `git clone https://github.com/tomshaffner/PiThermalCam.git`.
+After the prereq setup, clone the Git repo to your Pi. Clone it into your default (pi) folder for best functioning. This can be done by opening a terminal, making sure you're in the pi folder, and typing `git clone https://github.com/tomshaffner/PiThermalCam.git`.
 
 There are three approaches for running. All three are python 3 scripts so if you're comfortable with running python code manually or via an IDE you can just execute them. Details outlined below.
 
