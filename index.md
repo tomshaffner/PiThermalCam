@@ -190,11 +190,16 @@ Run this by executing the icon or going into the folder in the terminal and typi
 
 In the normal mode, the video will start running.
 
-In using the camera I quickly found that it was useful to be able to change a number of features as the camera was running. For example, the colormap used can sometimes make a big differences in what is easily visible or not. In this clip, for example, you can see both my body heat on the side and two cold windows in the backgroung. I cycle the colormap in this, showing how much it can make a difference in how easy/hard it is to see differences.
+In using the camera I quickly found that it was useful to be able to change a number of features as the camera was running. Let's discusse these here:
+
+#### Colormaps
+The colormap used can sometimes make a big differences in what is easily visible or not. In this clip, for example, you can see both my body heat on the side and two cold windows in the backgroung. I cycle the colormap in this, showing how much it can make a difference in how easy/hard it is to see differences.
 
 {:.center}
 ![Cycling Colormaps](/images/cycling colormaps.gif#center)
 *Different colormaps make it easier to see important areas*
+
+Note: It's hard to see in the compressed gif here, but the colormap used is displayed in the white text at the top.
 
 The contrast in the image also makes a big difference. E.g. as I move out of the picture in this clip, the smaller temperature differences in the image become much more visible, making the impact of the windows much clearer. Again, different colormaps can help highlight areas of interest here too.
 
@@ -216,6 +221,7 @@ Now change the color scheme and interpolate for a much cleaner picture:
 
 Apart from having evidence that my hands aren't just feeling cold but actually ARE cold, this image highlights particularly how good the Matplotlib approach (which uses the SciPy library for interpolation) sets the coloring to detect edges. The white line surrounding the red of my body makes the boundary much clearer.
 
+#### Interpolation Algorithms
 OpenCV, in contrast, has a number of interpolations algorithms, but most of them don't function as well with boundaries like this, and the default colormaps weren't as useful. As a result I used the cmapy library to import a handful of Matplotlib colormaps (the once I chose you saw cycled above), and now we can also cycle interpolation algorithms. Here is a cycling of all of them, using the same colormap as the above Matplotlib image:
 
 {:.center}
@@ -224,7 +230,7 @@ OpenCV, in contrast, has a number of interpolations algorithms, but most of them
 
 The interpolation algorithm used is shown in the white text at the top of the image. Of note, cycling in this way allows us to us simplistic algorithms that are pretty much the basic raw data (useful in some cases to see what's actually going on before interpolation). Also, the last two interpolation algorithms used are based in part on the Matplotlib approach. The first of them, Scipy, uses exactly the same Scipy-based algorithm the Matplotlib approach used. As you can see in this gif though, using it can be a bit slower and prone to errors like the color glitch here. To gain the clearer quality of the Scipy approach but the speed of OpenCV the Scipy/CV2 approach at the end uses Scipy to scale up partially, and then OpenCV to scale the rest of the way.
 
-
+#### Other Options
 Finally, a few other simple options wer added.
 
 - The temperature units shown in the text of the image (which are relative by the way, not absolute) can be toggled between Fahrenheit and Celsius.
