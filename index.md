@@ -27,7 +27,9 @@ I would of course also need a raspberry pi and accompany equipment but I had som
 
 Of note: The resolution on this camera is much lower so we'll never get pictures quite like the above, but a mere few years ago even the [best cheaper camera](https://www.adafruit.com/product/3538) had only an 8x8 resolution, which is nearly unusable for projects like this. Jumping up to 24x32 resolution of the MLX90640 is a 12-fold increase for about the same price! It seems we've finally reached the point where cheap homemade thermal cameras are worth buying.
 
-The below guide is meant to be a start-to-finish overview of the parts, setup, install, and use of this project for any who want to do likewise or build on it further. I don't cover everything needed to work with a Raspberry Pi itself as there are plenty of other guides for that out there, but I try to touch on any and all pieces related to this project directly.
+The below guide is meant to be a start-to-finish overview of the parts, setup, install, and use of this project for any who want to do likewise or build on it further. I don't cover everything needed to work with a Raspberry Pi itself as there are plenty of other guides for that out there, but I try to touch on any and all pieces related to this project directly, at least to get it up and running.
+
+I also touch on a few pieces needed for development here, but if you're going to develop further I'd suggest looking at the original source articles as well; they cover the details of the code in more detail than I do here. I've also tried to leave comments in the code to make quite clear the sources of things and other information necessary to track what's going on and/or speed the learning curve for development.
 
 **Contents**
 * This line is replaced at runtime by a Table of Contents of headers, excluding those headers followed by {:.no_toc} 
@@ -58,7 +60,7 @@ Prices are approximate as of Jan. 2021:
 - ~$12 - Raspberry Pi Power Supply - You can get cheaper ones online, but they don't always have sufficient power output (Amps). For a quality one check [here](https://www.raspberrypi.org/products/raspberry-pi-universal-power-supply/)
 - Optional - Cooling Case with Fan - There are a variety of these to buy. You might well be fine without it, but the Pi 4 runs hot enough that I decided I wanted one simply to not need to worry about the CPU temp. Of note, if you have a Pi 4, looking for a case/fan in which the fan has 3 wires, not 2, so that you can connect it up to the Raspbian fan control which turns it on/off automatically as needed. The 2-wire versions will need adjustment or will be always on.
 
-#### Other Things you might need:
+**Other Things you might need:**
 - Portable battery with output ~ 3 Amps
 - Screen for the Raspberry Pi
 
@@ -192,7 +194,7 @@ In the normal mode, the video will start running.
 
 In using the camera I quickly found that it was useful to be able to change a number of features as the camera was running. Let's discusse these here:
 
-####     Colormaps
+#### Colormaps
 The colormap used can sometimes make a big differences in what is easily visible or not. In this clip, for example, you can see both my body heat on the side and two cold windows in the backgroung. I cycle the colormap in this, showing how much it can make a difference in how easy/hard it is to see differences.
 
 {:.center}
@@ -207,7 +209,7 @@ The contrast in the image also makes a big difference. E.g. as I move out of the
 ![Impact of Temperature Range on image](/images/turning_to_windows_only.gif#center)
 *As I leave the image, my bodyheat being removed makes the temperature difference between the windows and wall more visible*
 
-####     Interpolation Algorithms
+#### Interpolation Algorithms
 Also, the process of blowing the image up larger requires zoom/interpolation algorithms of various sorts. E.g. here is a picture of me with the Matplotlib approach before interpolation (i.e. just the raw data as an image):
 
 {:.center}
@@ -230,7 +232,7 @@ OpenCV, in contrast, has a number of interpolations algorithms, but most of them
 
 The interpolation algorithm used is shown in the white text at the top of the image. Of note, cycling in this way allows us to us simplistic algorithms at the start that are showing pretty much just the raw data (useful in some cases to see what's actually going on before interpolation). Also, the last two interpolation algorithms used are based in part on the Matplotlib approach. The first of them, Scipy, uses exactly the same Scipy-based algorithm the Matplotlib approach used. As you can see in this gif though, using it can be a bit slower or glitchy. To gain the clearer quality of the Scipy approach but the speed of OpenCV the Scipy/CV2 approach at the end uses Scipy to scale up partially, and then OpenCV to scale the rest of the way. This seems to work almost as well as Scipy alone, but without as much of a speed hit.
 
-####     Other Options
+####  Other Options
 Finally, a few other simple options were added.
 
 - The temperature units shown in the text of the image (which are relative by the way, not absolute) can be toggled between Fahrenheit and Celsius.
