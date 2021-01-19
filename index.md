@@ -208,13 +208,13 @@ The contrast in the image also makes a big difference. E.g. as I move out of the
 *As I leave the image, my bodyheat being removed makes the temperature difference between the windows and wall more visible*
 
 #### Interpolation Algorithms
-Also, the process of blowing the image up larger requires zoom/interpolation algorithms of various sorts. As an example, here is a picture of me with the Matplotlib approach before interpolation (i.e. just the raw data as an image):
+Also, the process of blowing the image up larger requires zoom/interpolation algorithms of various sorts. E.g. here is a picture of me with the Matplotlib approach before interpolation (i.e. just the raw data as an image):
 
 {:.center}
 ![Matplotlib Raw Data Wave](/images/Matplotlib Simple Wave.gif#center)
 *The raw temperature data as an image.*
 
-Now change the color scheme and interpolate for a much cleaner picture:
+Now change the color scheme and interpolate for a cleaner/clearer picture:
 
 {:.center}
 ![Matplotlib Wave](/images/Matplotlib Wave.gif#center)
@@ -222,7 +222,7 @@ Now change the color scheme and interpolate for a much cleaner picture:
 
 Apart from having evidence that my hands aren't just feeling cold but actually ARE cold, this image highlights particularly how good the Matplotlib approach (which uses the SciPy library for interpolation) sets the coloring to detect edges. The white line surrounding the red of my body makes the boundary much clearer.
 
-OpenCV, in contrast, has a number of interpolations algorithms, but most of them don't function as well with boundaries like this, and the default colormaps weren't as useful. As a result I used the cmapy library to import a handful of Matplotlib colormaps (the once I chose you saw cycled above), and now we can also cycle interpolation algorithms. Here is a cycling of all of them, using the same colormap as the above Matplotlib image:
+OpenCV, in contrast, has a number of interpolations algorithms, but most of them don't function as well with boundaries like this, and the default colormaps weren't as useful. As a result I used the cmapy library to import a handful of Matplotlib colormaps (the ones are visible in the cycling colormap gif above), and now we can also cycle interpolation algorithms. Here is a cycling of all of them, using the same colormap as the above Matplotlib image:
 
 {:.center}
 ![Interpolation Cycling](/images/cycling interpolation.gif#center)
