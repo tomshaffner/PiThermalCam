@@ -196,11 +196,29 @@ In using the camera I quickly found that it was useful to be able to change a nu
 ![Cycling Colormaps](/images/cycling colormaps.gif#center)
 *Different colormaps make it easier to see important areas*
 
-The contrast in the image also makes a big difference. E.g. as I move out of the picture in this video the smaller temperature differences in the image become much more visible. Again, different colormaps can help highlight areas of interest here too.
+The contrast in the image also makes a big difference. E.g. as I move out of the picture in this clip, the smaller temperature differences in the image become much more visible, making the impact of the windows much clearer. Again, different colormaps can help highlight areas of interest here too.
 
 {:.center}
-![Impact of Temperature Range on Image](/images/turning_to_windows_only.gif#center)
+![Impact of Temperature Range on image](/images/turning_to_windows_only.gif#center)
 *As I leave the image, my bodyheat being removed makes the temperature difference between the windows and wall more visible*
+
+Also, the process of blowing the image up larger requires zoom/interpolation algorithms of various sorts. As an example, here is a picture of me with the Matplotlib approach before interpolation (i.e. just the raw data as an image):
+
+{:.center}
+![Matplotlib Raw Data Wave](/images/Matplotlib Simple Wave.gif#center)
+*The raw temperature data as an image.*
+
+Now change the color scheme and interpolate for a much cleaner picture:
+
+{:.center}
+![Matplotlib Wave](/images/Matplotlib Wave.gif#center)
+*Note the clarity of the border between my body and the surroundings.*
+
+Apart from having evidence that my hands aren't just feeling cold but actually ARE colder, this image highlights particularly how good the Matplotlib algorithm sets the coloring to detect edges. The white line surrounding the red of my body makes the boundary much clearer.
+
+OpenCV, in contrast, has a number of interpolations algorithms, but most of them don't function as well with boundaries like this:
+
+
 
 Esc - Exit and Close.
 S - Save a Snapshot of the Current Frame
