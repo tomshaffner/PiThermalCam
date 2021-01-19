@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=MatPlotLib Thermal Camera
+Icon=applets-screenshooter
+Path=/home/pi/pithermalcam/
+Exec=/usr/bin/python3 /home/pi/pithermalcam/examples/matplotlib_therm_cam.py
+Terminal=true
+Type=Application
+StartUpNotify=true
+Name[en_US]=Matplotlib Thermal Camera

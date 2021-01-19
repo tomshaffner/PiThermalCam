@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=OpenCV Thermal Camera
+Icon=xfce4-ui
+Path=/home/pi/pithermalcam/
+Exec=/usr/bin/python3 /home/pi/pithermalcam/examples/opencv_therm_cam.py
+Terminal=true
+Type=Application
+StartUpNotify=true
+Name[en_US]=OpenCV Thermal Camera

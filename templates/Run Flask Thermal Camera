@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Flask Thermal Camera
+Icon=screensaver
+Path=/home/pi/pithermalcam/
+Exec=/usr/bin/python3 /home/pi/pithermalcam/web_server.py
+Terminal=true
+Type=Application
+StartUpNotify=true
+Name[en_US]=Flask Thermal Camera
