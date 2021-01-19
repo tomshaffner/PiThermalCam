@@ -72,7 +72,7 @@ On the battery, the Pi 4 draws around 3 Amps so you'd want any backup battery yo
 
 {:.center}
 ![Wiring Setup](/images/mlx90640_rpi_wiring_diagram_w_table.png#center)
-*[By Joshua Hrisko / Maker Portal, copied permission and thanks](https://www.raspberrypi.org/products/raspberry-pi-universal-power-supply/)*
+*[Image by Joshua Hrisko / Maker Portal, copied with permission and thanks](https://www.raspberrypi.org/products/raspberry-pi-universal-power-supply/)*
 
 Most of the physical setup is straightforward. The one piece specific to this project is wiring the camera to the Pi itself, and luckly for us, Josh at Maker Portal has made the perfect picture (above) for this and kindly agreed to let me put it here too.
 
@@ -138,8 +138,8 @@ Note: In the first article I referenced, baudrates much higher than 400k were ap
 Once the above steps are done and your device is connected you can check to ensure the camera is visible to your pi. Run the command `sudo i2cdetect -y 1` and you should see a result like the below, indicating the camera is visible at the 0x33 address.
 
 {:.center}
-![I2C Detects CAmera](/images/i2c detected.gif#center)
-*The Camera registers with the Raspberry Pi on address 33.*
+![I2C Camera Detected](/images/i2c detected.gif#center)
+*The Raspberry PI registers the camera present at address 33.*
 
 Of note: The basic datasheet is available at Digikey for the [110 Degree Camera Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4469_Web.pdf) and the [55 Degree Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4407_Web.pdf). In both cases though the underlying camera device itself has the [same datasheet](https://www.melexis.com/-/media/files/documents/datasheets/mlx90640-datasheet-melexis.pdf), which shows that register 33 is the correct address.
 
@@ -155,11 +155,61 @@ After the prereq setup, clone the Git repo to your Pi. Clone it into your defaul
 
 There are three approaches for running the camear. All three are python 3 scripts so if you're comfortable with running python code manually or via an IDE you can just execute them. Details outlined below.
 
-For convenience I also created a desktop icon for each approach; those icons are in the templates folder and can be copied to your Raspbian desktop. Depending on how they downloaded You may need to make them executable, and they only work if you've installed this library in pi/pithermalcam/; otherwise you'll have to update the links.
+For convenience I also created a desktop icon for each approach; those three icons are in the templates folder and can be copied to your Raspbian desktop. Depending on how they downloaded you may need to make them executable, and they only work if you've installed this library in pi/pithermalcam/; otherwise you'll have to update the links.
+
+## The Three Approaches
+
+There are three approaches or methods used in this library.
+
+**Matplotlib:** The first, using Matplotlib, is based off the previously mentioned [article by Joshua Hrisko](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640). The picture colormapping and interpolation used in this approach is quite good, but it requires the baudrate to be well over the recommended limit to function as a reasonable rate. I was lucky to get a picture a second at the 400k baudrate. I would recommend starting with this approach to perform tests on your camera to make sure it's working, but once you've verified that it's probably better to move on to the other methods.
+
+**OpenCV:** The second approach uses OpenCV and runs MUCH faster. As I'll discuss below though, I found the colormaps and interpolation of Matplotlib superior, and so I ended up importing those pieces of the Matplotlib into this approach.
+
+**OpenCV Web Server:** The first two approaches run locally and display video output on the Pi directly. If you have a screen for the Pi or you're remoting into it via Remote Desktop or VNC this works fine. If you're walking around your house trying to use Remote Desktop on your phone to see the video output though, this can be a pain. As such I took the second approach above and rebuilt it into a Flask webserver version. If you start the webserver you'll see an IP Address printed out, and you can load that IP via a web browser on any computer in the network to see and control the video. For me, this was the more reliable/robust solution in practice.
+
+All three versions are discussed in more detail below.
 
 ### Matplotlib Version
 
+The Matplotlib version can be found in the examples folder under the name matplotlib_therm_cam.py. It has several running modes which can be switched via the number at the bottom of the file, as visible here:
+{:.center}
+![Matplotlib Modes](/images/matplotlib_modes.gif#center)
+*The running modes available for the Matplotlib Approach*
+
+Run this by executing the icon or going into the folder in the terminal and typing `python3` followed by the filename. The mode from the number chosen will execute.
+
+Mode 1 in the picture is the simples just to make sure you're getting readings from your camera. Mode 2 then takes a basic picture (saved to the run_data folder) showing the raw data without any interpolation. Mode 3 is mode 2 in video form. Modes 4 and 5 correlate to modes 2 and 3, except with interpolation built in.
+
+In the video modes, the video will continue unless/until an error occurs, the terminal window is closed, or the code in the terminal is halted.
+
 ### OpenCV Version - Local
+
+The OpenCV Local version can be found in the examples folder under the name opencv_therm_cam.py. It has two running modes which can be switched via the number at the bottom of the file, but the default is the video mode which is likely all you need if everything is installed correctly.
+
+Run this by executing the icon or going into the folder in the terminal and typing `python3` followed by the filename.
+
+In the normal mode, the video will start running.
+
+In using the camera I quickly found that it was useful to be able to change a number of features as the camera was running. For example, the colormap used can sometimes make a big differences in what is easily visible or not. In this clip, for example, you can see both my body heat on the side and two cold windows in the backgroung. I cycle the colormap in this, showing how much it can make a difference in how easy/hard it is to see differences.
+
+{:.center}
+![Cycling Colormaps](/images/cycling colormaps.gif#center)
+*Different colormaps make it easier to see important areas*
+
+The contrast in the image also makes a big difference. E.g. as I move out of the picture in this video the smaller temperature differences in the image become much more visible. Again, different colormaps can help highlight areas of interest here too.
+
+{:.center}
+![Impact of Temperature Range on Image](/images/turning_to_windows_only.gif#center)
+*As I leave the image, my bodyheat being removed makes the temperature difference between the windows and wall more visible*
+
+Esc - Exit and Close.
+S - Save a Snapshot of the Current Frame
+X - Cycle the Colormap Backwards
+C - Cycle the Colormap forward
+F - Toggle Filtering On/Off
+T - Toggle Temperature Units between C/F
+U - Go back to the previous Interpolation Algorithm
+I - Change the Interpolation Algorithm Used
 
 ### OpenCV Version - Web Server
 
