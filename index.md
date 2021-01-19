@@ -125,7 +125,8 @@ Finally you'll need to enable I2C on your Raspberry Pi and increase the baudrate
 
 To increase your baudrate, type `sudo nano /boot/config.txt` and find the line with `dtparam=i2c_arm=on`. Add `i2c_arm_baudrate=400000` to the end of it, so the end result should look like:
 
-![Baudrate Change](/images/baudrate change.gif)
+{:.center}
+![Baudrate Change](/images/baudrate change.gif#center)
 *Section of /boot/config.txt after baudrate change.*
 
 Save the file and reboot the device when you're done.
@@ -136,7 +137,8 @@ Note: In the first article I referenced, baudrates much higher than 400k were ap
 
 Once the above steps are done and your device is connected you can check to ensure the camera is visible to your pi. Run the command `sudo i2cdetect -y 1` and you should see a result like the below, indicating the camera is visible at the 0x33 address.
 
-![I2C Detects CAmera](/images/i2c detected.gif)
+{:.center}
+![I2C Detects CAmera](/images/i2c detected.gif#center)
 *The Camera registers with the Raspberry Pi on address 33.*
 
 Of note: The basic datasheet is available at Digikey for the [110 Degree Camera Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4469_Web.pdf) and the [55 Degree Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4407_Web.pdf). In both cases though the underlying camera device itself has the [same datasheet](https://www.melexis.com/-/media/files/documents/datasheets/mlx90640-datasheet-melexis.pdf), which shows that register 33 is the correct address.
