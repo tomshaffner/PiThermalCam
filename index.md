@@ -157,7 +157,7 @@ There are three approaches for running the camear. All three are python 3 script
 
 For convenience I also created a desktop icon for each approach; those three icons are in the templates folder and can be copied to your Raspbian desktop. Depending on how they downloaded you may need to make them executable, and they only work if you've installed this library in pi/pithermalcam/; otherwise you'll have to update the links.
 
-## The Three Approaches
+## Usage - The Three Approaches
 
 There are three approaches or methods used in this library.
 
@@ -192,7 +192,7 @@ In the normal mode, the video will start running.
 
 In using the camera I quickly found that it was useful to be able to change a number of features as the camera was running. Let's discusse these here:
 
-#### Colormaps
+####     Colormaps
 The colormap used can sometimes make a big differences in what is easily visible or not. In this clip, for example, you can see both my body heat on the side and two cold windows in the backgroung. I cycle the colormap in this, showing how much it can make a difference in how easy/hard it is to see differences.
 
 {:.center}
@@ -207,7 +207,7 @@ The contrast in the image also makes a big difference. E.g. as I move out of the
 ![Impact of Temperature Range on image](/images/turning_to_windows_only.gif#center)
 *As I leave the image, my bodyheat being removed makes the temperature difference between the windows and wall more visible*
 
-#### Interpolation Algorithms
+####     Interpolation Algorithms
 Also, the process of blowing the image up larger requires zoom/interpolation algorithms of various sorts. E.g. here is a picture of me with the Matplotlib approach before interpolation (i.e. just the raw data as an image):
 
 {:.center}
@@ -220,18 +220,18 @@ Now change the color scheme and interpolate for a cleaner/clearer picture:
 ![Matplotlib Wave](/images/Matplotlib Wave.gif#center)
 *The data interpolated. Note the clarity of the border between my body and the surroundings.*
 
-Apart from having evidence that my hands aren't just feeling cold but actually ARE cold, this image highlights particularly how good the Matplotlib approach (which uses the SciPy library for interpolation) sets the coloring to detect edges. The white line surrounding the red of my body makes the boundary much clearer.
+Apart from having evidence that my hands aren't just feeling cold but actually ARE cold, this image highlights particularly how good the Matplotlib approach (which uses the SciPy library for interpolation) sets the coloring in a way that makes edges clear. The white line surrounding the red of my body makes the boundary much more visible.
 
-OpenCV, in contrast, has a number of interpolations algorithms, but most of them don't function as well with boundaries like this, and the default colormaps weren't as useful. As a result I used the cmapy library to import a handful of Matplotlib colormaps (the ones are visible in the cycling colormap gif above), and now we can also cycle interpolation algorithms. Here is a cycling of all of them, using the same colormap as the above Matplotlib image:
+OpenCV, in contrast, has a number of interpolations algorithms, but most of them don't function as well with boundaries like this, and the default colormaps weren't as useful. As a result I used the cmapy library to import a handful of Matplotlib colormaps (the ones chosen are visible in the cycling colormap gif above), and now we can also cycle interpolation algorithms. Here I cycle through all of them, using the same colormap as the above Matplotlib image:
 
 {:.center}
 ![Interpolation Cycling](/images/cycling interpolation.gif#center)
 *Cycling through the various interpolation algorithms. SciPy is the algorithm used by the Matplotlib approach.*
 
-The interpolation algorithm used is shown in the white text at the top of the image. Of note, cycling in this way allows us to us simplistic algorithms that are pretty much the basic raw data (useful in some cases to see what's actually going on before interpolation). Also, the last two interpolation algorithms used are based in part on the Matplotlib approach. The first of them, Scipy, uses exactly the same Scipy-based algorithm the Matplotlib approach used. As you can see in this gif though, using it can be a bit slower and prone to errors like the color glitch here. To gain the clearer quality of the Scipy approach but the speed of OpenCV the Scipy/CV2 approach at the end uses Scipy to scale up partially, and then OpenCV to scale the rest of the way.
+The interpolation algorithm used is shown in the white text at the top of the image. Of note, cycling in this way allows us to us simplistic algorithms at the start that are showing pretty much just the raw data (useful in some cases to see what's actually going on before interpolation). Also, the last two interpolation algorithms used are based in part on the Matplotlib approach. The first of them, Scipy, uses exactly the same Scipy-based algorithm the Matplotlib approach used. As you can see in this gif though, using it can be a bit slower or glitchy. To gain the clearer quality of the Scipy approach but the speed of OpenCV the Scipy/CV2 approach at the end uses Scipy to scale up partially, and then OpenCV to scale the rest of the way. This seems to work almost as well as Scipy alone, but without as much of a speed hit.
 
-#### Other Options
-Finally, a few other simple options wer added.
+####     Other Options
+Finally, a few other simple options were added.
 
 - The temperature units shown in the text of the image (which are relative by the way, not absolute) can be toggled between Fahrenheit and Celsius.
 - Simple filtering can be turned on. I tested a number of filtering algorithms but not many make much difference; the best I could find I left here, but the impact is minimal.
@@ -253,7 +253,9 @@ The thinking here is simple: S for Save, T for Temp, F for Filter, C for Colorma
 
 ### OpenCV Version - Web Server
 
-## Usage
+
+
+## Results
 
 
 
