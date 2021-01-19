@@ -83,7 +83,7 @@ Below is a picture of my device in final form. You can see the case I used (but 
 I found taping the camera to the case an easy way to make using the device simpler to work with.
 
 {:.center}
-![Wiring Setup](/images/assembled device.jpg#center)
+![Assembled Device](/images/assembled device.jpg#center)
 *Final Device Assembled*
 
 ## Prerequisite Software Installation
@@ -119,6 +119,27 @@ OpenCV is a very large and comprehensive video processing library. It works fast
 A final small step: you'll need to install the cmapy python library. It has opencv as a dependency though, and so requires one shift.
  - If you're using the pip install approach for OpenCV you can just install cmapy via pip3 no problem.
  - If you're compiling OpenCV however you'll need to install cmapy using the --no-deps flag to prevent it trying to also install the pip version of OpenCV. To do this, simply run `pip3 install cmapy --no-deps`
+
+ **5. Enable I2C and Increase Pi Baudrate**
+Finally you'll need to enable I2C on your Raspberry Pi and increase the baudrate. I2C can be enabled simply in the Pi Configuration via GUI or via typing `sudo raspi-config` and enabling it there.
+
+To increase your baudrate, type `sudo nano /boot/config.txt` and find the line with `dtparam=i2c_arm=on`. Add `i2c_arm_baudrate=400000` to the end of it, so the end result should look like:
+
+![Baudrate Change](/images/baudrate change.gif)
+*Section of /boot/config.txt after baudrate change.*
+
+Save the file and reboot the device when you're done.
+
+Note: In the first article I referenced, baudrates much higher than 400k were apparently tested; as high as 1M. I tested some higher rates but got many more errors at these levels. Running at higher rates also increases the risk of overheating as the maximum supported speed is [apparently 400k](https://raspberrypi.stackexchange.com/questions/108896/what-is-rpis-i2c-maximum-speed#:~:text=The%20maximum%20supported%20speed%20is%20400%20Kb%2Fs.). When I switched to the OpenCV approach (discussed below), 400k was fast enough to be usable. Since I want to reuse my Pi for other projects or as a security camera long term I stuck with the 400k. If you want the Matplotlib approach to work faster, as it did for the writer of that first article, this is likely what you'd need to change; just make sure you have good heat management of your Pi in doing so. My choice to stick with only 400k is likely why that approach is so slow for me, and is thus why the OpenCV approach is the one I mainly use.
+
+ **Connection Verification**
+
+Once the above steps are done and your device is connected you can check to ensure the camera is visible to your pi. Run the command `sudo i2cdetect -y 1` and you should see a result like the below, indicating the camera is visible at the 0x33 address.
+
+![I2C Detects CAmera](/images/i2c detected.gif)
+*The Camera registers with the Raspberry Pi on address 33.*
+
+Of note: The basic datasheet is available at Digikey for the [110 Degree Camera Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4469_Web.pdf) and the [55 Degree Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4407_Web.pdf). In both cases though the underlying camera device itself has the [same datasheet](https://www.melexis.com/-/media/files/documents/datasheets/mlx90640-datasheet-melexis.pdf), which shows that register 33 is the correct address.
 
 ## Library Installation
 
