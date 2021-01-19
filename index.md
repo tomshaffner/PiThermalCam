@@ -217,7 +217,7 @@ Now change the color scheme and interpolate for a much cleaner picture:
 
 {:.center}
 ![Matplotlib Wave](/images/Matplotlib Wave.gif#center)
-*Note the clarity of the border between my body and the surroundings.*
+*The data interpolated. Note the clarity of the border between my body and the surroundings.*
 
 Apart from having evidence that my hands aren't just feeling cold but actually ARE cold, this image highlights particularly how good the Matplotlib approach (which uses the SciPy library for interpolation) sets the coloring to detect edges. The white line surrounding the red of my body makes the boundary much clearer.
 
@@ -248,6 +248,8 @@ F - Toggle Filtering On/Off
 T - Toggle Temperature Units between C/F
 U - Go back to the previous Interpolation Algorithm
 I - Change the Interpolation Algorithm Used
+
+The thinking here is simple: S for Save, T for Temp, F for Filter, C for Colormap, I for Interpolation, and in those last to cases the key just to the left to go back.
 
 ### OpenCV Version - Web Server
 
