@@ -214,11 +214,25 @@ Now change the color scheme and interpolate for a much cleaner picture:
 ![Matplotlib Wave](/images/Matplotlib Wave.gif#center)
 *Note the clarity of the border between my body and the surroundings.*
 
-Apart from having evidence that my hands aren't just feeling cold but actually ARE colder, this image highlights particularly how good the Matplotlib algorithm sets the coloring to detect edges. The white line surrounding the red of my body makes the boundary much clearer.
+Apart from having evidence that my hands aren't just feeling cold but actually ARE cold, this image highlights particularly how good the Matplotlib approach (which uses the SciPy library for interpolation) sets the coloring to detect edges. The white line surrounding the red of my body makes the boundary much clearer.
 
-OpenCV, in contrast, has a number of interpolations algorithms, but most of them don't function as well with boundaries like this:
+OpenCV, in contrast, has a number of interpolations algorithms, but most of them don't function as well with boundaries like this, and the default colormaps weren't as useful. As a result I used the cmapy library to import a handful of Matplotlib colormaps (the once I chose you saw cycled above), and now we can also cycle interpolation algorithms. Here is a cycling of all of them, using the same colormap as the above Matplotlib image:
+
+{:.center}
+![Interpolation Cycling](/images/cycling interpolation.gif#center)
+*Cycling through the various interpolation algorithms. SciPy is the algorithm used by the Matplotlib approach.*
+
+The interpolation algorithm used is shown in the white text at the top of the image. Of note, cycling in this way allows us to us simplistic algorithms that are pretty much the basic raw data (useful in some cases to see what's actually going on before interpolation). Also, the last two interpolation algorithms used are based in part on the Matplotlib approach. The first of them, Scipy, uses exactly the same Scipy-based algorithm the Matplotlib approach used. As you can see in this gif though, using it can be a bit slower and prone to errors like the color glitch here. To gain the clearer quality of the Scipy approach but the speed of OpenCV the Scipy/CV2 approach at the end uses Scipy to scale up partially, and then OpenCV to scale the rest of the way.
 
 
+Finally, a few other simple options wer added.
+
+- The temperature units shown in the text of the image (which are relative by the way, not absolute) can be toggled between Fahrenheit and Celsius.
+- Simple filtering can be turned on. I tested a number of filtering algorithms but not many make much difference; the best I could find I left here, but the impact is minimal.
+- Snapshot saving - When moving around the house evaluating, it's useful to be able to take pictures from the video, so snapshots can be saved.
+- Finally, exiting can be annoying if the terminal is behind the video, as you need to move the video to reach the terminal, so Esc is set to shut the script down.
+
+All of these options can be controlled while the video is running using the following keys:
 
 Esc - Exit and Close.
 S - Save a Snapshot of the Current Frame
