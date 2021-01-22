@@ -265,7 +265,18 @@ If, however, this approach seems at times cumbersome or more error prone, the we
 
 ### OpenCV Version - Web Server
 
+After testing the other two options I came to the conclusion that a better approach for using the camera via the internet would be to stream the video live to a webpage where multiple other computers or phones could all easily pull it up in a browser. Fortunately there was a similar project online in the guise of a [motion-detecting camera project](https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/) which I could use as a baseline for this. As such, the OpenCV code is connected in this piece to a basic Flask server which streams the video live to any computer on the network.
 
+In the process of making this conversion, the OpenCV code was also refactored into a cleaner object-oriented class to be cleaner and better encapsulated. If others wish to develop this project further or use the camera functionality in another project I'd suggest starting with this class for a cleaner, simpler, and self-contained entry point.
+
+Furthermore, the flask webpage that connects to this was set up to enable all the functionality of the various keyboard commands discussed in the OpenCV section via buttons on the webpage. This allows multiple browser windows or machines to all connect to the video stream at the same time and any can control the colormap, interpolation method, temperature units, save snapshots, etc.
+
+{:.center}
+![The Flask-based Live Webpage](/images/flask_webpage.png#center)
+*The flask-based server allows web browsers to view and control the live video feed.*
+
+
+#TODO Config file
 
 ## Results
 
