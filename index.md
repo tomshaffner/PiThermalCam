@@ -175,7 +175,7 @@ All three versions are discussed in more detail below.
 
 The Matplotlib version can be found in the examples folder under the name matplotlib_therm_cam.py. It has several running modes which can be switched via the number at the bottom of the file, as visible here:
 {:.center}
-![Matplotlib Modes](/images/matplotlib_modes.gif#center)
+![Matplotlib Modes](/images/matplotlib_modes.png#center)
 *The running modes available for the Matplotlib Approach*
 
 Run this by executing the icon or going into the folder in the terminal and typing `python3` followed by the filename. The mode from the number chosen will execute.
