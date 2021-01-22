@@ -275,9 +275,9 @@ Furthermore, the flask webpage that connects to this was set up to enable all th
 ![The Flask-based Live Webpage](/images/flask_webpage.png#center)
 *The flask-based server allows web browsers to view and control the live video feed.*
 
+#### Image Saving Note
 
-#TODO Config file
-
+Several of these features include the option to save snapshots of the video feed. The save location is determined by the Config file included in the project. It defaults to the location /home/pi/pithermalcam/run_data/. If this needs to be changed it can be updated in the config file directly.
 ## Results
 
 
