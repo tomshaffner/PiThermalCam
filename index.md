@@ -29,6 +29,8 @@ Of note: The resolution on this camera is much lower so we'll never get pictures
 
 The below guide is meant to be a start-to-finish overview of the parts, setup, install, and use of this project for any who want to do likewise or build on it further. I don't cover everything needed to work with a Raspberry Pi itself as there are plenty of other guides for that out there, but I try to touch on any and all pieces related to this project directly, at least to get it up and running.
 
+This guide is pretty comprehensive, but if you just want to get up and running, the pieces related to setup and the OpenCV running types are all you need to get to a fully working camera fairly fast.
+
 I also touch on a few pieces needed for development here, but if you're going to develop further I'd suggest looking at the original source articles as well; they cover the details of the code in more detail than I do here. I've also tried to leave comments in the code to make quite clear the sources of things and other information necessary to track what's going on and/or speed the learning curve for development.
 
 **Contents**
