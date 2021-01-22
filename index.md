@@ -253,6 +253,16 @@ I - Change the Interpolation Algorithm Used
 
 The thinking here is simple: S for Save, T for Temp, F for Filter, C for Colormap, I for Interpolation, and in those last to cases the key just to the left to go back.
 
+#### Viewing remotely on the Pi
+
+If, like me, you don't have a screen for your Raspberry Pi, you'll likely be remoting into the Pi for the two options discussed above. Both show live video on the screen and you'll want to see that as you move around. I mentioned remoting in via SSH for VS Code development earlier, but for viewing the video I used two different approaches: the first was VNC Viewer, which comes with the Raspberry Pi and can be [enabled in Raspbian](https://www.raspberrypi.org/documentation/remote-access/vnc/). This is traditionally how I've connected to my Pi.
+
+On the advice of some online forums however, I also tested the Remote Desktop program included in Microsoft Windows. As the forums had suggested, I found this connection to be a bit more stable and reliable when trying to view live video on the Pi and simultaneously moving around the wifi network. Connecting is a simple as opening remote desktop (often pre-installed on Windows and available in the Windows store and for Android and I believe Mac devices) and typing in the IP address and username of your Pi.
+
+These two options were enough to cover my need for this approach, and I'd recommend others who are doing this consider these options.
+
+If, however, this approach seems at times cumbersome or more error prone, the web server version might be for you:
+
 ### OpenCV Version - Web Server
 
 
