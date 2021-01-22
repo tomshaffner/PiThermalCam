@@ -100,6 +100,8 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
     interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4,5,6]
     interpolation_list_name = ['Nearest','Inter Linear','Inter Area','Inter Cubic','Inter Lanczos4','Scipy', 'Scipy/CV2 Mixed']
 
+    print_shortcuts_keys()
+
     try:
         while True:          
             # Get image
@@ -128,6 +130,8 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
 
             if filter_image:
                 img=cv2.bilateralFilter(img,15,80,80)
+
+                # Alternative filtering possibilities tested and currently removed as inferior to the above
                 # img=cv2.fastNlMeansDenoisingColored(img,None,10,10,7,21)
                 # img = cv2.erode(img, None, iterations=2)
                 # img = cv2.dilate(img, None, iterations=2)
@@ -143,6 +147,7 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
             if file_saved_notification_start is not None and (time.monotonic()-file_saved_notification_start)<1:
                 cv2.putText(img, 'Snapshot Saved!', (300,300),cv2.FONT_HERSHEY_SIMPLEX, .8, (255, 255, 255), 2)
 
+            # Display image on screen
             cv2.namedWindow('Thermal Image', cv2.WINDOW_NORMAL)
             cv2.resizeWindow('Thermal Image', 1200,900)
             cv2.imshow('Thermal Image', img)
@@ -171,11 +176,11 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
             elif key == ord("t"): # If t is chosen cycle the units used for Temperature
                 use_f = not use_f
                 print(f"Using Fahrenheit: {use_f}")
-            elif key == ord("u"): # If u is chosen cycle interpolation algorith back
+            elif key == ord("u"): # If u is chosen cycle interpolation algorithm back
                 interpolation_index-=1
                 if interpolation_index<0:
                     interpolation_index=len(interpolation_list)-1
-            elif key == ord("i"):  # If i is chosen cycle interpolation algorith
+            elif key == ord("i"):  # If i is chosen cycle interpolation algorithm
                 interpolation_index+=1
                 if interpolation_index==len(interpolation_list):
                     interpolation_index=0
@@ -192,6 +197,25 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
 
     cv2.destroyAllWindows()
 
+def print_shortcuts_keys():
+    """Print out a summary of the shortcut keys available during video runtime."""
+    print("The following keys are shortcuts for controlling the video during a run:")
+    print("Esc - Exit and Close.")
+    print("S - Save a Snapshot of the Current Frame")
+    print("X - Cycle the Colormap Backwards")
+    print("C - Cycle the Colormap forward")
+    print("F - Toggle Filtering On/Off")
+    print("T - Toggle Temperature Units between C/F")
+    print("U - Go back to the previous Interpolation Algorithm")
+    print("I - Change the Interpolation Algorithm Used")
+
 if __name__ == "__main__":
-    # take_pic()
-    camera_read()
+    # Pick the mode to run in. Mode corresponds to functions in elif below.
+    mode=2
+
+    if mode==1:
+        take_pic()
+    elif mode==2:
+        camera_read()
+    else:
+        print("Incorrect or missing mode.")

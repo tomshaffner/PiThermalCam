@@ -227,7 +227,7 @@ def interpolated_camera_read():
 
 if __name__ == "__main__":
     # Pick the mode to run in. Mode corresponds to functions in elif below.
-    mode=5
+    mode=1
 
     if mode==1:
         print_mean_temp()
@@ -239,3 +239,5 @@ if __name__ == "__main__":
         interpolated_pic()
     elif mode==5:
         interpolated_camera_read()
+    else:
+        print("Incorrect or missing mode.")

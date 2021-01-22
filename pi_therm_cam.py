@@ -48,6 +48,7 @@ class ThermalCam:
     _raw_image=None
     _image=None
     _file_saved_notification_start=None
+    _displaying_onscreen=False
 
     def __init__(self,use_f:bool = True, filter_image:bool = False, image_width:int=1200, image_height:int=900, output_folder:str = '/home/pi/pithermalcam/run_data/'):
         self.use_f=use_f
@@ -120,13 +121,13 @@ class ThermalCam:
         if self._file_saved_notification_start is not None and (time.monotonic()-self._file_saved_notification_start)<1:
             cv2.putText(self._image, 'Snapshot Saved!', (300,300),cv2.FONT_HERSHEY_SIMPLEX, .8, (255, 255, 255), 2)
         
-    def show_processed_image(self):
+    def _show_processed_image(self):
         """Resize image window and display it"""  
         cv2.namedWindow('Thermal Image', cv2.WINDOW_NORMAL)
         cv2.resizeWindow('Thermal Image', self.image_width,self.image_height)
         cv2.imshow('Thermal Image', self._image)        
 
-    def set_click_keyboard_events(self):
+    def _set_click_keyboard_events(self):
         """Add click and keyboard actions to image"""
         # Set mouse click events
         cv2.setMouseCallback('Thermal Image',self._mouse_click)
@@ -142,16 +143,46 @@ class ThermalCam:
             self.change_colormap(forward=False)
         elif key == ord("f"): # If f is chosen cycle the image filtering
             self.filter_image = not self.filter_image
-        elif key == ord("u"): # If t is chosen cycle the units used for temperature
+        elif key == ord("t"): # If t is chosen cycle the units used for Temperature
             self.use_f = not self.use_f
-        elif key==27: # Break if escape key is used
-            raise KeyboardInterrupt
+        elif key == ord("u"): # If t is chosen cycle the units used for temperature
+            self.change_interpolation()
+        elif key == ord("i"):  # If i is chosen cycle interpolation algorithm
+            self.change_interpolation(forward=False)
+        elif key==27: # Exit nicely if escape key is used
+            cv2.destroyAllWindows()
+            self._displaying_onscreen = False
+            print("Code Stopped by User")
+            exit()
 
     def _mouse_click(self,event,x,y,flags,param):
         """Used to save an image on double-click"""
         global mouseX,mouseY
         if event == cv2.EVENT_LBUTTONDBLCLK:
             self.save_image()
+
+    def _print_shortcuts_keys(self):
+        """Print out a summary of the shortcut keys available during video runtime."""
+        print("The following keys are shortcuts for controlling the video during a run:")
+        print("Esc - Exit and Close.")
+        print("S - Save a Snapshot of the Current Frame")
+        print("X - Cycle the Colormap Backwards")
+        print("C - Cycle the Colormap forward")
+        print("F - Toggle Filtering On/Off")
+        print("T - Toggle Temperature Units between C/F")
+        print("U - Go back to the previous Interpolation Algorithm")
+        print("I - Change the Interpolation Algorithm Used")
+        print("Double-click with Mouse - Save a Snapshot of the Current Frame")
+
+    def display_next_frame_onscreen(self):
+        """Display the camera live to the display"""
+        # Display shortcuts reminder to user on first run
+        if not self._displaying_onscreen:
+            self._print_shortcuts_keys()
+            self._displaying_onscreen = True
+        self.update_image_frame()
+        self._show_processed_image()
+        self._set_click_keyboard_events()
 
     def change_colormap(self, forward:bool = True):
         """Cycle colormap. Forward by default, backwards if param set to false."""
@@ -176,7 +207,7 @@ class ThermalCam:
                 self._interpolation_index=len(self._interpolation_list)-1
 
     def update_image_frame(self):
-        """Pull raw data, process it to an image, and update image attributes"""
+        """Pull raw temperature data, process it to an image, and update image text"""
         self._pull_raw_image()
         self._process_raw_image()
         self._add_image_text()
@@ -184,11 +215,12 @@ class ThermalCam:
         return self._image
 
     def update_raw_image_only(self):
-        """Pull only raw data"""
+        """Update only raw data without any further image processing or text updating"""
         self._pull_raw_image
 
     def get_current_raw_image_frame(self):
-        """Get the raw image"""
+        """Return the current raw image"""
+        self._pull_raw_image
         return self._raw_image
 
     def get_current_image_frame(self):
@@ -201,13 +233,27 @@ class ThermalCam:
         return self._image
 
     def save_image(self):
+        """Save the current frame as a snapshot to the output folder."""
         fname = self.output_folder + 'pic_' + dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.jpg'
         cv2.imwrite(fname, self._image)
         self._file_saved_notification_start = time.monotonic()
         print('Thermal Image ', fname)
 
-    # function to convert temperatures to pixels on image
     def _temps_to_rescaled_uints(self,f,Tmin,Tmax):
+        """Function to convert temperatures to pixels on image"""
         norm = np.uint8((f - Tmin)*255/(Tmax-Tmin))
         norm.shape = (24,32)
         return norm
+
+if __name__ == "__main__":
+    # If class is run as main, set up a live feed displayed to screen
+
+    thermcam = ThermalCam() # Instantiate class
+
+    # Loop to display frames
+    while True:
+        try:
+            thermcam.display_next_frame_onscreen()
+        # Catch a common I2C Error. If you get this too often consider checking/adjusting your I2C Baudrate
+        except Exception:
+            print("Too many retries error caught; continuing...")
