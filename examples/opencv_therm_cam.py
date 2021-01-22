@@ -127,7 +127,7 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
             else:
                 img = cv2.applyColorMap(img, cmapy.cmap(colormap_list[colormap_index]))
                 img = cv2.resize(img, (800,600), interpolation = interpolation_list[interpolation_index])      
-
+            img = cv2.flip(img, 1)
             if filter_image:
                 img=cv2.bilateralFilter(img,15,80,80)
 
