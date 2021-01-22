@@ -273,9 +273,21 @@ In the process of making this conversion, the OpenCV code was also refactored in
 
 Furthermore, the flask webpage that connects to this was set up to enable all the functionality of the various keyboard commands discussed in the OpenCV section via buttons on the webpage. This allows multiple browser windows or machines to all connect to the video stream at the same time and any can control the colormap, interpolation method, temperature units, save snapshots, etc.
 
+To initiate this, either click the "Run Flask Thermal Camera" icon, if you set it up, or initiate the web server in python 3 with `python3 web_server.py`. When it begins it will show the local IP address to log onto:
+
+{:.center}
+![The Flask-server starting up](/images/flask ip address.png#center)
+*The web server code displays the address to connect to before starting the Flask server.*
+
+In this case the user simply opens a browser and goes to 192.168.86.22:8000 in order to pull up the resulting webpage with the live feed:
+
 {:.center}
 ![The Flask-based Live Webpage](/images/flask_webpage.png#center)
 *The flask-based server allows web browsers to view and control the live video feed.*
+
+The IP address for this can also be fixed by setting your router to reserve an IP address for your Pi.
+
+Of note: This address will only be accessible from inside the same network. If you wish to set this up for external access research how to make a flask server accessible online.
 
 #### Image Saving Note
 
