@@ -276,13 +276,13 @@ Furthermore, the flask webpage that connects to this was set up to enable all th
 To initiate this, either click the "Run Flask Thermal Camera" icon, if you set it up, or initiate the web server in python 3 with `python3 web_server.py`. When it begins it will show the local IP address to log onto:
 
 {:.center}
-[![The Flask-server starting up](/images/flask ip address.png#center)](/images/flask ip address.png)
+[![The Flask-server starting up](/images/flask ip address.png#center)](https://github.com/tomshaffner/PiThermalCam/blob/gh-pages/images/flask ip address.png)
 *The web server code displays the address to connect to before starting the Flask server.*
 
 In this case the user simply opens a browser and goes to 192.168.86.22:8000 in order to pull up the resulting webpage with the live feed:
 
 {:.center}
-[![The Flask-based Live Webpage](/images/flask_webpage.png#center)](/images/flask_webpage.png)
+[![The Flask-based Live Webpage](/images/flask_webpage.png#center)](https://github.com/tomshaffner/PiThermalCam/blob/gh-pages/images/flask_webpage.png)
 *The flask-based server allows web browsers to view and control the live video feed.*
 
 The IP address for this can also be fixed by setting your router to reserve an IP address for your Pi.
