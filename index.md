@@ -299,6 +299,43 @@ Several of these features include the option to save snapshots of the video feed
 [![Screen and Laptop](/images/screen_and_laptop.jpg#center)](/PiThermalCam/images/screen_and_laptop.jpg#center)
 *Image of a screen and laptop, normal and thermal.*
 
-{:height="50%" width="50%"}
+{:.center}
+[![Lamp and Windows](/images/lamp_and_windows.jpg#center)](/PiThermalCam/images/lamp_and_windows.jpg#center)
+*A light and windows showing heat and cold respectively.*
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+{:.center}
+[![Sink with running water](/images/sink.jpg#center)](/PiThermalCam/images/sink.jpg#center)
+*A sink with running water.*
+
+{:.center}
+[![Thermal Sink](/images/thermal_sink.jpg#center)](/PiThermalCam/images/thermal_sink.jpg#center)
+*Sink with running water with cold and hot water respectively.*
+
+{:.center}
+[![Invisible hand](/images/invisible_hand.jpg#center)](/PiThermalCam/images/invisible_hand.jpg#center)
+*A hand covered in cold water, and a hand with cold water covering the palm only.*
+
+{:.center}
+[![Curtain](/images/curtain.jpg#center)](/PiThermalCam/images/curtain.jpg#center)
+*The effect of curtains visualized.*
+
+
+{:.center}
+[![Soil Pipe Coming out of Ceiling](/images/pipe_part_one.jpg#center)](/PiThermalCam/images/pipe_part_one.jpg#center)
+*Waste pipe coming out of the ceiling.*
+
+{:.center}
+[![Screen and Laptop](/images/pipe_part_two.jpg#center)](/PiThermalCam/images/pipe_part_two.jpg#center)
+*Waste pipe continuing.*
+
+{:.center}
+[![Insulation issues](/images/insulation_issues.jpg#center)](/PiThermalCam/images/insulation_issues.jpg#center)
+*A section of insulation missing underneath a floor, and a hole in that insulation.*
+
+{:.center}
+[![Garage Door](/images/garage_door.jpg#center)](/PiThermalCam/images/garage_door.jpg#center)
+*Heat loss via the garage door.*
+
+{:.center}
+[![Ceiling above the garage door](/images/garage_ceiling.jpg#center)](/PiThermalCam/images/garage_ceiling.jpg#center)
+*The ceiling above the garage door, showing poorly insulated section.*
