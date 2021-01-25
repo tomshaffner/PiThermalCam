@@ -16,7 +16,7 @@ It's winter, and my heating bill has gone up. I've also noticed a draft in certa
 Cameras such as these can produce images like this one, showing where heat is leaving a building:
 
 {:.center}
-![Image of House from Thermal Camera](/images/Passivhaus_thermogram_gedaemmt_ungedaemmt.png#center)
+[![Image of House from Thermal Camera](/images/Passivhaus_thermogram_gedaemmt_ungedaemmt.png#center)](/PiThermalCam/images/Passivhaus_thermogram_gedaemmt_ungedaemmt.png)
 *[Passivhaus Institut, CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/), via Wikimedia Commons*
 
 Initially I researched buying or renting such a camera, but the buying options tend to start at [$200 for the basic smartphone version](https://www.flir.com/products/flir-one-gen-3/), and go up to nearly $1,000. My local Lowe's has such cameras for rent as well but they cost $50 for 24 hours!
@@ -46,7 +46,7 @@ Thanks are owed to those three other projects: namely, Joshua Hrisko's article a
 ## Parts Required
 
 {:.center}
-![Raspberry Pi 4](/images/Raspberry_Pi_4_Model_B_-_Side.jpg#center)
+[![Raspberry Pi 4](/images/Raspberry_Pi_4_Model_B_-_Side.jpg#center)](/PiThermalCam/images/Raspberry_Pi_4_Model_B_-_Side.jpg)
 *[By Miiicihiaieil  Hieinizilieir / Wikimedia Commons, CC BY-SA 4.0](https://commons.wikimedia.org/w/index.php?curid=80140656)*
 
 Most of the parts lists I see are incomplete or link to pages with excessive costs (e.g. the Pi was invented specifically to be cheaper, so the basic version should never be > $35 before shipping). Below is a complete list of parts needed if you're starting from scratch. The Pi-specific items can be reused for other projects; the camera is really the only item specific to this project.
@@ -75,7 +75,7 @@ On the battery, the Pi 4 draws around 3 Amps so you'd want any backup battery yo
 ## Hardware Setup
 
 {:.center}
-![Wiring Setup](/images/mlx90640_rpi_wiring_diagram_w_table.png#center)
+[![Wiring Setup](/images/mlx90640_rpi_wiring_diagram_w_table.png#center)](/PiThermalCam/images/mlx90640_rpi_wiring_diagram_w_table.png)
 *[Image by Joshua Hrisko / Maker Portal, copied with permission and thanks](https://www.raspberrypi.org/products/raspberry-pi-universal-power-supply/)*
 
 Most of the physical setup is straightforward. The one piece specific to this project is wiring the camera to the Pi itself, and luckly for us, Josh at Maker Portal has made the perfect picture (above) for this and kindly agreed to let me put it here too.
@@ -87,7 +87,7 @@ Below is a picture of my device in final form. You can see the case I used (but 
 I found taping the camera to the case an easy way to make using the device simpler to work with.
 
 {:.center}
-![Assembled Device](/images/assembled device.jpg#center)
+[![Assembled Device](/images/assembled device.jpg#center)](/PiThermalCam/images/assembled device.jpg)
 *Final Device Assembled*
 
 ## Prerequisite Software Installation
@@ -130,7 +130,7 @@ Finally you'll need to enable I2C on your Raspberry Pi and increase the baudrate
 To increase your baudrate, type `sudo nano /boot/config.txt` and find the line with `dtparam=i2c_arm=on`. Add `i2c_arm_baudrate=400000` to the end of it, so the end result should look like:
 
 {:.center}
-![Baudrate Change](/images/baudrate change.gif#center)
+[![Baudrate Change](/images/baudrate change.gif#center)](/PiThermalCam/images/baudrate change.gif)
 *Section of /boot/config.txt after baudrate change.*
 
 Save the file and reboot the device when you're done.
@@ -142,7 +142,7 @@ Note: In the first article I referenced, baudrates much higher than 400k were ap
 Once the above steps are done and your device is connected you can check to ensure the camera is visible to your pi. Run the command `sudo i2cdetect -y 1` and you should see a result like the below, indicating the camera is visible at the 0x33 address.
 
 {:.center}
-![I2C Camera Detected](/images/i2c detected.gif#center)
+[![I2C Camera Detected](/images/i2c detected.gif#center)](/PiThermalCam/images/i2c detected.gif)
 *The Raspberry PI registers the camera present at address 33.*
 
 Of note: The basic datasheet is available at Digikey for the [110 Degree Camera Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4469_Web.pdf) and the [55 Degree Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4407_Web.pdf). In both cases though the underlying camera device itself has the [same datasheet](https://www.melexis.com/-/media/files/documents/datasheets/mlx90640-datasheet-melexis.pdf), which shows that register 33 is the correct address.
@@ -177,7 +177,7 @@ All three versions are discussed in more detail below.
 
 The Matplotlib version can be found in the examples folder under the name matplotlib_therm_cam.py. It has several running modes which can be switched via the number at the bottom of the file, as visible here:
 {:.center}
-![Matplotlib Modes](/images/matplotlib_modes.png#center)
+[![Matplotlib Modes](/images/matplotlib_modes.png#center)](/PiThermalCam/images/matplotlib_modes.png)
 *The running modes available for the Matplotlib Approach*
 
 Run this by executing the icon or going into the folder in the terminal and typing `python3` followed by the filename. The mode from the number chosen will execute.
@@ -200,7 +200,7 @@ In using the camera I quickly found that it was useful to be able to change a nu
 The colormap used can sometimes make a big differences in what is easily visible or not. In this clip, for example, you can see both my body heat on the side and two cold windows in the backgroung. I cycle the colormap in this, showing how much it can make a difference in how easy/hard it is to see differences.
 
 {:.center}
-![Cycling Colormaps](/images/cycling colormaps.gif#center)
+[![Cycling Colormaps](/images/cycling colormaps.gif#center)](/PiThermalCam/images/cycling colormaps.gif)
 *Different colormaps make it easier to see important areas*
 
 Note: It's hard to see in the compressed gif here, but the colormap in use is shown in the white text at the top.
@@ -208,20 +208,20 @@ Note: It's hard to see in the compressed gif here, but the colormap in use is sh
 The contrast in the image also makes a big difference. E.g. as I move out of the picture in this clip, the smaller temperature differences in the image become much more visible, making the impact of the windows much clearer. Again, different colormaps can help highlight areas of interest here too.
 
 {:.center}
-![Impact of Temperature Range on image](/images/turning_to_windows_only.gif#center)
+[![Impact of Temperature Range on image](/images/turning_to_windows_only.gif#center)](/PiThermalCam/images/turning_to_windows_only.gif)
 *As I leave the image, my bodyheat being removed makes the temperature difference between the windows and wall more visible*
 
 #### Interpolation Algorithms
 Also, the process of blowing the image up larger requires zoom/interpolation algorithms of various sorts. E.g. here is a picture of me with the Matplotlib approach before interpolation (i.e. just the raw data as an image):
 
 {:.center}
-![Matplotlib Raw Data Wave](/images/Matplotlib Simple Wave.gif#center)
+[![Matplotlib Raw Data Wave](/images/Matplotlib Simple Wave.gif#center)](/PiThermalCam/images/Matplotlib Simple Wave.gif)
 *The raw temperature data as an image.*
 
 Now change the color scheme and interpolate for a cleaner/clearer picture:
 
 {:.center}
-![Matplotlib Wave](/images/Matplotlib Wave.gif#center)
+[![Matplotlib Wave](/images/Matplotlib Wave.gif#center)](/PiThermalCam/images/Matplotlib Wave.gif)
 *The data interpolated. Note the clarity of the border between my body and the surroundings.*
 
 Apart from having evidence that my hands aren't just feeling cold but actually ARE cold, this image highlights particularly how good the Matplotlib approach (which uses the SciPy library for interpolation) sets the coloring in a way that makes edges clear. The white line surrounding the red of my body makes the boundary much more visible.
@@ -229,7 +229,7 @@ Apart from having evidence that my hands aren't just feeling cold but actually A
 OpenCV, in contrast, has a number of interpolations algorithms, but most of them don't function as well with boundaries like this, and the default colormaps weren't as useful. As a result I used the cmapy library to import a handful of Matplotlib colormaps (the ones chosen are visible in the cycling colormap gif above), and now we can also cycle interpolation algorithms. Here I cycle through all of them, using the same colormap as the above Matplotlib image:
 
 {:.center}
-[![Interpolation Cycling](/images/cycling interpolation.gif#center)](/images/cycling interpolation.gif)
+[![Interpolation Cycling](/images/cycling interpolation.gif#center)](/PiThermalCam/images/cycling interpolation.gif)
 *Cycling through the various interpolation algorithms. SciPy is the algorithm used by the Matplotlib approach.*
 
 The interpolation algorithm used is shown in the white text at the top of the image. Of note, cycling in this way allows us to us simplistic algorithms at the start that are showing pretty much just the raw data (useful in some cases to see what's actually going on before interpolation). Also, the last two interpolation algorithms used are based in part on the Matplotlib approach. The first of them, Scipy, uses exactly the same Scipy-based algorithm the Matplotlib approach used. As you can see in this gif though, using it can be a bit slower or glitchy. To gain the clearer quality of the Scipy approach but the speed of OpenCV the Scipy/CV2 approach at the end uses Scipy to scale up partially, and then OpenCV to scale the rest of the way. This seems to work almost as well as Scipy alone, but without as much of a speed hit.
@@ -276,13 +276,13 @@ Furthermore, the flask webpage that connects to this was set up to enable all th
 To initiate this, either click the "Run Flask Thermal Camera" icon, if you set it up, or initiate the web server in python 3 with `python3 web_server.py`. When it begins it will show the local IP address to log onto:
 
 {:.center}
-[![The Flask-server starting up](/images/flask ip address.png#center)](/images/flask ip address.png)
+[![The Flask-server starting up](/images/flask ip address.png#center)](/PiThermalCam/images/flask ip address.png)
 *The web server code displays the address to connect to before starting the Flask server.*
 
 In this case the user simply opens a browser and goes to 192.168.86.22:8000 in order to pull up the resulting webpage with the live feed:
 
 {:.center}
-[![The Flask-based Live Webpage](/images/flask_webpage.png#center)](/images/flask_webpage.png#center)
+[![The Flask-based Live Webpage](/images/flask_webpage.png#center)](/PiThermalCam/images/flask_webpage.png#center)
 *The flask-based server allows web browsers to view and control the live video feed.*
 
 The IP address for this can also be fixed by setting your router to reserve an IP address for your Pi.
