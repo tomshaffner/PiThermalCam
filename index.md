@@ -295,5 +295,10 @@ Several of these features include the option to save snapshots of the video feed
 ## Results
 
 
+{:.center}
+[![Screen and Laptop](/images/screen_and_laptop.jpg#center)](/PiThermalCam/images/screen_and_laptop.jpg#center)
+*Image of a screen and laptop, normal and thermal.*
+
+{:height="50%" width="50%"}
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
