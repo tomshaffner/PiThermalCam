@@ -229,7 +229,7 @@ Apart from having evidence that my hands aren't just feeling cold but actually A
 OpenCV, in contrast, has a number of interpolations algorithms, but most of them don't function as well with boundaries like this, and the default colormaps weren't as useful. As a result I used the cmapy library to import a handful of Matplotlib colormaps (the ones chosen are visible in the cycling colormap gif above), and now we can also cycle interpolation algorithms. Here I cycle through all of them, using the same colormap as the above Matplotlib image:
 
 {:.center}
-![Interpolation Cycling](/images/cycling interpolation.gif#center)
+[![Interpolation Cycling](/images/cycling interpolation.gif#center)](/images/cycling interpolation.gif)
 *Cycling through the various interpolation algorithms. SciPy is the algorithm used by the Matplotlib approach.*
 
 The interpolation algorithm used is shown in the white text at the top of the image. Of note, cycling in this way allows us to us simplistic algorithms at the start that are showing pretty much just the raw data (useful in some cases to see what's actually going on before interpolation). Also, the last two interpolation algorithms used are based in part on the Matplotlib approach. The first of them, Scipy, uses exactly the same Scipy-based algorithm the Matplotlib approach used. As you can see in this gif though, using it can be a bit slower or glitchy. To gain the clearer quality of the Scipy approach but the speed of OpenCV the Scipy/CV2 approach at the end uses Scipy to scale up partially, and then OpenCV to scale the rest of the way. This seems to work almost as well as Scipy alone, but without as much of a speed hit.
@@ -282,7 +282,7 @@ To initiate this, either click the "Run Flask Thermal Camera" icon, if you set i
 In this case the user simply opens a browser and goes to 192.168.86.22:8000 in order to pull up the resulting webpage with the live feed:
 
 {:.center}
-[![The Flask-based Live Webpage](/images/flask_webpage.png#center)]/images/flask_webpage.png
+[![The Flask-based Live Webpage](/images/flask_webpage.png#center)](/images/flask_webpage.png)
 *The flask-based server allows web browsers to view and control the live video feed.*
 
 The IP address for this can also be fixed by setting your router to reserve an IP address for your Pi.
