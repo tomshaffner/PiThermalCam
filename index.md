@@ -294,48 +294,91 @@ Of note: This address will only be accessible from inside the same network. If y
 Several of these features include the option to save snapshots of the video feed. The save location is determined by the Config file included in the project. It defaults to the location /home/pi/pithermalcam/run_data/. If this needs to be changed it can be updated in the config file directly.
 ## Results
 
+Having put all this together, the big outstanding question is, how does it work? Is it useful enough to identify insulation issues?
 
+It is again worth noting that a higher resolution (i.e. much more expensive) camera would make this much easier. The lower resolution means it's harder to figure out what a hot or cold spot is at times, and in my use I found it was both helpful and, now and then, necessary to change the color map and interpolation scheme as I was using the camera to figure out what was going on.
+
+This is another instance in which the 110 Degree camera viewing angle is also harder to work with; if the camera is pointed at a wall, the viewing range is so wide that it's sometimes hard to tell what is what. In a number of cases it was necessary to get very close to something to figure out what was going on. Sometimes it was also useful to hold the camera still and have someone put their hand on a physical object to determine what something was. (e.g. this red section is that angle of the wall there I think, can you put your hand on it to make sure?)
+
+The 55 Degree camera would, again, likely be much better for this. Having the same number of sensors over a smaller viewing range would give a more nuanced view of what's happening, and would also allow the camera to be more useful at a greater distance.
+
+This ultimately just means that the 110 Degree camera is a bit more work though, the end result can still be quite useful. As it need be used only once for the thermal evaluation though the extra work isn't a huge issue. And, as I said earlier, for longer term security camera usage the 110 Degree camera is likely much better as it can cover a much wider area when watching for the presence of a warm body.
+
+**Initial Results**
+To begin with, some basic pictures were taken of the workstation. Below are real images with a corresponding thermal image to compare for a few of these. Click an image to enlarge.
+
+Here the heat from the screen and laptop is visible fairly clearly.
 {:.center}
 [![Screen and Laptop](/images/screen_and_laptop.jpg#center)](/PiThermalCam/images/screen_and_laptop.jpg#center)
 *Image of a screen and laptop, normal and thermal.*
 
+Here a ceiling light and windows in the background show the heat of the former and the coolness of the latter.
 {:.center}
-[![Lamp and Windows](/images/lamp_and_windows.jpg#center)](/PiThermalCam/images/lamp_and_windows.jpg#center)
+[![Light and Windows](/images/lamp_and_windows.jpg#center)](/PiThermalCam/images/lamp_and_windows.jpg#center)
 *A light and windows showing heat and cold respectively.*
 
+To play around with the camera a bit, a number of pictures were taken around a running sink, where the water temperature could be varied. Here's the sink via a normal camera:
 {:.center}
 [![Sink with running water](/images/sink.jpg#center)](/PiThermalCam/images/sink.jpg#center)
 *A sink with running water.*
 
+And here's the sink with the water at cold and hot settings:
 {:.center}
 [![Thermal Sink](/images/thermal_sink.jpg#center)](/PiThermalCam/images/thermal_sink.jpg#center)
-*Sink with running water with cold and hot water respectively.*
+*Sink with cold and hot running water respectively.*
 
+Then I took my hand and placed it in the image under the water. In the right image I ran the cold water over the palm of my hand (it also ran down my little finger) and then took a thermal picture; the cold from the water makes the heat from the center of my hand invisible, or even colder than the background. In the left image I then covered my entire hand in cold water and held it behind a stream of hot water; the end result shows the stream visible and my arm down to a bit above the wrist. Beyond that my hand is completely invisible  where the cold water had covered it:
 {:.center}
 [![Invisible hand](/images/invisible_hand.jpg#center)](/PiThermalCam/images/invisible_hand.jpg#center)
 *A hand covered in cold water, and a hand with cold water covering the palm only.*
+Seeing this was interesting, and kind of cast in a different light all those movie or TV shows where someone is facing a thermal camera in some heist.
 
+**Evaluating the House for Insulation**
+The next question was, what heat problems are there in the house? I covered a lot more than just the below, but here are some highlights.
+
+First, to evaluate the impact the curtains in my living room, I opened one of them; the cold of the door is clearly visible in the opened area:
 {:.center}
 [![Curtain](/images/curtain.jpg#center)](/PiThermalCam/images/curtain.jpg#center)
 *The effect of curtains visualized.*
+Note: The angle of these two pictures isn't exactly the same.
 
-
+Next I went into the basement and took a number of pictures. Of particular interest here, the soil stack (black pipe carrying waste water out of the ceiling and into the wall) was the hottest item in this picture! I checked after and it turned out someone had taken a hot shower not too long before.
 {:.center}
 [![Soil Pipe Coming out of Ceiling](/images/pipe_part_one.jpg#center)](/PiThermalCam/images/pipe_part_one.jpg#center)
 *Waste pipe coming out of the ceiling.*
+Note: Again, the thermal picture and real picture are taken from slightly different angles here.
 
+That waste pipe continues through the wall and into another basement room, and in that room the heat from that pipe is again the hottest thing around:
 {:.center}
-[![Screen and Laptop](/images/pipe_part_two.jpg#center)](/PiThermalCam/images/pipe_part_two.jpg#center)
+[![Soil Pipe Continuing](/images/pipe_part_two.jpg#center)](/PiThermalCam/images/pipe_part_two.jpg#center)
 *Waste pipe continuing.*
+I hope to do further testing of this pipe when it hasn't been used recently to see how much heat loss there is otherwise. It's still an open question whether this heat is just from the recent shower or if that pipe is always warm, indicating heat from the apartment above is being lost through it, in which case it might be worth insulating the pipe.
 
+In the second room there's also insulation in the ceiling preventing heat loss through the floor of the apartment above. Evaluating sections of that insulation highlighted one section where the insulation between two particularly close joists is actually simply missing:
 {:.center}
-[![Insulation issues](/images/insulation_issues.jpg#center)](/PiThermalCam/images/insulation_issues.jpg#center)
+[![Insulation issues](/images/Insulation_Issues.jpg#center)](/PiThermalCam/images/Insulation_Issues.jpg#center)
 *A section of insulation missing underneath a floor, and a hole in that insulation.*
+Of note, not only is there greater heat in between those joists, but a small area of insulation in another section is also leaking heat, indicating it's either bunched wrong or there's a thin place that could use some patching. The entire ceiling here could use an evaluating to find other sections of insulation that are missing or leaking heat.
 
+In the garage, there was some debate about whether the garage door itself was the major point of heat loss or if the cinderblock walls were just as bad. In particular, the cinderblock wall has a crack just to the left of the door, and it was thought that insulating the door itself might be a waste if the wall leaked just as much:
 {:.center}
 [![Garage Door](/images/garage_door.jpg#center)](/PiThermalCam/images/garage_door.jpg#center)
 *Heat loss via the garage door.*
+Here we can see that's not the case; the wall might be losing heat, but the door is losing it MUCH faster. If that crack makes a difference it's too small even to see here.
 
+Note: The temperature differential shown is only about 14 Degrees F. The temperatures in the text are relative so the absolute value is almost certainly wrong, but the difference between them should be ballpark correct and represents the differential between the hottest and coldest parts of the picture. Note that the walls immediately around the garage door ARE cooler than the hottest part of the picture (dark red in the ceiling), but those walls are still warmer than the door itself. As such, the theory about the wall losing heat is likely correct, but the greater heat loss through the door would indicate that either a new door or insulation for it would, indeed, help keep the space warmer.
+
+
+While looking at that garage picture I was a bit surprised at how hot the ceiling was. Particularly interesting, if the camera turned up a bit, a beam of heat could be seen running down the ceiling (left pic below). At first I thought maybe this was the chain and motor for the garage, but if I took a picture when the garage door hadn't been opened for a day the beam of heat was still there. Furthermore, if I turned the camera up to cover the entire ceiling, the beam of heat ran all along it, even the sections with no chain or motor. Turned high enough to exclude the door itself, the beam of heat in the middle of the ceiling, surrounded by cooler areas on either side, became obvious (right picture below):
 {:.center}
 [![Ceiling above the garage door](/images/garage_ceiling.jpg#center)](/PiThermalCam/images/garage_ceiling.jpg#center)
-*The ceiling above the garage door, showing poorly insulated section.*
+*The ceiling above the garage door, showing poorly insulated*
+This was one of the most useful insights from the entire project. The camera is seeing heat leaking through the center of the garage ceiling, while the ceiling looks completely blank and unchanged to the naked eye. Something is going on above the surface of the ceiling that is not visible.
+
+In trying to figure out what might be causing this, first, an access panel nearby gives a bit of visibility in the direction of this ceiling and it seems there are two boards that cover the outside sections of the ceiling, but leave the middle section open. Second, it's believed, after asking around among those who were present during the last remodeling, that the heating duct for the apartment above runs directly through this section. Furthermore, at the time of installation this heating duct was installed without being insulated.
+
+As such, it seems likely that some portion of the heat from this particular heating duct is, instead of being vented into the apartment above through the grate, leaking into the garage below. From there is goes right out the poorly insulated garage door, making for an overall heat loss for the entire area.
+
+There's still a debate about whether the best solution for this is to insulate the duct itself or to insulate the garage door, continuing to lose heat from above into the garage but potentially making the garage a more comfortable space to work in during the winter months.
+
+In either case though, the camera has already been deeply useful in figuring out what's going on and what to do about it.
