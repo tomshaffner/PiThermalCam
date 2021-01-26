@@ -33,7 +33,7 @@ This guide is pretty comprehensive, but if you just want to get up and running, 
 
 I also touch on a few pieces needed for development here, but if you're going to develop further I'd suggest looking at the original source articles as well; they cover the details of the code in more detail than I do here. I've also tried to leave comments in the code to make quite clear the sources of things and other information necessary to track what's going on and/or speed the learning curve for development.
 
-**Contents**
+#### Contents
 * This line is replaced at runtime by a Table of Contents of headers, excluding those headers followed by {:.no_toc} 
 {:toc}
 
@@ -42,7 +42,7 @@ I also touch on a few pieces needed for development here, but if you're going to
 There were several similar projects already online, and I ended up taking pieces of two as my baseline, mixing and matching, and adding features like web streaming from a third source. The results of that work are placed here for others to use directly or as a baseline for further develoment. The code is also available in the Github Repo corresponding to this page (link at top). The license is also included there and is an AGPL-3.0 License, so if you make changes and publish, you'll need to publish the code with it.
 
 Thanks are owed to those three other projects: namely, Joshua Hrisko's article at Maker Portal, [High Resolution Thermal Camera with Raspberry Pi and MLX90640](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640),  Валерий Курышев's article under the name Walker2000 at Habr, [Making a DIY thermal camera based on a Raspberry Pi](https://habr.com/en/post/441050/), and Adrian Rosebrock's article [OpenCV – Stream video to web browser/HTML page](https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/). Their work was a BIG step forward as a starting point.
-
+[Back to Table of Contents](#Contents)
 ## Parts Required
 
 {:.center}
