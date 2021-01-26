@@ -187,6 +187,7 @@ Mode 1 in the picture is the simples just to make sure you're getting readings f
 
 In the video modes, the video will continue unless/until an error occurs, the terminal window is closed, or the code in the terminal is halted.
 
+[_Back to Table of Contents_](#contents)
 ### OpenCV Version - Local
 
 The OpenCV Local version can be found in the examples folder under the name opencv_therm_cam.py. It has two running modes which can be switched via the number at the bottom of the file, but the default is the video mode which is likely all you need if everything is installed correctly.
@@ -266,6 +267,7 @@ These two options were enough to cover my need for this approach, and I'd recomm
 
 If, however, this approach seems at times cumbersome or more error prone, the web server version might be for you:
 
+[_Back to Table of Contents_](#contents)
 ### OpenCV Version - Web Server
 
 After testing the other two options I came to the conclusion that a better approach for using the camera via the internet would be to stream the video live to a webpage where multiple other computers or phones could all easily pull it up in a browser. Fortunately there was a similar project online in the guise of a [motion-detecting camera project](https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/) which I could use as a baseline for this. As such, the OpenCV code is connected in this piece to a basic Flask server which streams the video live to any computer on the network.
