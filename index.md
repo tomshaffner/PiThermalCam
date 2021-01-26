@@ -331,6 +331,7 @@ Then I took my hand and placed it in the image under the water. In the right ima
 {:.center}
 [![Invisible hand](/images/invisible_hand.jpg#center)](/PiThermalCam/images/invisible_hand.jpg#center)
 *A hand covered in cold water, and a hand with cold water covering the palm only.*
+
 Seeing this was interesting, and kind of cast in a different light all those movie or TV shows where someone is facing a thermal camera in some heist.
 
 **Evaluating the House for Insulation**
@@ -340,30 +341,35 @@ First, to evaluate the impact the curtains in my living room, I opened one of th
 {:.center}
 [![Curtain](/images/curtain.jpg#center)](/PiThermalCam/images/curtain.jpg#center)
 *The effect of curtains visualized.*
+
 Note: The angle of these two pictures isn't exactly the same.
 
 Next I went into the basement and took a number of pictures. Of particular interest here, the soil stack (black pipe carrying waste water out of the ceiling and into the wall) was the hottest item in this picture! I checked after and it turned out someone had taken a hot shower not too long before.
 {:.center}
 [![Soil Pipe Coming out of Ceiling](/images/pipe_part_one.jpg#center)](/PiThermalCam/images/pipe_part_one.jpg#center)
 *Waste pipe coming out of the ceiling.*
+
 Note: Again, the thermal picture and real picture are taken from slightly different angles here.
 
 That waste pipe continues through the wall and into another basement room, and in that room the heat from that pipe is again the hottest thing around:
 {:.center}
 [![Soil Pipe Continuing](/images/pipe_part_two.jpg#center)](/PiThermalCam/images/pipe_part_two.jpg#center)
 *Waste pipe continuing.*
+
 I hope to do further testing of this pipe when it hasn't been used recently to see how much heat loss there is otherwise. It's still an open question whether this heat is just from the recent shower or if that pipe is always warm, indicating heat from the apartment above is being lost through it, in which case it might be worth insulating the pipe.
 
 In the second room there's also insulation in the ceiling preventing heat loss through the floor of the apartment above. Evaluating sections of that insulation highlighted one section where the insulation between two particularly close joists is actually simply missing:
 {:.center}
 [![Insulation issues](/images/Insulation_Issues.jpg#center)](/PiThermalCam/images/Insulation_Issues.jpg#center)
 *A section of insulation missing underneath a floor, and a hole in that insulation.*
+
 Of note, not only is there greater heat in between those joists, but a small area of insulation in another section is also leaking heat, indicating it's either bunched wrong or there's a thin place that could use some patching. The entire ceiling here could use an evaluating to find other sections of insulation that are missing or leaking heat.
 
 In the garage, there was some debate about whether the garage door itself was the major point of heat loss or if the cinderblock walls were just as bad. In particular, the cinderblock wall has a crack just to the left of the door, and it was thought that insulating the door itself might be a waste if the wall leaked just as much:
 {:.center}
 [![Garage Door](/images/garage_door.jpg#center)](/PiThermalCam/images/garage_door.jpg#center)
 *Heat loss via the garage door.*
+
 Here we can see that's not the case; the wall might be losing heat, but the door is losing it MUCH faster. If that crack makes a difference it's too small even to see here.
 
 Note: The temperature differential shown is only about 14 Degrees F. The temperatures in the text are relative so the absolute value is almost certainly wrong, but the difference between them should be ballpark correct and represents the differential between the hottest and coldest parts of the picture. Note that the walls immediately around the garage door ARE cooler than the hottest part of the picture (dark red in the ceiling), but those walls are still warmer than the door itself. As such, the theory about the wall losing heat is likely correct, but the greater heat loss through the door would indicate that either a new door or insulation for it would, indeed, help keep the space warmer.
@@ -373,6 +379,7 @@ While looking at that garage picture I was a bit surprised at how hot the ceilin
 {:.center}
 [![Ceiling above the garage door](/images/garage_ceiling.jpg#center)](/PiThermalCam/images/garage_ceiling.jpg#center)
 *The ceiling above the garage door, showing poorly insulated*
+
 This was one of the most useful insights from the entire project. The camera is seeing heat leaking through the center of the garage ceiling, while the ceiling looks completely blank and unchanged to the naked eye. Something is going on above the surface of the ceiling that is not visible.
 
 In trying to figure out what might be causing this, first, an access panel nearby gives a bit of visibility in the direction of this ceiling and it seems there are two boards that cover the outside sections of the ceiling, but leave the middle section open. Second, it's believed, after asking around among those who were present during the last remodeling, that the heating duct for the apartment above runs directly through this section. Furthermore, at the time of installation this heating duct was installed without being insulated.
@@ -382,3 +389,40 @@ As such, it seems likely that some portion of the heat from this particular heat
 There's still a debate about whether the best solution for this is to insulate the duct itself or to insulate the garage door, continuing to lose heat from above into the garage but potentially making the garage a more comfortable space to work in during the winter months.
 
 In either case though, the camera has already been deeply useful in figuring out what's going on and what to do about it.
+
+
+There were other examples of the camera helping find holes or issues in the current insulation. What's shown here is already enough, however, to demonstrate the usefulness and efficacy of the MLX90640 for this purpose.
+
+**Further use thoughts**
+What's not shown here are pictures taken from the outside of the house of heat coming out. Some basic testing was done for this, but on the days in question this testing was limited due in part to concerns about water on the device (it was raining), and because the efficacy of those images was limited. The device itself worked fine from outside, and in a few cases identified much more clearly which windows are currently leaking much more heat than others, and which windows already seem to be high enough quality to not be an issue.
+
+From outside however, the distances from the objects being considered become greater, and as a result the problems of having a lower resolution higher viewing angle camera become more apparent. This is one area where the 55 Degree viewing angle camera would likely be much better.
+
+Also, the wifi in this particular house extends only so far from the building itself. As such, the method used here of streaming the video over wifi became more and more unstable the further from the building the camera was. With a better network connection or a screen attached to the Pi and the video being displayed locally on the screen (rather than via the web server approach) this method would be much easier. Pictures of this type will likely be quite useful as well in identifying other areas of heat loss for the house.
+
+For purposes of this demo however, the above were considered sufficient to showcase the efficacy of the camera for this purpose.
+
+## Conclusion
+
+While the MLX90640 will never provide pictures or video of the level of fidelity that some much more expensive professional cameras provide, what's shown here is more than enough to demonstrate the efficacy and usefulness of the camera both for entertainment purposes, as a security camera, and for a thermal evaluation of a house. The version of the camera with a narrower viewing angle (55 Degrees instead of 110) would likely be better for the thermal evaluation purpose but be of less value as a security camera.
+
+Regardless though, it's clear that the market has now reached the point where affordable thermal cameras can be effectively used to evaluate the insulation quality of a house. This article, and the accompanying open source library on Github, are provided for others to get started quickly and easily in doing their own work, or to use as a springboard for further development of their own.
+
+## Further Development
+
+There are a few next steps for development that have not (to date) been undertaken. Pull requests that complete these would be welcome:
+
+1. Add double-click save option in local version: The web-version of the OpenCV code has been set up to enable saving not only via the 's' key, but also via double-clicking the image itself. This would be a particularly useful function on the local OpenCV version as well, as it would enable a touchscreen double-tap picture saving. Initial attempts to replicate the approach used in the web version didn't work in the local version, but it would be worth completing these.
+2. Test OpenCV Pip Install: The above approach was used via the manual installation of OpenCV, but this approach is extremely cumbersome. Testing of the pip installation approach, both to verify it works and to compare the speed, would be extremely useful. If this did work the library would be switched to use it as the default install method, which would be far simpler and faster.
+3. Convert library to pip-installable package: Related to 2), if pip install for all dependencies could be possible, the library could be easily converted to a package that could be hung on PyPI. This would enable those would bought the camera to wire it up, install the apt-get dependencies, and then install this library directly from PiPI and be up and running in minutes. A few steps would likely be necessary for this in addition to completing number 2 above:
+  - Convert library to package (requirements.txt is already set up with this conversion in mind, once the pip-installed version of OpenCV is verified to work)
+  - Set up scripts that copy icons to desktop and ensure they're executable
+  - Update paths (in config file and icons) to reflect pip installation location
+  - Determine if other methods are necessary for running Matlab, OpenCV local, and OpenCV Web version
+4. Set up security camera mode: The web server version of the library can currently be used as a basic security camera version, but another mode could be added to do this more effectively. In particular, the article used to set up the web server version could be mirrored to check and see where movement is occurring in the frame and where the background is remaining unchanged. This could also then be set up to raise a warning of some sort when movement is detected.
+
+Of note on this fourth point, the normal use of the camera indicates some measure of noise that's greater than a typical (non-thermal) camera experiences, so the approach used in the original article on this topic would likely need to be enhanced to allow for greater noise levels without triggering. Similarly, the fact that temperatures are shown in a relative way might impact how movement works. And finally, temperature fluctuations of the general environment throughout the day would need to be accounted for to avoid beams of sun or the simple onset of a wind or night being viewed as motion.
+
+## Issue Reporting
+
+Where issues, problems, or concerns come up, they can be reported in the [Github repository that corresponds to this page](https://github.com/tomshaffner/PiThermalCam). Bugs or problems can be entered as [Issues](https://github.com/tomshaffner/PiThermalCam/issues), and general questions or discussion topics can be created in the [Discussions](https://github.com/tomshaffner/PiThermalCam/discussions) section. A fast response from the author is not guaranteed, but I will do my best to support/respond as time allows.
