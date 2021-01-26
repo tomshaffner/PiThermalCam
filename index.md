@@ -44,7 +44,7 @@ There were several similar projects already online, and I ended up taking pieces
 
 Thanks are owed to those three other projects: namely, Joshua Hrisko's article at Maker Portal, [High Resolution Thermal Camera with Raspberry Pi and MLX90640](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640),  Валерий Курышев's article under the name Walker2000 at Habr, [Making a DIY thermal camera based on a Raspberry Pi](https://habr.com/en/post/441050/), and Adrian Rosebrock's article [OpenCV – Stream video to web browser/HTML page](https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/). Their work was a BIG step forward as a starting point.
 
-[Jump to Table of Contents](#Contents)
+_[Back to Table of Contents]_(#contents)
 ## Parts Required
 
 {:.center}
@@ -74,7 +74,7 @@ I went with the Wifi option so I can't speak to screens, but I'd imagine any of 
 
 On the battery, the Pi 4 draws around 3 Amps so you'd want any backup battery you have which can feed a USB-C connection with 3 Amps. I had a battery I use for my phone while traveling that worked great. You could try one with less power than this; just be aware that even if it runs it might be a bit slower.
 
-[Jump to Table of Contents](#Contents)
+_[Back to Table of Contents]_(#contents)
 ## Hardware Setup
 
 {:.center}
@@ -156,7 +156,7 @@ If you're not going to run simply from the icons or script, you'll likely will w
 
 None of this is required, but if you find yourself looking to develop this project further, I found this setup to be the best.
 
-[Jump to Table of Contents](#Contents)
+_[Back to Table of Contents]_(#contents)
 ## Library Installation
 
 After the prereq setup, clone the Git repo to your Pi. Clone it into your default (pi) folder to mirror my setup and avoid needing extra adjustments. This can be done by opening a terminal, making sure you're in the pi folder, and typing `git clone https://github.com/tomshaffner/PiThermalCam.git`.
@@ -165,7 +165,7 @@ There are three approaches for running the camear. All three are python 3 script
 
 For convenience I also created a desktop icon for each approach; those three icons are in the templates folder and can be copied to your Raspbian desktop. Depending on how they downloaded you may need to make them executable, and they only work if you've installed this library in pi/pithermalcam/; otherwise you'll have to update the links.
 
-[Jump to Table of Contents](#Contents)
+_[Back to Table of Contents]_(#contents)
 ## Usage - The Three Approaches
 
 There are three approaches or methods used in this library.
@@ -298,7 +298,7 @@ Of note: This address will only be accessible from inside the same network. If y
 
 Several of these features include the option to save snapshots of the video feed. The save location is determined by the Config file included in the project. It defaults to the location /home/pi/pithermalcam/run_data/. If this needs to be changed it can be updated in the config file directly.
 
-[Jump to Table of Contents](#Contents)
+_[Back to Table of Contents]_(#contents)
 ## Results
 
 Having put all this together, the big outstanding question is, how does it work? Is it useful enough to identify insulation issues?
@@ -409,14 +409,14 @@ Also, the wifi in this particular house extends only so far from the building it
 
 For purposes of this demo however, the above were considered sufficient to showcase the efficacy of the camera for this purpose.
 
-[Jump to Table of Contents](#Contents)
+_[Back to Table of Contents]_(#contents)
 ## Conclusion
 
 While the MLX90640 will never provide pictures or video of the level of fidelity that some much more expensive professional cameras provide, what's shown here is more than enough to demonstrate the efficacy and usefulness of the camera both for entertainment purposes, as a security camera, and for a thermal evaluation of a house. The version of the camera with a narrower viewing angle (55 Degrees instead of 110) would likely be better for the thermal evaluation purpose but be of less value as a security camera.
 
 Regardless though, it's clear that the market has now reached the point where affordable thermal cameras can be effectively used to evaluate the insulation quality of a house. This article, and the accompanying open source library on Github, are provided for others to get started quickly and easily in doing their own work, or to use as a springboard for further development of their own.
 
-[Jump to Table of Contents](#Contents)
+_[Back to Table of Contents]_(#contents)
 ## Further Development
 
 There are a few next steps for development that have not (to date) been undertaken. Pull requests that complete these would be welcome:
@@ -432,7 +432,7 @@ There are a few next steps for development that have not (to date) been undertak
 
 Of note on this fourth point, the normal use of the camera indicates some measure of noise that's greater than a typical (non-thermal) camera experiences, so the approach used in the original article on this topic would likely need to be enhanced to allow for greater noise levels without triggering. Similarly, the fact that temperatures are shown in a relative way might impact how movement works. And finally, temperature fluctuations of the general environment throughout the day would need to be accounted for to avoid beams of sun or the simple onset of a wind or night being viewed as motion.
 
-[Jump to Table of Contents](#Contents)
+_[Back to Table of Contents]_(#contents)
 ## Issue Reporting
 
 Where issues, problems, or concerns come up, they can be reported in the [Github repository that corresponds to this page](https://github.com/tomshaffner/PiThermalCam). Bugs or problems can be entered as [Issues](https://github.com/tomshaffner/PiThermalCam/issues), and general questions or discussion topics can be created in the [Discussions](https://github.com/tomshaffner/PiThermalCam/discussions) section. A fast response from the author is not guaranteed, but I will do my best to support/respond as time allows.
