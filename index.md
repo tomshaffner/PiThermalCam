@@ -5,11 +5,7 @@
 {:.center}
 _January, 2021_
 
-# Note: This page is still under construction. Check back later for the final version.
-{:.no_toc}
-
 ## Introduction
-{:.no_toc}
 
 It's winter, and my heating bill has gone up. I've also noticed a draft in certain areas of my house, so I decided it was time to fulfill my long-awaited dream of getting a thermal camera. These have generated some buzz of late as potential Covid temperature detectors, but I was more interested in seeing where there's an insulation problem in my house that I might fix, or to be able to detect leaks in pipes. Also, fun to play with!
 
@@ -436,3 +432,5 @@ Of note on this fourth point, the normal use of the camera indicates some measur
 ## Issue Reporting
 
 Where issues, problems, or concerns come up, they can be reported in the [Github repository that corresponds to this page](https://github.com/tomshaffner/PiThermalCam). Bugs or problems can be entered as [Issues](https://github.com/tomshaffner/PiThermalCam/issues), and general questions or discussion topics can be created in the [Discussions](https://github.com/tomshaffner/PiThermalCam/discussions) section. A fast response from the author is not guaranteed, but I will do my best to support/respond as time allows.
+
+[_Back to Table of Contents_](#contents)
