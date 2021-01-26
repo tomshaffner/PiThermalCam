@@ -290,7 +290,7 @@ The IP address for this can also be fixed by setting your router to reserve an I
 
 Of note: This address will only be accessible from inside the same network. If you wish to set this up for external access research how to make a flask server accessible online.
 
-#### Image Saving Note
+### Image Saving Note
 
 Several of these features include the option to save snapshots of the video feed. The save location is determined by the Config file included in the project. It defaults to the location /home/pi/pithermalcam/run_data/. If this needs to be changed it can be updated in the config file directly.
 
