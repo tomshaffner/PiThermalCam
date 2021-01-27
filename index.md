@@ -107,7 +107,9 @@ i2c-tools
 
 **2. Pip Installs**
 
-Most of the remaining packages are listed in the requirements.txt file and can be installed via pip using the command `pip3 install -r requirements.txt`.
+Most of the remaining packages are listed in the requirements.txt file and can be installed via pip using the command `pip3 install -r requirements.txt`. Make sure you do this with pip3 and not pip.
+
+Note: If you prefer, you can do this inside a virtual environment instead too. Instructions for this are not included here, but if you wish to keep this project separate from others on the Pi, that's an effective method to do so.
 
 **3. OpenCV Install**
 
