@@ -150,7 +150,7 @@ Of note: The basic datasheet is available at Digikey for the [110 Degree Camera 
 
 If you're not going develop this code or dig into it yourself rather than simply from the icons or script, you'll likely will want an IDE. The Raspberry Pi comes with several now; if you installed the Raspbian version with recommended software you can find them in the Programming section of the menu. In my case though, I love Visual Studio Code and it's now supported on the Pi!! Straightforward install instructions are available at [PiMyLifeUp](https://pimylifeup.com/raspberry-pi-visual-studio-code/).
 
-Also, if you want a faster development experience you can install VS Code on your local machine, enable and set up SSH on the Pi (tutorials on this easy to find), [add your ssh key](https://pimylifeup.com/raspberry-pi-ssh-keys/) to the Pi, and then use the remote development extension from your local VSCode. You can add an entry in your ssh config file like this:
+Also, if you want a faster development experience you can install VS Code on your local machine, enable and set up SSH on the Pi (tutorials on this easy to find), create an ssh key and [add the public key](https://pimylifeup.com/raspberry-pi-ssh-keys/) to the Pi authorized_keys file, and then connect via the remote development extension from your local VSCode. You can add an entry in your local ssh config file like this:
 ```
 Host RaspberryPi
     HostName 192.168.86.22
