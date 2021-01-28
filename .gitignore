@@ -4,8 +4,8 @@
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 # Project specific
-/run_data/*
-!/run_data/note.txt
+/saved_snapshots/*
+!/saved_snapshots/note.txt
 *.png
 
 # Pycache

@@ -10,7 +10,6 @@ import datetime as dt
 import cv2
 import logging, configparser
 import cmapy
-from numpy.lib.type_check import imag
 from util_functions import *
 from scipy import ndimage
 
