@@ -107,7 +107,7 @@ i2c-tools
 
 **2. Pip and OpenCV Installs**
 
-There are two options for installing the remaining requirements. The first is by far the simplest, but the second can potentially result in a program that runs a bit faster.
+There are two options for installing the remaining requirements. The first is by far the simplest, but the second can potentially result in a program that runs a bit faster. In initial testing the difference in speed between the two did not seem large; those that aren't willing to invest substantially more effort for every last ounce of speed in the end result are recommended to use the first approach.
 
   **_2.-1 Pip Install Only_**
 
