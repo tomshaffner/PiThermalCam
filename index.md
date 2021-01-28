@@ -105,27 +105,31 @@ libatlas-base-dev
 python-smbus
 i2c-tools
 
-**2. Pip Installs**
+**2. Pip and OpenCV Installs**
 
-Most of the remaining packages are listed in the requirements.txt file and can be installed via pip using the command `pip3 install -r requirements.txt`. Make sure you do this with pip3 and not pip.
+There are two options for installing the remaining requirements. The first is by far the simplest, but the second can potentially result in a program that runs a bit faster.
 
-Note: If you prefer, you can do this inside a virtual environment instead too. Instructions for this are not included here, but if you wish to keep this project separate from others on the Pi, that's an effective method to do so.
+  **_2.-1 Pip Install Only_**
 
-**3. OpenCV Install**
+In this method you simply install the packageslisted in the requirements.txt file, which can be done using the command `pip3 install -r requirements.txt`. Make sure you do this with pip3 and not pip. Because OpenCV is being installed in this instance this will take a long time to run; in the ballpark of an hour potentially, depending on the speed of your SD card.
 
-OpenCV is a very large and comprehensive video processing library. It works faster partly because it runs mostly in C++. There are thus two ways to install it.
-1. Attempt a pip install
-  - There are premade versions of the library that can be installed using pip. This changes often so it's worth searching for yourself, but at the time of this writing [this article](https://www.jeremymorgan.com/tutorials/raspberry-pi/how-to-install-opencv-raspberry-pi/) or [this article](https://www.pyimagesearch.com/2018/09/19/pip-install-opencv/) discuss the pip method to do this. This is much faster/simpler but from what I've read it also is less optimized and in develpment I wanted every ounce of speed so I did the more complex install below. If you just want a simple setup give it a go; from what I've read it likely isn't a huge speed difference. If you do this, the whole system install is slightly simpler and fine if you don't expect to use multiple OpenCV versions; the virtual environment install is a bit cleaner if you might have multiple versions.
-2. Compile/Install OpenCV Locally
-  - This results in a more robust and optimized install and is what I used, but it also requires a MUCH longer and more cumbersome install process: one with many steps and which, at one point, takes an hour for the build to finish. Fortunately there are many sites that walk through the steps to do this. As this changes often it's again worth searching the web for more updated install instructions for OpenCV on a Raspberry Pi, but at the time of this writing [this article](https://qengineering.eu/install-opencv-4.4-on-raspberry-pi-4.html) or [this article](https://learnopencv.com/install-opencv-4-on-raspberry-pi/) work (check for newer OpenCV version even in those though). Again, I installed directly, skipping the virtual environment, but either approach should be fine for this project.
+Note: If you prefer, you can do this inside a virtual environment instead. Instructions for this are not included here, but if you wish to keep this project separate from others on the Pi, that's an effective method to do so.
 
-**4. Cmapy Install**
+  **_2.-2 OpenCV Manual Install_**
 
-A final small step: you'll need to install the cmapy python library. It has opencv as a dependency though, and so requires one shift.
- - If you're using the pip install approach for OpenCV you can just install cmapy via pip3 no problem.
- - If you're compiling OpenCV however you'll need to install cmapy using the --no-deps flag to prevent it trying to also install the pip version of OpenCV. To do this, simply run `pip3 install cmapy --no-deps`
+In this method you install a smaller list of pip requirements and then manually build OpenCV.
 
- **5. Enable I2C and Increase Pi Baudrate**
+OpenCV is a very large and comprehensive video processing library. It works faster than many alternatives partly because it runs mostly in C++. The pip install works, but is potentially less optimized for the Pi. A more optimized approach is to build and compile it locally. This results in a more robust and optimized install and is what I used, but it also requires a MUCH longer and more cumbersome install process: one with many steps and which, at one point, takes an hour for the build to finish. To do this:
+
+1. Install the smaller list of pip requirements using `pip3 install -r requirements_without_opencv.txt`.
+
+2. Compile/Install OpenCV Locally - Fortunately there are many sites that walk through the steps to do this. As this changes often it's again worth searching the web for more updated install instructions for OpenCV on a Raspberry Pi, but at the time of this writing [this article](https://qengineering.eu/install-opencv-4.4-on-raspberry-pi-4.html) or [this article](https://learnopencv.com/install-opencv-4-on-raspberry-pi/) work (check for newer OpenCV version even in those though). Again, I installed directly, skipping the virtual environment, but either approach should be fine for this project.
+
+3. Cmapy Install
+
+A final small step: you'll need to install the cmapy python library. It has opencv as a dependency so if you install it via the normal pip it will attempt to install the pip version of OpenCV as well. To avoid this, simply install it  using the --no-deps flag via this command:`pip3 install cmapy --no-deps`.
+
+ **3. Enable I2C and Increase Pi Baudrate**
 Finally you'll need to enable I2C on your Raspberry Pi and increase the baudrate. I2C can be enabled simply in the Pi Configuration via GUI or via typing `sudo raspi-config` and enabling it there.
 
 To increase your baudrate, type `sudo nano /boot/config.txt` and find the line with `dtparam=i2c_arm=on`. Add `i2c_arm_baudrate=400000` to the end of it, so the end result should look like:
