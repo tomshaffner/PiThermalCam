@@ -10,7 +10,6 @@ import adafruit_mlx90640
 import matplotlib.pyplot as plt
 import logging, configparser
 from scipy import ndimage
-from util_functions import c_to_f
 
 profiling = False # Flag to turn profiling on
 if profiling:
@@ -41,10 +40,12 @@ output_folder = config.get(section='FILEPATHS',option='output_folder',raw=True)
 i2c = busio.I2C(board.SCL, board.SDA, frequency=800000) # setup I2C
 mlx = adafruit_mlx90640.MLX90640(i2c) # begin MLX90640 with I2C comm
 
-
+def c_to_f(temp:float):
+    """ Convert temperature from C to F """  
+    return ((9.0/5.0)*temp+32.0)
 
 # print out the average temperature from the MLX90640
-def print_mean_temp(use_f:bool = False):
+def print_mean_temp():
     """
     Get mean temp of entire field of view. Return both temp C and temp F.
     """

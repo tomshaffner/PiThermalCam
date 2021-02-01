@@ -14,7 +14,6 @@ import traceback
 from scipy import ndimage
 
 from numpy.lib.type_check import imag
-from util_functions import c_to_f
 
 # Manual Params
 DEBUG_MODE=False
@@ -42,6 +41,10 @@ i2c = busio.I2C(board.SCL, board.SDA, frequency=800000) # setup I2C
 mlx = adafruit_mlx90640.MLX90640(i2c) # begin MLX90640 with I2C comm
 mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_8_HZ  # set refresh rate
 time.sleep(0.1)
+
+def c_to_f(temp:float):
+    """ Convert temperature from C to F """  
+    return ((9.0/5.0)*temp+32.0)
 
 # function to convert temperatures to pixels on image
 def temps_to_rescaled_uints(f,Tmin,Tmax):

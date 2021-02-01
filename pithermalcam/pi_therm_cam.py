@@ -10,7 +10,6 @@ import datetime as dt
 import cv2
 import logging, configparser
 import cmapy
-from util_functions import *
 from scipy import ndimage
 
 # Manual Params
@@ -32,9 +31,17 @@ logger.debug(f'Config file sections found: {config.sections()}')
 ## Read Global variables from config file
 # Note: Raw parsing used to avoid having to escape % characters in time strings
 logger.debug("Reading config file and initializing variables...")
-output_folder = config.get(section='FILEPATHS',option='output_folder',raw=True)
+try:
+    output_folder = config.get(section='FILEPATHS',option='output_folder',raw=True)
+except configparser.NoSectionError:
+    print("Run from parent folder instead of in this subfolder to avoid path errors.")
+    print("Image saving may fail.")
 
-class ThermalCam:
+def c_to_f(temp:float):
+    """ Convert temperature from C to F """  
+    return ((9.0/5.0)*temp+32.0)
+
+class pithermalcam:
     # See https://gitlab.com/cvejarano-oss/cmapy/-/blob/master/docs/colorize_all_examples.md to for options that can be put in this list
     _colormap_list=['jet','bwr','seismic','coolwarm','PiYG_r','tab10','tab20','gnuplot2','brg']
     _interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4,5,6]
@@ -72,6 +79,22 @@ class ThermalCam:
         self.mlx = adafruit_mlx90640.MLX90640(self.i2c) # begin MLX90640 with I2C comm
         self.mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_8_HZ  # set refresh rate
         time.sleep(0.1)
+
+    def get_mean_temp(self):
+        """
+        Get mean temp of entire field of view. Return both temp C and temp F.
+        """
+        frame = np.zeros((24*32,)) # setup array for storing all 768 temperatures
+        while True:
+            try:
+                self.mlx.getFrame(frame) # read MLX temperatures into frame var
+                break
+            except ValueError:
+                continue # if error, just read again
+    
+        temp_c = np.mean(frame)
+        temp_f=c_to_f(temp_c)
+        return temp_c, temp_f
 
     def _pull_raw_image(self):
         """Get one pull of the raw image data, converting temp units if necessary"""
@@ -240,19 +263,24 @@ class ThermalCam:
 
     def _temps_to_rescaled_uints(self,f,Tmin,Tmax):
         """Function to convert temperatures to pixels on image"""
+        f=np.nan_to_num(f)
         norm = np.uint8((f - Tmin)*255/(Tmax-Tmin))
         norm.shape = (24,32)
         return norm
 
+    def display_camera_onscreen(self):
+         # Loop to display frames
+        while True:
+            try:
+                thermcam.display_next_frame_onscreen()
+            # Catch a common I2C Error. If you get this too often consider checking/adjusting your I2C Baudrate
+            except Exception:
+                print("Too many retries error caught; continuing...")
+
 if __name__ == "__main__":
     # If class is run as main, set up a live feed displayed to screen
 
-    thermcam = ThermalCam() # Instantiate class
+    thermcam = pithermalcam() # Instantiate class
+    thermcam.display_camera_onscreen()
 
-    # Loop to display frames
-    while True:
-        try:
-            thermcam.display_next_frame_onscreen()
-        # Catch a common I2C Error. If you get this too often consider checking/adjusting your I2C Baudrate
-        except Exception:
-            print("Too many retries error caught; continuing...")
+   
