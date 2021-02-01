@@ -12,16 +12,16 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://tomshaffner.github.io/PiThermalCam/",
-    packages=setuptools.find_packages(),
+    packages=['pithermalcam'],
     install_requires=[
         'numpy',
-        'matplotlib'
-        'scipy'
-        'RPI.GPIO'
-        'Adafruit-Blinka'
-        'adafruit-circuitpython-mlx90640'
-        'flask'
-        'opencv-contrib-python'
+        'matplotlib',
+        'scipy',
+        'RPI.GPIO',
+        'Adafruit-Blinka',
+        'adafruit-circuitpython-mlx90640',
+        'flask',
+        'opencv-python',
         'cmapy'
       ],
     classifiers=[
