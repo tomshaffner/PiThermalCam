@@ -4,7 +4,7 @@ Documentation of the pithermalcam project and accompanying [PyPI package](https:
 
 Setup based primarily off the articles [by Joshua Hrisko at MakerPortal](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640) and by [Валерий Курышев’s under the name Walker2000 at Habr](https://habr.com/en/post/441050/) and flask pieces based on the work of [Adrian Rosebrock at pyimagesearch](https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/). Many thanks these people for their great work.
 
-Full details for this project are available at https://tomshaffner.github.io/PiThermalCam/, including comprehensive hardware/software setup, install, and usage instructions. A cursory overview for development purposes only is included here.
+Full details for this project are available at https://tomshaffner.github.io/PiThermalCam/, including comprehensive hardware/software setup, install, usage instructions, and examples of potential results. A cursory overview for development purposes only is included here.
 
 ### Manual Install/Setup ###
 
