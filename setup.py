@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pithermalcam",
-    version="0.9.15",
+    version="0.9.17",
     author="Tom Shaffner",
     description="A package which connects an MLX90640 Thermal IR Camera to a Raspberry Pi for viewing or web streaming.",
     long_description=long_description,
@@ -13,15 +13,15 @@ setuptools.setup(
     url="https://tomshaffner.github.io/PiThermalCam/",
     packages=['pithermalcam'],
     install_requires=[
-        'numpy',
-        'matplotlib',
-        'scipy',
-        'RPI.GPIO',
-        'Adafruit-Blinka',
-        'adafruit-circuitpython-mlx90640',
-        'flask',
-        'opencv-python',
-        'cmapy'
+        'numpy>=1.16.5',
+        'matplotlib>=3.0.2',
+        'scipy>=1.6.0',
+        'RPI.GPIO>=0.7.0',
+        'Adafruit-Blinka>=5.13.1',
+        'adafruit-circuitpython-mlx90640>=1.2.1',
+        'flask>=1.0.2',
+        'opencv-python>=4.5.1.48',
+        'cmapy>=0.6.6',
       ],
     classifiers=[
         # Full list: https://pypi.org/classifiers/ or https://pypi.python.org/pypi?%3Aaction=list_classifiers
