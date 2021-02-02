@@ -54,7 +54,7 @@ class pithermalcam:
         # Setup camera
         self.i2c = busio.I2C(board.SCL, board.SDA, frequency=800000) # setup I2C
         self.mlx = adafruit_mlx90640.MLX90640(self.i2c) # begin MLX90640 with I2C comm
-        self.mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_8_HZ  # set refresh rate
+        self.mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_16_HZ  # set refresh rate
         time.sleep(0.1)
 
     def _c_to_f(self,temp:float):
@@ -89,8 +89,12 @@ class pithermalcam:
             self._current_frame_processed=False # Note that the newly updated raw frame has not been processed
         except ValueError:
             print("Math error; continuing...")
+            self._raw_image = np.zeros((24*32,)) # If something went wrong, make sure the raw image has numbers
             logger.info(traceback.format_exc())
-
+        except OSError:
+            print("IO Error; continuing...")
+            self._raw_image = np.zeros((24*32,)) # If something went wrong, make sure the raw image has numbers
+            logger.info(traceback.format_exc())
     def _process_raw_image(self):
         """Process the raw temp data to a colored image. Filter if necessary"""
         # Image processing
