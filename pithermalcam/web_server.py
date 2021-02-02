@@ -14,7 +14,6 @@ from flask import render_template
 import threading
 import time, socket, logging, traceback
 import cv2
-import sys
 
 # Set up Logger
 logging.basicConfig(filename='pithermcam.log',filemode='a',

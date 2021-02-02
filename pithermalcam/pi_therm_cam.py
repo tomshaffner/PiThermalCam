@@ -11,7 +11,6 @@ import cv2
 import logging
 import cmapy
 from scipy import ndimage
-from sys import exit
 
 # Set up logging
 logging.basicConfig(filename='pithermcam.log',filemode='a',
