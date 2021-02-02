@@ -54,7 +54,7 @@ class pithermalcam:
         # Setup camera
         self.i2c = busio.I2C(board.SCL, board.SDA, frequency=800000) # setup I2C
         self.mlx = adafruit_mlx90640.MLX90640(self.i2c) # begin MLX90640 with I2C comm
-        self.mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_16_HZ  # set refresh rate
+        self.mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_8_HZ  # set refresh rate
         time.sleep(0.1)
 
     def _c_to_f(self,temp:float):

@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="pithermalcam",
-    version="0.9.9",
+    version="0.9.10",
     author="Tom Shaffner",
     author_email="tom.shaffner@yahoo.com",
     description="A package which connects an MLX90640 Thermal IR Camera to a Raspberry Pi for viewing or web streaming.",
