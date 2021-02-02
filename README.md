@@ -8,9 +8,9 @@ Full details for this project are available at https://tomshaffner.github.io/PiT
 
 ### Manual Install/Setup ###
 
-This section discusses software setup only, and assumes you have hardware set up, the MLX90640 correctly wired up, and the baudrate increased to 400k.
+This section discusses software setup only, and assumes you have hardware set up, the MLX90640 correctly wired up, I2C turned on, and the I2C baudrate increased to 400k. Refer to the above full details link for detailed instructions on both the hardware and software installs.
 
-This install is for manual operation of the library. For the Pip install from PyPi simply execute a pip install for pithermalcam.
+The below install is for manual operation of the library. For the Pip install from PyPi skip the below and simply execute `pip3 install pithermalcam`.
 
 1. Install, using apt-get, the following items:
 libatlas-base-dev
@@ -24,7 +24,7 @@ or
 b. 
     pip3 install the requirements_without_opencv.txt
 
-    Download, build, and install OpenCV locally (painstaking process, but results in more optimized code).
+    Download, build, and install OpenCV locally (painstaking process, but results in more optimized code.).
 
     Install cmapy using --no-deps pip3 flag to avoid installing OpenCV via pip3.
 
@@ -40,7 +40,7 @@ If you wish to clone the library, execute this clone command:
 
 `git clone -b master --single-branch https://github.com/tomshaffner/PiThermalCam.git`
 
-This clones the code without cloning the pictures for the accompanying article (which take up more space).
+This clones the code without cloning the pictures for the accompanying article (which take up excessive space).
 
 To operate from here:
 
