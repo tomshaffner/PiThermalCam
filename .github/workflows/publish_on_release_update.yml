@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Publish Python 🐍 distributions 📦 to PyPI on new release
+name: Publish distribution 📦 to PyPI 🐍 on new release
 
 # Controls when the action will run. 
 on:
