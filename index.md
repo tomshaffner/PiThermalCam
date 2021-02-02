@@ -5,6 +5,23 @@
 {:.center}
 _January, 2021_
 
+## Summary ## 
+
+This page contains both the background and documentation for the PyPi package [pithermalcam](https://pypi.org/project/pithermalcam/), which enables connecting an MLX90640 to a Raspberry Pi for use. The package is set up for quick and easy install or for cloning for more advanced users to play/tweak/develop further.
+
+If you just want to get up and running as fast as possible, use the [Parts Required](#parts-required)/[Hardware Setup](#hardware-setup) sections to prepare the device, and then follow go to the [Fast Software Setup][](#fast-software-setup) instructions to get up and running. If you just want to see what's possible, jump down to the [Usage](#usage) and [Results](#results) sections for pictures and videos of the results you can get.
+
+Other sections are also included that go in depth for cloning or development. There's a lot here but I've been careful to split up different paths and to make this whole page modular, so jump to the parts you need and skip the ones that don't apply to you.
+
+And if you're simply curious about the project as a whole, skim the whole page!
+
+Enjoy!
+
+#### Contents
+{:.no_toc}
+* This line is replaced at runtime by a Table of Contents of headers, excluding those headers followed by {:.no_toc} 
+{:toc}
+
 ## Introduction
 
 It's winter, and my heating bill has gone up. I've also noticed a draft in certain areas of my house, so I decided it was time to fulfill my long-awaited dream of getting a thermal camera. These have generated some buzz of late as potential Covid temperature detectors, but I was more interested in seeing where there's an insulation problem in my house that I might fix, or to be able to detect leaks in pipes. Also, fun to play with!
@@ -28,11 +45,6 @@ The below guide is meant to be a start-to-finish overview of the parts, setup, i
 This guide is pretty comprehensive, but if you just want to get up and running, the pieces related to setup and the OpenCV running types are all you need to get to a fully working camera fairly fast.
 
 I also touch on a few pieces needed for development here, but if you're going to develop further I'd suggest looking at the original source articles as well; they cover the details of the code in more detail than I do here. I've also tried to leave comments in the code to make quite clear the sources of things and other information necessary to track what's going on and/or speed the learning curve for development.
-
-#### Contents
-{:.no_toc}
-* This line is replaced at runtime by a Table of Contents of headers, excluding those headers followed by {:.no_toc} 
-{:toc}
 
 ## Background
 
@@ -89,6 +101,9 @@ I found taping the camera to the case an easy way to make using the device simpl
 [![Assembled Device](/images/assembled device.jpg#center)](/PiThermalCam/images/assembled device.jpg)
 *Final Device Assembled*
 
+
+## Fast Software Setup
+
 ## Prerequisite Software Installation
 
 There are two approaches to the video in this package. The first uses Matplotlib and is based on [Joshua Hrisko's article](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640) mentioned above. It works fine but in my case ran incredibly slow (though it had superior processing algorithms; more on this later). It was almost unusable without substantial speed improvements, so I switched to:
@@ -111,7 +126,7 @@ There are two options for installing the remaining requirements. The first is by
 
   **_2.-1 Pip Install Only_**
 
-In this method you simply install the packageslisted in the requirements.txt file, which can be done using the command `pip3 install -r requirements.txt`. Make sure you do this with pip3 and not pip. Because OpenCV is being installed in this instance this will take a long time to run; in the ballpark of an hour potentially, depending on the speed of your SD card.
+In this method you simply install the library with prerequisites: `pip3 install pithermalcam`. This will download the current package from PyPI and install all prerequisites as well. Make sure you do this with pip3 and not pip. Because OpenCV is being installed in this instance this can take a long time to run; in the ballpark of an hour potentially, depending on the speed of your SD card.
 
 Note: If you prefer, you can do this inside a virtual environment instead. Instructions for this are not included here, but if you wish to keep this project separate from others on the Pi, that's an effective method to do so.
 
@@ -121,11 +136,13 @@ In this method you install a smaller list of pip requirements and then manually 
 
 OpenCV is a very large and comprehensive video processing library. It works faster than many alternatives partly because it runs mostly in C++. The pip install works, but is potentially less optimized for the Pi. A more optimized approach is to build and compile it locally. This results in a more robust and optimized install and is what I used, but it also requires a MUCH longer and more cumbersome install process: one with many steps and which, at one point, takes an hour for the build to finish. To do this:
 
-1. Install the smaller list of pip requirements using `pip3 install -r requirements_without_opencv.txt`.
+1. Clone the master branch of the library using `git clone -b master --single-branch https://github.com/tomshaffner/PiThermalCam.git`.
 
-2. Compile/Install OpenCV Locally - Fortunately there are many sites that walk through the steps to do this. As this changes often it's again worth searching the web for more updated install instructions for OpenCV on a Raspberry Pi, but at the time of this writing [this article](https://qengineering.eu/install-opencv-4.4-on-raspberry-pi-4.html) or [this article](https://learnopencv.com/install-opencv-4-on-raspberry-pi/) work (check for newer OpenCV version even in those though). Again, I installed directly, skipping the virtual environment, but either approach should be fine for this project.
+2. Install the smaller list of pip requirements using `pip3 install -r requirements_without_opencv.txt`.
 
-3. Cmapy Install
+3. Compile/Install OpenCV Locally - Fortunately there are many sites that walk through the steps to do this. As this changes often it's again worth searching the web for more updated install instructions for OpenCV on a Raspberry Pi, but at the time of this writing [this article](https://qengineering.eu/install-opencv-4.4-on-raspberry-pi-4.html) or [this article](https://learnopencv.com/install-opencv-4-on-raspberry-pi/) work (check for newer OpenCV version even in those though). Again, I installed directly, skipping the virtual environment, but either approach should be fine for this project.
+
+4. Cmapy Install
 
 A final small step: you'll need to install the cmapy python library. It has opencv as a dependency so if you install it via the normal pip it will attempt to install the pip version of OpenCV as well. To avoid this, simply install it  using the --no-deps flag via this command:`pip3 install cmapy --no-deps`.
 
