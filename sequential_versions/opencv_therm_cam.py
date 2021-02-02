@@ -13,8 +13,6 @@ import cmapy
 import traceback
 from scipy import ndimage
 
-from numpy.lib.type_check import imag
-
 # Manual Params
 DEBUG_MODE=False
 
@@ -28,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 # Parse Config file
 config = configparser.ConfigParser(inline_comment_prefixes='#')
-config.read('config.ini')
+config.read('sequential_config.ini')
 logger.debug(f'Config file sections found: {config.sections()}')
 
 ## Read Global variables from config file
@@ -110,10 +108,12 @@ def camera_read(use_f:bool = True, filter_image:bool = False):
             # Get image
             try:
                 mlx.getFrame(image) # read mlx90640
-            except Exception:
-                print("Too many retries error caught; continuing...")
-                logger.info(traceback.format_exc())
-                continue
+            except RuntimeError as e:
+                if e.message == 'Too many retries':
+                    print("Too many retries error caught, potential I2C baudrate issue: continuing...")
+                    logger.info(traceback.format_exc())
+                    continue
+                raise
             temp_min = np.min(image)
             temp_max = np.max(image)
             img=temps_to_rescaled_uints(image,temp_min,temp_max)    

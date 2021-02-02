@@ -127,11 +127,11 @@ def generate():
 		# yield the output frame in the byte format
 		yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
 
-def start_server():
+def start_server(output_folder:str = '/home/pi/pithermalcam/run_data/'):
 	global thermcam
 	# initialize the video stream and allow the camera sensor to warmup
-	thermcam = pithermalcam()
-	time.sleep(2.0)
+	thermcam = pithermalcam(output_folder=output_folder)
+	time.sleep(0.1)
 
 	# start a thread that will perform motion detection
 	t = threading.Thread(target=pull_images)

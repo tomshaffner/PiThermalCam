@@ -8,38 +8,14 @@ import numpy as np
 import adafruit_mlx90640
 import datetime as dt
 import cv2
-import logging, configparser
+import logging
 import cmapy
 from scipy import ndimage
+from sys import exit
 
-# Manual Params
-DEBUG_MODE=False
-
-# Set up Logger
-if DEBUG_MODE:
-    logging.basicConfig(format='%(asctime)s %(levelname)-8s [%(filename)s:%(name)s:%(lineno)d] %(message)s',level=logging.DEBUG)
-    logging.getLogger('matplotlib.font_manager').disabled = True # Disable warnings from matplotlib font manager when in debug mode
-else:
-    logging.basicConfig(filename='pithermcam.log',filemode='a',format='%(asctime)s %(levelname)-8s [%(filename)s:%(name)s:%(lineno)d] %(message)s',level=logging.WARNING,datefmt='%d-%b-%y %H:%M:%S')
+# Set up logging
+logging.basicConfig(filename='pithermcam.log',filemode='a',format='%(asctime)s %(levelname)-8s [%(filename)s:%(name)s:%(lineno)d] %(message)s',level=logging.WARNING,datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
-
-# Parse Config file
-config = configparser.ConfigParser(inline_comment_prefixes='#')
-config.read('config.ini')
-logger.debug(f'Config file sections found: {config.sections()}')
-
-## Read Global variables from config file
-# Note: Raw parsing used to avoid having to escape % characters in time strings
-logger.debug("Reading config file and initializing variables...")
-try:
-    output_folder = config.get(section='FILEPATHS',option='output_folder',raw=True)
-except configparser.NoSectionError:
-    print("Run from parent folder instead of in this subfolder to avoid path errors.")
-    print("Image saving may fail.")
-
-def c_to_f(temp:float):
-    """ Convert temperature from C to F """  
-    return ((9.0/5.0)*temp+32.0)
 
 class pithermalcam:
     # See https://gitlab.com/cvejarano-oss/cmapy/-/blob/master/docs/colorize_all_examples.md to for options that can be put in this list
@@ -55,6 +31,7 @@ class pithermalcam:
     _image=None
     _file_saved_notification_start=None
     _displaying_onscreen=False
+    _exit_requested=False
 
     def __init__(self,use_f:bool = True, filter_image:bool = False, image_width:int=1200, image_height:int=900, output_folder:str = '/home/pi/pithermalcam/run_data/'):
         self.use_f=use_f
@@ -80,6 +57,10 @@ class pithermalcam:
         self.mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_8_HZ  # set refresh rate
         time.sleep(0.1)
 
+    def _c_to_f(self,temp:float):
+        """ Convert temperature from C to F """  
+        return ((9.0/5.0)*temp+32.0)
+
     def get_mean_temp(self):
         """
         Get mean temp of entire field of view. Return both temp C and temp F.
@@ -93,7 +74,7 @@ class pithermalcam:
                 continue # if error, just read again
     
         temp_c = np.mean(frame)
-        temp_f=c_to_f(temp_c)
+        temp_f=self._c_to_f(temp_c)
         return temp_c, temp_f
 
     def _pull_raw_image(self):
@@ -131,8 +112,8 @@ class pithermalcam:
     def _add_image_text(self):
         """Set image text content"""
         if self.use_f:
-            temp_min=c_to_f(self._temp_min)
-            temp_max=c_to_f(self._temp_max)
+            temp_min=self._c_to_f(self._temp_min)
+            temp_max=self._c_to_f(self._temp_max)
             text = f'Tmin={temp_min:+.1f}F - Tmax={temp_max:+.1f}F - FPS={1/(time.time() - self._t0):.1f} - Interpolation: {self._interpolation_list_name[self._interpolation_index]} - Colormap: {self._colormap_list[self._colormap_index]} - Filtered: {self.filter_image}'
         else:
             text = f'Tmin={self._temp_min:+.1f}C - Tmax={self._temp_max:+.1f}C - FPS={1/(time.time() - self._t0):.1f} - Interpolation: {self._interpolation_list_name[self._interpolation_index]} - Colormap: {self._colormap_list[self._colormap_index]} - Filtered: {self.filter_image}'
@@ -142,6 +123,11 @@ class pithermalcam:
         # For a brief period after saving, display saved notification
         if self._file_saved_notification_start is not None and (time.monotonic()-self._file_saved_notification_start)<1:
             cv2.putText(self._image, 'Snapshot Saved!', (300,300),cv2.FONT_HERSHEY_SIMPLEX, .8, (255, 255, 255), 2)
+
+    def add_customized_text(self,text):
+        """Add custom text to the center of the image, used mostly to notify user that server is off."""
+        cv2.putText(self._image, text, (300,300),cv2.FONT_HERSHEY_SIMPLEX, .8, (255, 255, 255), 2)
+        time.sleep(0.1)
         
     def _show_processed_image(self):
         """Resize image window and display it"""  
@@ -175,7 +161,7 @@ class pithermalcam:
             cv2.destroyAllWindows()
             self._displaying_onscreen = False
             print("Code Stopped by User")
-            exit()
+            self._exit_requested=True
 
     def _mouse_click(self,event,x,y,flags,param):
         """Used to save an image on double-click"""
@@ -269,18 +255,22 @@ class pithermalcam:
         return norm
 
     def display_camera_onscreen(self):
-         # Loop to display frames
-        while True:
+         # Loop to display frames unless/until user requests exit
+        while not self._exit_requested:
             try:
-                thermcam.display_next_frame_onscreen()
+                self.display_next_frame_onscreen()
             # Catch a common I2C Error. If you get this too often consider checking/adjusting your I2C Baudrate
-            except Exception:
-                print("Too many retries error caught; continuing...")
+            except RuntimeError as e:
+                if e.message == 'Too many retries':
+                    print("Too many retries error caught, potential I2C baudrate issue: continuing...")
+                    continue
+                raise                
 
 if __name__ == "__main__":
-    # If class is run as main, set up a live feed displayed to screen
+    # If class is run as main, read ini and set up a live feed displayed to screen
+    output_folder = '/home/pi/PiThermalCam/saved_snapshots/'
 
-    thermcam = pithermalcam() # Instantiate class
+    thermcam = pithermalcam(output_folder=output_folder) # Instantiate class
     thermcam.display_camera_onscreen()
 
    

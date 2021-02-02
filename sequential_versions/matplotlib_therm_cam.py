@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 # Parse Config file
 config = configparser.ConfigParser(inline_comment_prefixes='#')
-config.read('config.ini')
+config.read('sequential_config.ini')
 logger.debug(f'Config file sections found: {config.sections()}')
 
 ## Read Global variables from config file
