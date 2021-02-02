@@ -10,6 +10,8 @@ Full details for this project are available at https://tomshaffner.github.io/PiT
 
 This section discusses software setup only, and assumes you have hardware set up, the MLX90640 correctly wired up, and the baudrate increased to 400k.
 
+This install is for manual operation of the library. For the Pip install from PyPi simply execute a pip install for pithermalcam.
+
 1. Install, using apt-get, the following items:
 libatlas-base-dev
 python-smbus
@@ -29,8 +31,22 @@ b.
 
 ### Usage ###
 
-Run web_server.py to set up a flask server and strean live video.
+#### Pip Library Install ####
 
-Run pi_therm_cam.py to display the video feed onscreen.
+If you install the library via Pip you can follow the usage shown in the examples folder to see usage instructions.
 
-Check examples folder for sequential running approaches that are easier to track/follow (i.e. not object-oriented). These are less robust, but can be easier to understand/track/edit, particularly for those coming from a scientific background. Again, refer to the link at top for a detailed discussion.
+#### Clone library locally ####
+If you wish to clone the library, execute this clone command:
+`git clone -b master --single-branch https://github.com/tomshaffner/PiThermalCam.git`
+This clones the code without cloning the pictures for the accompanying article (which take up more space).
+
+To operate from here:
+1. Copy the icons to your desktop and make executable.
+
+or
+2. 
+Run pithermalcam/web_server.py to set up a flask server and strean live video.
+
+Run pithermalcam/pi_therm_cam.py to display the video feed onscreen.
+
+Check sequential_versions folder for sequential running approaches that are easier to track/follow (i.e. not object-oriented). These are less robust, but can be easier to understand/track/edit, particularly for those coming from a scientific background. Again, refer to the link at top for a detailed discussion.
