@@ -2,7 +2,7 @@
 
 Documentation of the pithermalcam project and accompanying [PyPI package](https://pypi.org/project/pithermalcam/), which connects an MLX90640 thermal camera up to a Raspberry Pi. (Built on a Pi 4)
 
-Setup based primarily off the article at https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640#thermal-cam, with additions from https://www.raspberrypi.org/products/raspberry-pi-universal-power-supply/ and flask pieces based on https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/. Many thanks to Joshua Hrisko, Валерий Курышев, and Adrian Rosebrock for their work in these articles.
+Setup based primarily off the articles [by Joshua Hrisko at MakerPortal](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640) and by [Валерий Курышев’s under the name Walker2000 at Habr](https://habr.com/en/post/441050/) and flask pieces based on the work of [Adrian Rosebrock at pyimagesearch](https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/). Many thanks these people for their great work.
 
 Full details for this project are available at https://tomshaffner.github.io/PiThermalCam/, including comprehensive hardware/software setup, install, and usage instructions. A cursory overview for development purposes only is included here.
 

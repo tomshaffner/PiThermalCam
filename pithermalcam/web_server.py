@@ -4,9 +4,9 @@
 # Flask web server for MLX90640 Thermal Camera w Raspberry Pi
 # If running directly, run from root folder, not pithermalcam folder
 ##################################
-try: # If called as an imported module
+try:  # If called as an imported module
 	from pithermalcam import pithermalcam
-except: # If run directly
+except:  # If run directly
 	from pi_therm_cam import pithermalcam
 from flask import Response, request
 from flask import Flask
@@ -17,7 +17,9 @@ import cv2
 import sys
 
 # Set up Logger
-logging.basicConfig(filename='pithermcam.log',filemode='a',format='%(asctime)s %(levelname)-8s [%(filename)s:%(name)s:%(lineno)d] %(message)s',level=logging.WARNING,datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(filename='pithermcam.log',filemode='a',
+					format='%(asctime)s %(levelname)-8s [%(filename)s:%(name)s:%(lineno)d] %(message)s',
+					level=logging.WARNING,datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
 # initialize the output frame and a lock used to ensure thread-safe exchanges of the output frames (useful when multiple browsers/tabs are viewing the stream)
@@ -83,7 +85,7 @@ def appexit():
 def video_feed():
 	# return the response generated along with the specific media
 	# type (mime type)
-	return Response(generate(), mimetype = "multipart/x-mixed-replace; boundary=frame")
+	return Response(generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 def get_ip_address():
 	"""Find the current IP address of the device"""

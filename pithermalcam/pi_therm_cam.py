@@ -14,15 +14,18 @@ from scipy import ndimage
 from sys import exit
 
 # Set up logging
-logging.basicConfig(filename='pithermcam.log',filemode='a',format='%(asctime)s %(levelname)-8s [%(filename)s:%(name)s:%(lineno)d] %(message)s',level=logging.WARNING,datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(filename='pithermcam.log',filemode='a',
+                    format='%(asctime)s %(levelname)-8s [%(filename)s:%(name)s:%(lineno)d] %(message)s',
+                    level=logging.WARNING,datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
+
 
 class pithermalcam:
     # See https://gitlab.com/cvejarano-oss/cmapy/-/blob/master/docs/colorize_all_examples.md to for options that can be put in this list
     _colormap_list=['jet','bwr','seismic','coolwarm','PiYG_r','tab10','tab20','gnuplot2','brg']
     _interpolation_list =[cv2.INTER_NEAREST,cv2.INTER_LINEAR,cv2.INTER_AREA,cv2.INTER_CUBIC,cv2.INTER_LANCZOS4,5,6]
     _interpolation_list_name = ['Nearest','Inter Linear','Inter Area','Inter Cubic','Inter Lanczos4','Pure Scipy', 'Scipy/CV2 Mixed']
-    _current_frame_processed=False # Tracks if the current processed image matches the current raw image
+    _current_frame_processed=False  # Tracks if the current processed image matches the current raw image
     i2c=None
     mlx=None
     _temp_min=None
@@ -52,27 +55,27 @@ class pithermalcam:
     def _setup_therm_cam(self):
         """Initialize the thermal camera"""
         # Setup camera
-        self.i2c = busio.I2C(board.SCL, board.SDA, frequency=800000) # setup I2C
-        self.mlx = adafruit_mlx90640.MLX90640(self.i2c) # begin MLX90640 with I2C comm
+        self.i2c = busio.I2C(board.SCL, board.SDA, frequency=800000)  # setup I2C
+        self.mlx = adafruit_mlx90640.MLX90640(self.i2c)  # begin MLX90640 with I2C comm
         self.mlx.refresh_rate = adafruit_mlx90640.RefreshRate.REFRESH_8_HZ  # set refresh rate
         time.sleep(0.1)
 
     def _c_to_f(self,temp:float):
-        """ Convert temperature from C to F """  
+        """ Convert temperature from C to F """
         return ((9.0/5.0)*temp+32.0)
 
     def get_mean_temp(self):
         """
         Get mean temp of entire field of view. Return both temp C and temp F.
         """
-        frame = np.zeros((24*32,)) # setup array for storing all 768 temperatures
+        frame = np.zeros((24*32,))  # setup array for storing all 768 temperatures
         while True:
             try:
-                self.mlx.getFrame(frame) # read MLX temperatures into frame var
+                self.mlx.getFrame(frame)  # read MLX temperatures into frame var
                 break
             except ValueError:
-                continue # if error, just read again
-    
+                continue  # if error, just read again
+
         temp_c = np.mean(frame)
         temp_f=self._c_to_f(temp_c)
         return temp_c, temp_f
@@ -82,33 +85,34 @@ class pithermalcam:
         # Get image
         self._raw_image = np.zeros((24*32,))
         try:
-            self.mlx.getFrame(self._raw_image) # read mlx90640
-            self._temp_min = np.min(self._raw_image) 
-            self._temp_max = np.max(self._raw_image) 
+            self.mlx.getFrame(self._raw_image)  # read mlx90640
+            self._temp_min = np.min(self._raw_image)
+            self._temp_max = np.max(self._raw_image)
             self._raw_image=self._temps_to_rescaled_uints(self._raw_image,self._temp_min,self._temp_max)
-            self._current_frame_processed=False # Note that the newly updated raw frame has not been processed
+            self._current_frame_processed=False  # Note that the newly updated raw frame has not been processed
         except ValueError:
             print("Math error; continuing...")
-            self._raw_image = np.zeros((24*32,)) # If something went wrong, make sure the raw image has numbers
+            self._raw_image = np.zeros((24*32,))  # If something went wrong, make sure the raw image has numbers
             logger.info(traceback.format_exc())
         except OSError:
             print("IO Error; continuing...")
-            self._raw_image = np.zeros((24*32,)) # If something went wrong, make sure the raw image has numbers
+            self._raw_image = np.zeros((24*32,))  # If something went wrong, make sure the raw image has numbers
             logger.info(traceback.format_exc())
+
     def _process_raw_image(self):
         """Process the raw temp data to a colored image. Filter if necessary"""
         # Image processing
         # Can't apply colormap before ndimage, so reversed in first two options, even though it seems slower
-        if self._interpolation_index==5: # Scale via scipy only - slowest but seems higher quality
-            self._image = ndimage.zoom(self._raw_image,25) # interpolate with scipy
+        if self._interpolation_index==5:  # Scale via scipy only - slowest but seems higher quality
+            self._image = ndimage.zoom(self._raw_image,25)  # interpolate with scipy
             self._image = cv2.applyColorMap(self._image, cmapy.cmap(self._colormap_list[self._colormap_index]))
-        elif self._interpolation_index==6: # Scale partially via scipy and partially via cv2 - mix of speed and quality
-            self._image = ndimage.zoom(self._raw_image,10) # interpolate with scipy
+        elif self._interpolation_index==6:  # Scale partially via scipy and partially via cv2 - mix of speed and quality
+            self._image = ndimage.zoom(self._raw_image,10)  # interpolate with scipy
             self._image = cv2.applyColorMap(self._image, cmapy.cmap(self._colormap_list[self._colormap_index]))
-            self._image = cv2.resize(self._image, (800,600), interpolation = cv2.INTER_CUBIC)
+            self._image = cv2.resize(self._image, (800,600), interpolation=cv2.INTER_CUBIC)
         else:
             self._image = cv2.applyColorMap(self._raw_image, cmapy.cmap(self._colormap_list[self._colormap_index]))
-            self._image = cv2.resize(self._image, (800,600), interpolation = self._interpolation_list[self._interpolation_index])
+            self._image = cv2.resize(self._image, (800,600), interpolation=self._interpolation_list[self._interpolation_index])
         self._image = cv2.flip(self._image, 1)
         if self.filter_image:
             self._image=cv2.bilateralFilter(self._image,15,80,80)
@@ -122,7 +126,7 @@ class pithermalcam:
         else:
             text = f'Tmin={self._temp_min:+.1f}C - Tmax={self._temp_max:+.1f}C - FPS={1/(time.time() - self._t0):.1f} - Interpolation: {self._interpolation_list_name[self._interpolation_index]} - Colormap: {self._colormap_list[self._colormap_index]} - Filtered: {self.filter_image}'
         cv2.putText(self._image, text, (30, 18), cv2.FONT_HERSHEY_SIMPLEX, .4, (255, 255, 255), 1)
-        self._t0 = time.time() # Update time to this pull
+        self._t0 = time.time()  # Update time to this pull
 
         # For a brief period after saving, display saved notification
         if self._file_saved_notification_start is not None and (time.monotonic()-self._file_saved_notification_start)<1:
@@ -132,12 +136,12 @@ class pithermalcam:
         """Add custom text to the center of the image, used mostly to notify user that server is off."""
         cv2.putText(self._image, text, (300,300),cv2.FONT_HERSHEY_SIMPLEX, .8, (255, 255, 255), 2)
         time.sleep(0.1)
-        
+
     def _show_processed_image(self):
-        """Resize image window and display it"""  
+        """Resize image window and display it"""
         cv2.namedWindow('Thermal Image', cv2.WINDOW_NORMAL)
         cv2.resizeWindow('Thermal Image', self.image_width,self.image_height)
-        cv2.imshow('Thermal Image', self._image)        
+        cv2.imshow('Thermal Image', self._image)
 
     def _set_click_keyboard_events(self):
         """Add click and keyboard actions to image"""
@@ -147,21 +151,21 @@ class pithermalcam:
         # Set keyboard events
         # if 's' is pressed - saving of picture
         key = cv2.waitKey(1) & 0xFF
-        if key == ord("s"): # If s is chosen, save an image to filec
+        if key == ord("s"):  # If s is chosen, save an image to filec
             self.save_image()
-        elif key == ord("c"): # If c is chosen cycle the colormap used
+        elif key == ord("c"):  # If c is chosen cycle the colormap used
             self.change_colormap()
-        elif key == ord("x"): # If c is chosen cycle the colormap used
+        elif key == ord("x"):  # If c is chosen cycle the colormap used
             self.change_colormap(forward=False)
-        elif key == ord("f"): # If f is chosen cycle the image filtering
+        elif key == ord("f"):  # If f is chosen cycle the image filtering
             self.filter_image = not self.filter_image
-        elif key == ord("t"): # If t is chosen cycle the units used for Temperature
+        elif key == ord("t"):  # If t is chosen cycle the units used for Temperature
             self.use_f = not self.use_f
-        elif key == ord("u"): # If t is chosen cycle the units used for temperature
+        elif key == ord("u"):  # If t is chosen cycle the units used for temperature
             self.change_interpolation()
         elif key == ord("i"):  # If i is chosen cycle interpolation algorithm
             self.change_interpolation(forward=False)
-        elif key==27: # Exit nicely if escape key is used
+        elif key==27:  # Exit nicely if escape key is used
             cv2.destroyAllWindows()
             self._displaying_onscreen = False
             print("Code Stopped by User")
@@ -259,7 +263,7 @@ class pithermalcam:
         return norm
 
     def display_camera_onscreen(self):
-         # Loop to display frames unless/until user requests exit
+        # Loop to display frames unless/until user requests exit
         while not self._exit_requested:
             try:
                 self.display_next_frame_onscreen()
@@ -268,13 +272,11 @@ class pithermalcam:
                 if e.message == 'Too many retries':
                     print("Too many retries error caught, potential I2C baudrate issue: continuing...")
                     continue
-                raise                
+                raise
 
 if __name__ == "__main__":
     # If class is run as main, read ini and set up a live feed displayed to screen
     output_folder = '/home/pi/PiThermalCam/saved_snapshots/'
 
-    thermcam = pithermalcam(output_folder=output_folder) # Instantiate class
+    thermcam = pithermalcam(output_folder=output_folder)  # Instantiate class
     thermcam.display_camera_onscreen()
-
-   

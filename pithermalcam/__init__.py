@@ -4,14 +4,15 @@
 from pithermalcam.pi_therm_cam import pithermalcam
 from pithermalcam import web_server
 
+
 def test_camera():
     """Check for an average temperature value to ensure the camera is connected and working."""
     try:
-        thermcam = pithermalcam() # Instantiate class
+        thermcam = pithermalcam()  # Instantiate class
         temp_c = None
         temp_f = None
         temp_c, temp_f = thermcam.get_mean_temp()
-        
+
         print("Camera seems to be connected and returning a value:")
         print('Average MLX90640 Temperature: {0:2.1f}C ({1:2.1f}F)'.format(temp_c,temp_f))
         print('To verify it\'s working, change the average temperature')
@@ -21,12 +22,14 @@ def test_camera():
             print("ERROR: Camera not found. There seems to be no device connected to I2C address 0x33.")
     except Exception as e:
         print("Camera didn't seem to work properly. Returned the following error:")
-        raise(e) 
+        raise(e)
+
 
 def display_camera_live(output_folder:str = '/home/pi/pithermalcam/run_data/'):
     """Display the camera live onscreen"""
-    thermcam = pithermalcam(output_folder=output_folder) # Instantiate class
+    thermcam = pithermalcam(output_folder=output_folder)  # Instantiate class
     thermcam.display_camera_onscreen()
+
 
 def stream_camera_online(output_folder:str = '/home/pi/pithermalcam/run_data/'):
     """Start a flask server streaming the camera live"""
