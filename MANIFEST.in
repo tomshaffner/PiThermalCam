@@ -1,2 +1,3 @@
 recursive-include pithermalcam/templates *
+recursive-exclude lib/pithermalcam/templates *
 *.ini
