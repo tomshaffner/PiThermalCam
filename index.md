@@ -470,10 +470,11 @@ In either case though, the camera has already been deeply useful in figuring out
 
 There were other examples of the camera helping find holes or issues in the current insulation. What's shown here is already enough, however, to demonstrate the usefulness and efficacy of the MLX90640 for this purpose.
 
-Finally, here's a brief larger video of the camera cycling interpolation algorithms and colors as a demonstration:
+Finally, here's a brief larger video of the camera cycling interpolation algorithms and colors as a demonstration. The gif reduces the quality a bit, so what you'll get is even better and faster than what you see here:
 
 {:.center}
 [![A full cycle of the camera](/images/cycling_all.gif#center)](/PiThermalCam/images/cycling_all.gif#center)
+*Live camera cycling through interpolation and color modes and varying view.*
 
 **Further use thoughts**
 What's not shown here are pictures taken from the outside of the house of heat coming out. Some basic testing was done for this, but on the days in question this testing was limited due in part to concerns about water on the device (it was raining), and because the efficacy of those images was limited. The device itself worked fine from outside, and in a few cases identified much more clearly which windows are currently leaking much more heat than others, and which windows already seem to be high enough quality to not be an issue.
