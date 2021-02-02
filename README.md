@@ -37,14 +37,19 @@ If you install the library via Pip you can follow the usage shown in the example
 
 #### Clone library locally ####
 If you wish to clone the library, execute this clone command:
+
 `git clone -b master --single-branch https://github.com/tomshaffner/PiThermalCam.git`
+
 This clones the code without cloning the pictures for the accompanying article (which take up more space).
 
 To operate from here:
+
 1. Copy the icons to your desktop and make executable.
 
 or
-2. 
+
+2. Run the files directly in python3:
+
 Run pithermalcam/web_server.py to set up a flask server and strean live video.
 
 Run pithermalcam/pi_therm_cam.py to display the video feed onscreen.
