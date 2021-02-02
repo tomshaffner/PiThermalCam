@@ -7,13 +7,11 @@ _January, 2021_
 
 ## Summary ## 
 
-This page contains both the background and documentation for the PyPi package [pithermalcam](https://pypi.org/project/pithermalcam/), which enables connecting an MLX90640 to a Raspberry Pi for use. The package is set up for quick and easy install or for cloning for more advanced users to play/tweak/develop further.
+This page contains both the background and documentation for the PyPi package [pithermalcam](https://pypi.org/project/pithermalcam/), which connects an MLX90640 thermal camera to a Raspberry Pi. The package is set up for quick and easy install or for cloning for more advanced users to play/tweak/develop further.
 
-If you just want to get up and running as fast as possible, use the [Parts Required](#parts-required)/[Hardware Setup](#hardware-setup) sections to prepare the device, and then follow go to the [Fast Software Setup][](#fast-software-setup) instructions to get up and running. If you just want to see what's possible, jump down to the [Usage](#usage) and [Results](#results) sections for pictures and videos of the results you can get.
+If you just want to get up and running as fast as possible, use the [Parts Required](#parts-required)/[Hardware Setup](#hardware-setup) sections to prepare the device, and then follow go to the [Software Setup](#software-setup) instructions to get up and running. If you just want to see what's possible, jump down to the [Usage](#usage) and [Results](#results) sections for pictures and videos of the results you can get.
 
-Other sections are also included that go in depth for cloning or development. There's a lot here but I've been careful to split up different paths and to make this whole page modular, so jump to the parts you need and skip the ones that don't apply to you.
-
-And if you're simply curious about the project as a whole, skim the whole page!
+Other sections go in depth for cloning or development. There's a lot here, but I've been careful to split up different paths and to make this whole page modular. This enables you to jump to the parts you need and skip the ones that don't apply to you.
 
 Enjoy!
 
@@ -24,7 +22,7 @@ Enjoy!
 
 ## Introduction
 
-It's winter, and my heating bill has gone up. I've also noticed a draft in certain areas of my house, so I decided it was time to fulfill my long-awaited dream of getting a thermal camera. These have generated some buzz of late as potential Covid temperature detectors, but I was more interested in seeing where there's an insulation problem in my house that I might fix, or to be able to detect leaks in pipes. Also, fun to play with!
+It's winter, and my heating bill has gone up. I've also noticed a draft in certain areas of my house, so I decided it was time to fulfill my long-awaited dream of getting a thermal camera. These have generated some buzz of late as potential Covid temperature detectors, but I was more interested in seeing where there's an insulation problem in my house that I might fix, or to detect leaks in pipes. Also, fun to play with!
 
 Cameras such as these can produce images like this one, showing where heat is leaving a building:
 
@@ -34,21 +32,17 @@ Cameras such as these can produce images like this one, showing where heat is le
 
 Initially I researched buying or renting such a camera, but the buying options tend to start at [$200 for the basic smartphone version](https://www.flir.com/products/flir-one-gen-3/), and go up to nearly $1,000. My local Lowe's has such cameras for rent as well but they cost $50 for 24 hours!
 
-I've long been a Raspberry Pi fan so when I saw that rental price I decided to see what options were available for the Pi. I quickly found the MLX90640 camera which costs only $60; at this price I figured I'd get a cool gadget to play with, be able to evaluate my house for leaks, and when I'm done I can use it as a security camera.
+I've long been a Raspberry Pi fan so when I saw that rental price I decided to see what options were available for the Pi. I quickly found the MLX90640 camera which costs only $60; at this price I'd get a cool gadget to play with, be able to evaluate my house for leaks, and use it as a security camera when I'm done. Perfect.
 
 I would of course also need a raspberry pi and accompany equipment but I had some of that and would be able to reuse it all for other projects as well. This was also a great excuse to finally upgrade from the Pi 3B+ I had to a [Pi 4](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/).
 
-Of note: The resolution on this camera is much lower so we'll never get pictures quite like the above, but a mere few years ago even the [best cheaper camera](https://www.adafruit.com/product/3538) had only an 8x8 resolution, which is nearly unusable for projects like this. Jumping up to 24x32 resolution of the MLX90640 is a 12-fold increase for about the same price! It seems we've finally reached the point where cheap homemade thermal cameras are worth buying.
+Of note: The resolution on this camera is much lower so we'll never get pictures like the above, but a mere few years ago even the [best cheaper camera](https://www.adafruit.com/product/3538) had only an 8x8 resolution, which is nearly unusable for projects like this. Jumping up to 24x32 resolution of the MLX90640 is a 12-fold increase for about the same price! It seems we've finally reached the point where cheap homemade thermal cameras are worth buying.
 
 The below guide is meant to be a start-to-finish overview of the parts, setup, install, and use of this project for any who want to do likewise or build on it further. I don't cover everything needed to work with a Raspberry Pi itself as there are plenty of other guides for that out there, but I try to touch on any and all pieces related to this project directly, at least to get it up and running.
 
-This guide is pretty comprehensive, but if you just want to get up and running, the pieces related to setup and the OpenCV running types are all you need to get to a fully working camera fairly fast.
-
-I also touch on a few pieces needed for development here, but if you're going to develop further I'd suggest looking at the original source articles as well; they cover the details of the code in more detail than I do here. I've also tried to leave comments in the code to make quite clear the sources of things and other information necessary to track what's going on and/or speed the learning curve for development.
-
 ## Background
 
-There were several similar projects already online, and I ended up taking pieces of two as my baseline, mixing and matching, and adding features like web streaming from a third source. The results of that work are placed here for others to use directly or as a baseline for further develoment. The code is also available in the Github Repo corresponding to this page (link at top). The license is also included there and is an AGPL-3.0 License, so if you make changes and publish, you'll need to publish the code with it.
+There were several similar projects already online, and I ended up taking pieces of two as my baseline, mixing and matching, and adding web streaming from a third. The results of that work are placed here for others to use directly or as a baseline for further develoment. The code is also available in the Github Repo corresponding to this page (link at top). The license is an AGPL-3.0 License, so if you make changes and publish, you'll need to publish the code with it.
 
 Thanks are owed to those three other projects: namely, Joshua Hrisko's article at Maker Portal, [High Resolution Thermal Camera with Raspberry Pi and MLX90640](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640),  Валерий Курышев's article under the name Walker2000 at Habr, [Making a DIY thermal camera based on a Raspberry Pi](https://habr.com/en/post/441050/), and Adrian Rosebrock's article [OpenCV – Stream video to web browser/HTML page](https://www.pyimagesearch.com/2019/09/02/opencv-stream-video-to-web-browser-html-page/). Their work was a BIG step forward as a starting point.
 
@@ -76,11 +70,11 @@ Prices are approximate as of Jan. 2021:
 - Portable battery with output ~ 3 Amps
 - Screen for the Raspberry Pi
 
-If you're going to be walking around your house, or outside it, you'll want some way to see the camera output live. As such, you'll probably need a portable battery for the device and, if you're not going to stream the video over your WIFI (or your pi will go outside of internet range), you'll want a screen to attach to the Pi.
+If you're going to be walking around your house, or outside it, you'll want some way to see the camera output live. As such, you'll probably need a portable battery for the device and, if you're not going to stream the video over your Wifi, you'll want a screen to attach to the Pi.
 
 I went with the Wifi option so I can't speak to screens, but I'd imagine any of the many Pi-specific screens would be fine for this.
 
-On the battery, the Pi 4 draws around 3 Amps so you'd want any backup battery you have which can feed a USB-C connection with 3 Amps. I had a battery I use for my phone while traveling that worked great. You could try one with less power than this; just be aware that even if it runs it might be a bit slower.
+On the battery, the Pi 4 draws around 3 Amps so you'd want any backup battery which can feed a USB-C connection with ~3 Amps. I had a battery I use for my phone while traveling that worked great. You could try one with less power than this; just be aware that it might run a bit slower.
 
 [_Back to Table of Contents_](#contents)
 ## Hardware Setup
@@ -89,9 +83,9 @@ On the battery, the Pi 4 draws around 3 Amps so you'd want any backup battery yo
 [![Wiring Setup](/images/mlx90640_rpi_wiring_diagram_w_table.png#center)](/PiThermalCam/images/mlx90640_rpi_wiring_diagram_w_table.png)
 *[Image by Joshua Hrisko / Maker Portal, copied with permission and thanks](https://www.raspberrypi.org/products/raspberry-pi-universal-power-supply/)*
 
-Most of the physical setup is straightforward. The one piece specific to this project is wiring the camera to the Pi itself, and luckly for us, Josh at Maker Portal has made the perfect picture (above) for this and kindly agreed to let me put it here too.
+Most of the physical setup is straightforward. The one piece specific to this project is wiring the camera to the Pi itself, and luckly for us, Josh at Maker Portal has made the perfect diagram (above) for this and kindly agreed to let me put it here too.
 
-The image shows where the camera connects to the Pi using the appropriate power and I2C pins. In my particular case I had a fan on the ground pin shown in this so I needed to move the ground wire to another ground on the Pi, but you can find another ground as needed in the [GPIO pinout diagrams](https://www.raspberrypi.org/documentation/usage/gpio/) available in many places online.
+The image shows where the camera connects to the Pi using the appropriate power and I2C pins. In my particular case I had a fan on the ground pin used here so I needed to move the ground wire to another ground on the Pi, but you can find another ground as needed in the [GPIO pinout diagrams](https://www.raspberrypi.org/documentation/usage/gpio/) available in many places online.
 
 Below is a picture of my device in final form. You can see the case I used (but would not recommend; better to get one a tad more open and with a variable speed fan) and the fact that I initially bought a Stemma connector with male ends meant I had to solder those to other wires to connect to the Pi. If you buy the right pieces the first time yours will look cleaner than this.
 
@@ -101,32 +95,107 @@ I found taping the camera to the case an easy way to make using the device simpl
 [![Assembled Device](/images/assembled device.jpg#center)](/PiThermalCam/images/assembled device.jpg)
 *Final Device Assembled*
 
+## Software Setup
 
-## Fast Software Setup
+This section discusses the software setup needed to get going.
 
-## Prerequisite Software Installation
+### Prerequisite/Setup
 
-There are two approaches to the video in this package. The first uses Matplotlib and is based on [Joshua Hrisko's article](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640) mentioned above. It works fine but in my case ran incredibly slow (though it had superior processing algorithms; more on this later). It was almost unusable without substantial speed improvements, so I switched to:
+Prior to setting up the python library itself, you'll need to perform some tweaks and installs to get ready:
+
+**1. apt-get Installs**
+
+Use apt-get to install the following packages: libatlas-base-dev python-smbus i2c-tools
+
+**2. Enable I2C and Increase Pi Baudrate**
+You'll need to enable I2C on your Raspberry Pi and increase the baudrate. I2C can be enabled simply in the Pi Configuration via GUI or via typing `sudo raspi-config` and enabling it there.
+
+To increase your baudrate, type `sudo nano /boot/config.txt` and find the line with `dtparam=i2c_arm=on`. Add `i2c_arm_baudrate=400000` to the end of it, so the end result should look like:
+
+{:.center}
+[![Baudrate Change](/images/baudrate change.gif#center)](/PiThermalCam/images/baudrate change.gif)
+*Section of /boot/config.txt after baudrate change.*
+
+Save the file and reboot the device when you're done.
+
+Note: In the first article I referenced, baudrates much higher than 400k were apparently tested; as high as 1M. I tested some higher rates but got many more errors at these levels. Running at higher rates also increases the risk of overheating as the maximum supported speed is [apparently 400k](https://raspberrypi.stackexchange.com/questions/108896/what-is-rpis-i2c-maximum-speed#:~:text=The%20maximum%20supported%20speed%20is%20400%20Kb%2Fs.). When I switched to the OpenCV approach (discussed below), 400k was fast enough to be usable. Since I want to reuse my Pi for other projects or as a security camera long term I stuck with the 400k. If you want the Matplotlib approach to work faster, as it did for the writer of that first article, this is likely what you'd need to change; just make sure you have good heat management of your Pi in doing so. My choice to stick with only 400k is likely why that approach is so slow for me, and is thus why the OpenCV approach is the one I mainly use.
+
+**3. Verify camera is connected**
+
+Once the above steps are done and your device is connected you can check to ensure the camera is visible to your pi. Run the command `sudo i2cdetect -y 1` and you should see a result like the below, indicating the camera is visible at the 0x33 address.
+
+{:.center}
+[![I2C Camera Detected](/images/i2c detected.gif#center)](/PiThermalCam/images/i2c detected.gif)
+*The Raspberry PI registers the camera present at address 33.*
+
+Of note: The basic datasheet is available at Digikey for the [110 Degree Camera Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4469_Web.pdf) and the [55 Degree Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4407_Web.pdf). In both cases though the underlying camera device itself has the [same datasheet](https://www.melexis.com/-/media/files/documents/datasheets/mlx90640-datasheet-melexis.pdf), which shows that register 33 is the correct address.
+
+### Library Installation
+
+Simply to get up and running, the library can be installed from PyPi using `pip3 install pithermalcam`.
+
+From this point, a quick test of the device is possible via:
+
+```
+import pithermalcam as ptc
+
+ptc.test_camera()
+```
+
+Run the camera via live video using:
+```
+import pithermalcam as ptc
+
+ptc.display_camera_live()
+```
+Note the following keyboard shortcuts for this mode:
+```
+Esc - Exit and Close.
+S - Save a Snapshot of the Current Frame
+X - Cycle the Colormap Backwards
+C - Cycle the Colormap forward
+F - Toggle Filtering On/Off
+T - Toggle Temperature Units between C/F
+U - Go back to the previous Interpolation Algorithm
+I - Change the Interpolation Algorithm Used
+Double-click with Mouse - Save a Snapshot of the Current Frame
+
+```
+
+
+And stream the video over the local network via a web server using:
+```
+import pithermalcam as ptc
+
+ptc.stream_camera_online()
+```
+
+Of note, in the latter two cases, the save location can also be passed in via the `output_folder` input variable. It defaults to '/home/pi/PiThermalCam/saved_snapshots/'
+
+
+[_Back to Table of Contents_](#contents)
+## Development Copy Setup/Info
+This section will discuss the process of cloning the repo, digging into the code, and a bit more background to understand what's going on.
+
+While the OpenCV method is the only one used in the final package, there are actually two approaches to the video in the code. The first uses Matplotlib and is based on [Joshua Hrisko's article](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640) mentioned above. It works fine but in testing ran quite slow (though it had superior processing algorithms; more on this later). It was almost unusable without substantial speed improvements or leaving the baudrate very high, so it was dropped in favor of:
 
 The second approach uses an OpenCV approach based on the [article by Валерий Курышев](https://habr.com/en/post/441050/), which ran MUCH faster for me, and thus I focused subsequent work on importing the algorithms from Josh's article into the OpenCV method.
 
-You can install simply the listed requirements in steps 1 and 2 below and that will be sufficient to use the Matplotlib approach as is. If you wish to use the faster (higher FPS in the final video) and more robust approach though, you'll need to go through the longer and more complex process of installing OpenCV as well.
+To begin development you'll need to first complete the [Prerequisite/Setup](#Prerequisite/Setup) section above.
 
-### Installation Steps
-**1. apt-get Installs**
+Next, clone the Git repo to your Pi. Clone it via the following command to clone only the master branch and avoid downloading all the images the github pages branch has: `git clone -b master --single-branch https://github.com/tomshaffner/PiThermalCam.git`.
 
-First, a number of these can be installed using apt-get, in particular these three:
-libatlas-base-dev
-python-smbus
-i2c-tools
+Once cloned, there are three approaches for running the camera. All three are python 3 scripts so if you're comfortable with running python code manually or via an IDE you can just execute them. Details outlined below.
+
+For convenience I also created a desktop icon for each approach; those three icons are in the templates folder and can be copied to your Raspbian desktop. Depending on how they downloaded you may need to make them executable, and they only work if you've installed this library in pi/pithermalcam/; otherwise you'll have to update the links.
 
 **2. Pip and OpenCV Installs**
 
-There are two options for installing the remaining requirements. The first is by far the simplest, but the second can potentially result in a program that runs a bit faster. In initial testing the difference in speed between the two did not seem large; those that aren't willing to invest substantially more effort for every last ounce of speed in the end result are recommended to use the first approach.
+There are two options for installing the remaining requirements manually. The first is by far the simplest, but the second can potentially result in a program that runs a bit faster. In initial testing the difference in speed between the two did not seem large; those that aren't willing to invest substantially more effort for every last ounce of speed in the end result are recommended to use the first approach.
 
   **_2.-1 Pip Install Only_**
 
-In this method you simply install the library with prerequisites: `pip3 install pithermalcam`. This will download the current package from PyPI and install all prerequisites as well. Make sure you do this with pip3 and not pip. Because OpenCV is being installed in this instance this can take a long time to run; in the ballpark of an hour potentially, depending on the speed of your SD card.
+In this method you simply install the packages listed in the requirements.txt file, which can be done using the command `pip3 install -r requirements.txt`. Make sure you do this with pip3 and not pip. Because OpenCV is being installed in this instance this can take a long time to run; in the ballpark of an hour potentially, depending on the speed of your SD card.
 
 Note: If you prefer, you can do this inside a virtual environment instead. Instructions for this are not included here, but if you wish to keep this project separate from others on the Pi, that's an effective method to do so.
 
@@ -146,28 +215,6 @@ OpenCV is a very large and comprehensive video processing library. It works fast
 
 A final small step: you'll need to install the cmapy python library. It has opencv as a dependency so if you install it via the normal pip it will attempt to install the pip version of OpenCV as well. To avoid this, simply install it  using the --no-deps flag via this command:`pip3 install cmapy --no-deps`.
 
- **3. Enable I2C and Increase Pi Baudrate**
-Finally you'll need to enable I2C on your Raspberry Pi and increase the baudrate. I2C can be enabled simply in the Pi Configuration via GUI or via typing `sudo raspi-config` and enabling it there.
-
-To increase your baudrate, type `sudo nano /boot/config.txt` and find the line with `dtparam=i2c_arm=on`. Add `i2c_arm_baudrate=400000` to the end of it, so the end result should look like:
-
-{:.center}
-[![Baudrate Change](/images/baudrate change.gif#center)](/PiThermalCam/images/baudrate change.gif)
-*Section of /boot/config.txt after baudrate change.*
-
-Save the file and reboot the device when you're done.
-
-Note: In the first article I referenced, baudrates much higher than 400k were apparently tested; as high as 1M. I tested some higher rates but got many more errors at these levels. Running at higher rates also increases the risk of overheating as the maximum supported speed is [apparently 400k](https://raspberrypi.stackexchange.com/questions/108896/what-is-rpis-i2c-maximum-speed#:~:text=The%20maximum%20supported%20speed%20is%20400%20Kb%2Fs.). When I switched to the OpenCV approach (discussed below), 400k was fast enough to be usable. Since I want to reuse my Pi for other projects or as a security camera long term I stuck with the 400k. If you want the Matplotlib approach to work faster, as it did for the writer of that first article, this is likely what you'd need to change; just make sure you have good heat management of your Pi in doing so. My choice to stick with only 400k is likely why that approach is so slow for me, and is thus why the OpenCV approach is the one I mainly use.
-
- **Connection Verification**
-
-Once the above steps are done and your device is connected you can check to ensure the camera is visible to your pi. Run the command `sudo i2cdetect -y 1` and you should see a result like the below, indicating the camera is visible at the 0x33 address.
-
-{:.center}
-[![I2C Camera Detected](/images/i2c detected.gif#center)](/PiThermalCam/images/i2c detected.gif)
-*The Raspberry PI registers the camera present at address 33.*
-
-Of note: The basic datasheet is available at Digikey for the [110 Degree Camera Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4469_Web.pdf) and the [55 Degree Version](https://media.digikey.com/pdf/Data%20Sheets/Adafruit%20PDFs/4407_Web.pdf). In both cases though the underlying camera device itself has the [same datasheet](https://www.melexis.com/-/media/files/documents/datasheets/mlx90640-datasheet-melexis.pdf), which shows that register 33 is the correct address.
 
 **IDE Setup for Development**
 
@@ -186,23 +233,15 @@ This was actually the best dev experience I found; the only downside is that run
 
 None of this is required, but if you find yourself looking to develop this project further, I found this setup to be the best.
 
-[_Back to Table of Contents_](#contents)
-## Library Installation
-
-After the prereq setup, clone the Git repo to your Pi. Clone it into your default (pi) folder to mirror my setup and avoid needing extra adjustments. This can be done by opening a terminal, making sure you're in the pi folder, and typing `git clone https://github.com/tomshaffner/PiThermalCam.git`.
-
-There are three approaches for running the camear. All three are python 3 scripts so if you're comfortable with running python code manually or via an IDE you can just execute them. Details outlined below.
-
-For convenience I also created a desktop icon for each approach; those three icons are in the templates folder and can be copied to your Raspbian desktop. Depending on how they downloaded you may need to make them executable, and they only work if you've installed this library in pi/pithermalcam/; otherwise you'll have to update the links.
 
 [_Back to Table of Contents_](#contents)
 ## Usage - The Three Approaches
 
 There are three approaches or methods used in this library.
 
-**Matplotlib:** The first, using Matplotlib, is based off the previously mentioned [article by Joshua Hrisko](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640). The picture colormapping and interpolation used in this approach is quite good, but it requires the baudrate to be well over the recommended limit to function as a reasonable rate. I was lucky to get a picture a second at the 400k baudrate. I would recommend starting with this approach to perform tests on your camera to make sure it's working, but once you've verified that it's probably better to move on to the other methods.
+**Matplotlib:** The first, using Matplotlib, works only in the cloned version of the package; not the one from PyPI. This version is based off the previously mentioned [article by Joshua Hrisko](https://makersportal.com/blog/2020/6/8/high-resolution-thermal-camera-with-raspberry-pi-and-mlx90640). The picture colormapping and interpolation used in this approach is quite good, but it requires the baudrate to be well over the recommended limit to function as a reasonable rate. I was lucky to get a picture a second at the 400k baudrate.
 
-**OpenCV:** The second approach uses OpenCV and runs MUCH faster. As I'll discuss below though, I found the colormaps and interpolation of Matplotlib superior, and so I ended up importing those pieces of the Matplotlib into this approach.
+**OpenCV displayed onscreen:** The second approach uses OpenCV and runs MUCH faster. As I'll discuss below though, I found the colormaps and interpolation of Matplotlib superior, and so I ended up importing those pieces of the Matplotlib into this approach.
 
 **OpenCV Web Server:** The first two approaches run locally and display video output on the Pi directly. If you have a screen for the Pi or you're remoting into it via Remote Desktop or VNC this works fine. If you're walking around your house trying to use Remote Desktop on your phone to see the video output though, this can be a pain. As such I took the second approach above and rebuilt it into a Flask webserver version. If you start the webserver you'll see an IP Address printed out, and you can load that IP via a web browser on any computer in the network to see and control the video. For me, this was the more reliable/robust solution in practice.
 
@@ -210,30 +249,28 @@ All three versions are discussed in more detail below.
 
 ### Matplotlib Version
 
-The Matplotlib version can be found in the examples folder under the name matplotlib_therm_cam.py. It has several running modes which can be switched via the number at the bottom of the file, as visible here:
+Again, this version is only in the cloned version of the library, not the on on PyPI. The Matplotlib version can be found in the sequential_versions folder under the name matplotlib_therm_cam.py. It has several running modes which can be switched via the number at the bottom of the file, as visible here:
 {:.center}
 [![Matplotlib Modes](/images/matplotlib_modes.png#center)](/PiThermalCam/images/matplotlib_modes.png)
 *The running modes available for the Matplotlib Approach*
 
 Run this by executing the icon or going into the folder in the terminal and typing `python3` followed by the filename. The mode from the number chosen will execute.
 
-Mode 1 in the picture is the simples just to make sure you're getting readings from your camera. Mode 2 then takes a basic picture (saved to the run_data folder) showing the raw data without any interpolation. Mode 3 is mode 2 in video form. Modes 4 and 5 correlate to modes 2 and 3, except with interpolation built in.
-
 In the video modes, the video will continue unless/until an error occurs, the terminal window is closed, or the code in the terminal is halted.
 
 [_Back to Table of Contents_](#contents)
 ### OpenCV Version - Local
 
-The OpenCV Local version can be found in the examples folder under the name opencv_therm_cam.py. It has two running modes which can be switched via the number at the bottom of the file, but the default is the video mode which is likely all you need if everything is installed correctly.
+The OpenCV Local version can be found in the sequential_versions folder under the name opencv_therm_cam.py. It has two running modes which can be switched via the number at the bottom of the file, but the default is the video mode which is likely all you need if everything is installed correctly.
 
 Run this by executing the icon or going into the folder in the terminal and typing `python3` followed by the filename.
 
-In the normal mode, the video will start running.
+This version of the code was later rewritten to be class-based, and the result is pithermalcam/pi_therm_cam.py and is the camera method used by the PyPI install version of the code.
 
-In using the camera I quickly found that it was useful to be able to change a number of features as the camera was running. Let's discusse these here:
+In using the camera I quickly found that it was useful to be able to change a number of features as the camera was running. Let's discuss these here:
 
 #### Colormaps
-The colormap used can sometimes make a big differences in what is easily visible or not. In this clip, for example, you can see both my body heat on the side and two cold windows in the backgroung. I cycle the colormap in this, showing how much it can make a difference in how easy/hard it is to see differences.
+The colormap used can sometimes make a big difference in what is easily visible or not. In this clip, for example, you can see both my body heat on the side and two cold windows in the background. I cycle the colormap in this, showing how much it can make a difference in how easy/hard it is to see differences.
 
 {:.center}
 [![Cycling Colormaps](/images/cycling colormaps.gif#center)](/PiThermalCam/images/cycling colormaps.gif)
@@ -279,7 +316,7 @@ Finally, a few other simple options were added.
 - Finally, exiting can be annoying if the terminal is behind the video, as you need to move the video to reach the terminal, so Esc is set to shut the script down.
 
 All of these options can be controlled while the video is running using the following keys:
-
+```
 Esc - Exit and Close.
 S - Save a Snapshot of the Current Frame
 X - Cycle the Colormap Backwards
@@ -288,7 +325,7 @@ F - Toggle Filtering On/Off
 T - Toggle Temperature Units between C/F
 U - Go back to the previous Interpolation Algorithm
 I - Change the Interpolation Algorithm Used
-
+```
 The thinking here is simple: S for Save, T for Temp, F for Filter, C for Colormap, I for Interpolation, and in those last to cases the key just to the left to go back.
 
 #### Viewing remotely on the Pi
@@ -328,7 +365,7 @@ Of note: This address will only be accessible from inside the same network. If y
 
 ### Image Saving Note
 
-Several of these features include the option to save snapshots of the video feed. The save location is determined by the Config file included in the project. It defaults to the location /home/pi/pithermalcam/run_data/. If this needs to be changed it can be updated in the config file directly.
+Several of these features include the option to save snapshots of the video feed. The code versions in the sequential_versions folder use a sequential_config.ini file to set the location. The rest of the project defaults to the location /home/pi/pithermalcam/saved_snapshots/. If this needs to be changed it can be passed in via the "output_folder" parameter any time the camera is initialized.
 
 [_Back to Table of Contents_](#contents)
 ## Results
@@ -432,6 +469,11 @@ In either case though, the camera has already been deeply useful in figuring out
 
 There were other examples of the camera helping find holes or issues in the current insulation. What's shown here is already enough, however, to demonstrate the usefulness and efficacy of the MLX90640 for this purpose.
 
+Finally, here's a brief larger video of the camera cycling interpolation algorithms and colors as a demonstration:
+
+{:.center}
+[![A full cycle of the camera](/images/cycling_all.gif#center)](/PiThermalCam/images/cycling_all.gif#center)
+
 **Further use thoughts**
 What's not shown here are pictures taken from the outside of the house of heat coming out. Some basic testing was done for this, but on the days in question this testing was limited due in part to concerns about water on the device (it was raining), and because the efficacy of those images was limited. The device itself worked fine from outside, and in a few cases identified much more clearly which windows are currently leaking much more heat than others, and which windows already seem to be high enough quality to not be an issue.
 
@@ -453,16 +495,11 @@ Regardless though, it's clear that the market has now reached the point where af
 
 There are a few next steps for development that have not (to date) been undertaken. Pull requests that complete these would be welcome:
 
-1. Add double-click save option in local version: The web-version of the OpenCV code has been set up to enable saving not only via the 's' key, but also via double-clicking the image itself. This would be a particularly useful function on the local OpenCV version as well, as it would enable a touchscreen double-tap picture saving. Initial attempts to replicate the approach used in the web version didn't work in the local version, but it would be worth completing these.
-2. Test OpenCV Pip Install: The above approach was used via the manual installation of OpenCV, but this approach is extremely cumbersome. Testing of the pip installation approach, both to verify it works and to compare the speed, would be extremely useful. If this did work the library would be switched to use it as the default install method, which would be far simpler and faster.
-3. Convert library to pip-installable package: Related to 2), if pip install for all dependencies could be possible, the library could be easily converted to a package that could be hung on PyPI. This would enable those would bought the camera to wire it up, install the apt-get dependencies, and then install this library directly from PiPI and be up and running in minutes. A few steps would likely be necessary for this in addition to completing number 2 above:
-  - Convert library to package (requirements.txt is already set up with this conversion in mind, once the pip-installed version of OpenCV is verified to work)
-  - Set up scripts that copy icons to desktop and ensure they're executable
-  - Update paths (in config file and icons) to reflect pip installation location
-  - Determine if other methods are necessary for running Matlab, OpenCV local, and OpenCV Web version
-4. Set up security camera mode: The web server version of the library can currently be used as a basic security camera version, but another mode could be added to do this more effectively. In particular, the article used to set up the web server version could be mirrored to check and see where movement is occurring in the frame and where the background is remaining unchanged. This could also then be set up to raise a warning of some sort when movement is detected.
+1. Look into camera speed more. The article on which the Matplotlib approach was based had a useful discussion of framerate and camera speed. In the author's case, a much higher baudrate and some tweaking of the size of the final image could result in much better framerates than I ever achieved. Easier options to tweak all these factors in the library are worth setting up.
+2. Set up a security camera mode: The web server version of the library can currently be used as a basic security camera version, but another mode could be added to do this more effectively. In particular, the article used to set up the web server version could be mirrored to check and see where movement is occurring in the frame and where the background is remaining unchanged. This could also then be set up to raise a warning of some sort when movement is detected.
+2. Convert security camera mode to enable viewing it outside the local wifi network.
 
-Of note on this fourth point, the normal use of the camera indicates some measure of noise that's greater than a typical (non-thermal) camera experiences, so the approach used in the original article on this topic would likely need to be enhanced to allow for greater noise levels without triggering. Similarly, the fact that temperatures are shown in a relative way might impact how movement works. And finally, temperature fluctuations of the general environment throughout the day would need to be accounted for to avoid beams of sun or the simple onset of a wind or night being viewed as motion.
+Of note on the second point, the normal use of the camera indicates some measure of noise that's greater than a typical (non-thermal) camera experiences, so the approach used in the original article on this topic would likely need to be enhanced to allow for greater noise levels without triggering. Similarly, the fact that temperatures are shown in a relative way might impact how movement works. And finally, temperature fluctuations of the general environment throughout the day would need to be accounted for to avoid beams of sun or the simple onset of a wind or night being viewed as motion.
 
 [_Back to Table of Contents_](#contents)
 ## Issue Reporting
