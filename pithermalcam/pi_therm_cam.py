@@ -35,7 +35,8 @@ class pithermalcam:
     _displaying_onscreen=False
     _exit_requested=False
 
-    def __init__(self,use_f:bool = True, filter_image:bool = False, image_width:int=1200, image_height:int=900, output_folder:str = '/home/pi/pithermalcam/saved_snapshots/'):
+    def __init__(self,use_f:bool = True, filter_image:bool = False, image_width:int=1200, 
+                image_height:int=900, output_folder:str = '/home/pi/pithermalcam/saved_snapshots/'):
         self.use_f=use_f
         self.filter_image=filter_image
         self.image_width=image_width
