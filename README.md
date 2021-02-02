@@ -50,8 +50,8 @@ or
 
 2. Run the files directly in python3:
 
-Run pithermalcam/web_server.py to set up a flask server and strean live video.
+Run pithermalcam/web_server.py to set up a flask server and stream live video over the local network.
 
 Run pithermalcam/pi_therm_cam.py to display the video feed onscreen.
 
-Check sequential_versions folder for sequential running approaches that are easier to track/follow (i.e. not object-oriented). These are less robust, but can be easier to understand/track/edit, particularly for those coming from a scientific background. Again, refer to the link at top for a detailed discussion.
+Check sequential_versions folder for sequential running approaches that are easier to track/follow (i.e. sequential running rather than object-oriented classes). These are less robust, but can be easier to understand/track/edit, particularly for those coming from a scientific background. Again, refer to the link at top for a detailed discussion.
