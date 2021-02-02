@@ -5,7 +5,8 @@
 {:.center}
 _January, 2021_
 
-## Summary ## 
+## Overview ## 
+{:.no_toc}
 
 This page contains both the background and documentation for the PyPi package [pithermalcam](https://pypi.org/project/pithermalcam/), which connects an MLX90640 thermal camera to a Raspberry Pi. The package is set up for quick and easy install or for cloning for more advanced users to play/tweak/develop further.
 
