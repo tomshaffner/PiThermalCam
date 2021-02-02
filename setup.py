@@ -31,7 +31,10 @@ setuptools.setup(
         "Operating System :: POSIX :: Linux",
     ],
     keywords="raspberry pi mlx90640 thermal camera ir flir",
-    python_requires='>=3.6',    
+    python_requires='>=3.6',
+    setup_requires=[
+        "flake8"
+    ],
     include_package_data=True,
-    # What does your project relate to?    
+    # What does your project relate to?
 )
