@@ -6,7 +6,7 @@ name: Publish distribution 📦 to PyPI 🐍 on new release
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
     release: 
-      types: [published,created,edited,released]
+      types: [created]
     
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
