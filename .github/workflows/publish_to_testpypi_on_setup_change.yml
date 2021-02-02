@@ -14,7 +14,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build-n-publish:
-    name: Build and publish Python 🐍 distributions 📦 to TestPyPI and, when tagged, PyPI
+    name: Build and publish Python 🐍 distribution 📦 to TestPyPI
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     strategy:
