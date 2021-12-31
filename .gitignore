@@ -59,3 +59,9 @@ Thumbs.db
 .vscode/
 build/
 pithermalcam.egg-info
+
+# virtual env
+.venv
+
+# logging
+logs
