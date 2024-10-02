@@ -13,7 +13,7 @@ setuptools.setup(
     url="https://tomshaffner.github.io/PiThermalCam/",
     packages=['pithermalcam'],
     install_requires=[
-        'numpy>=1.16.5',
+        'numpy>=2.1.1',
         'matplotlib',
         'scipy>=1.6.0',
         'RPI.GPIO',
