@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6.15]   #, 3.7, 3.8, 3.9] # These are redundant and cause errors on upload since it's a version-independent build
+        python-version: [3.6]   #, 3.7, 3.8, 3.9] # These are redundant and cause errors on upload since it's a version-independent build
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
        # You can test your matrix by printing the current Python version
