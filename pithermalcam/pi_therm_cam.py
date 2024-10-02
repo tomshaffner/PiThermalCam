@@ -232,11 +232,11 @@ class pithermalcam:
 
     def update_raw_image_only(self):
         """Update only raw data without any further image processing or text updating"""
-        self._pull_raw_image
+        self._pull_raw_image()
 
     def get_current_raw_image_frame(self):
         """Return the current raw image"""
-        self._pull_raw_image
+        self._pull_raw_image()
         return self._raw_image
 
     def get_current_image_frame(self):
